@@ -1,0 +1,9 @@
+# ignore secrets
+.secrets
+
+# python
+.venv
+__pycache__
+
+# macOS
+.DS_Store
