@@ -1,0 +1,47 @@
+/* Colors
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+a {
+  color: steelblue; 
+}
+
+a:hover {
+  color: #0FA0CE; 
+}
+
+abbr {
+	color: #bbb;
+}
+
+form#search input[name="q"], form#search input[type="submit"], ::placeholder {
+	background: gainsboro;
+	color: darkslategray;
+}
+
+/* Forms
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+form#search {
+	text-align: center;
+}
+/*
+form#search input[name="q"] {
+	width: 80%;
+}
+*/
+form#search input[type="submit"] {
+	position: relative;
+	left: -10px;
+}
+
+form#search input[name="q"], form#search input[type="submit"] {
+	border: 0;
+	border-radius: 5px;
+	font-size: 1.4em;
+	padding: 1.2em;
+	text-transform: none;
+	vertical-align: middle;
+}
+
+li {
+	margin-bottom: 0.3rem;
+}
+
