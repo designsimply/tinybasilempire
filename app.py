@@ -1,0 +1,255 @@
+import os
+import json
+import psycopg2
+import psycopg2.extras
+import requests
+
+# third-party libraries
+from flask import Flask, render_template, redirect, request, url_for, jsonify
+from flask_login import UserMixin
+from flask_login import (
+    LoginManager,
+    current_user,
+    login_required,
+    login_user,
+    logout_user,
+)
+from oauthlib.oauth2 import WebApplicationClient
+from datetime import timedelta, datetime, timezone
+import datetime as dt
+import humanize
+
+# internal imports
+import config
+from db.db import get_db_connection, query_db
+from db.users import User
+from db.sql import _QUERY_SEARCH_LINKS
+ 
+client = WebApplicationClient(config.GOOGLE_CLIENT_ID)
+
+app = Flask(__name__)
+
+app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
+
+# user session management setup from https://flask-login.readthedocs.io/en/latest
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+# find out what url to hit for google login
+def get_google_provider_cfg():
+    return requests.get(config.GOOGLE_DISCOVERY_URL).json()
+
+# flask-login helper to retrieve a user from the db 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get(user_id)
+
+def db_links_select(title="%%", description="%%", limit=5, offset=0):
+    return query_db(_QUERY_SEARCH_LINKS,params=(title, description, limit, offset))
+
+#def pagination_params():
+    #todo move limit, page, offset into a function
+
+@app.route('/')
+def index():
+    limit = request.args.get('limit', 10, type=int)
+    page = request.args.get('page', 1, type=int)
+    offset = (page - 1) * limit  # page=2, limit=10, offset = 10
+
+    # make a link object and add this as a method
+    #timesince = humanize.naturaldelta(dt.timedelta(datecreated))
+
+    links = db_links_select(
+        limit = limit, 
+        offset = offset,
+    )
+
+    return render_template(
+        'index.html', 
+        links=links, 
+        context_name_for_sheri="stuff", 
+        limit=limit,
+        page=page,
+        offset=offset,
+        current_user=current_user
+    )
+
+
+
+
+@app.route("/login")
+def login():
+    if config.AUTOLOGIN:
+        user = User.get_from_email(config.DEV_EMAIL)
+        login_user(user)
+        return redirect(url_for("index"))
+
+    # get a login url for google
+    google_provider_cfg = get_google_provider_cfg()
+    authorization_endpoint = google_provider_cfg["authorization_endpoint"]
+
+    # request google login and scope what to retrieve 
+    request_uri = client.prepare_request_uri(
+        authorization_endpoint,
+        redirect_uri=request.base_url + "/callback",
+        scope=["openid", "email", "profile"],
+    )
+    return redirect(request_uri)
+
+@app.route("/login/callback")
+def callback():
+    # get auth code back from google 
+    code = request.args.get("code")
+
+    # get google authorization code and url for tokens
+    google_provider_cfg = get_google_provider_cfg()
+    token_endpoint = google_provider_cfg["token_endpoint"]
+
+    # send a request to get tokens
+    token_url, headers, body = client.prepare_token_request(
+        token_endpoint,
+        authorization_response=request.url,
+        redirect_url=request.base_url,
+        code=code
+    )
+    token_response = requests.post(
+        token_url,
+        headers=headers,
+        data=body,
+        auth=(config.GOOGLE_CLIENT_ID, config.GOOGLE_CLIENT_SECRET),
+    )
+
+    # parse the tokens
+    client.parse_request_body_response(json.dumps(token_response.json()))
+
+    # get profile information from google
+    userinfo_endpoint = google_provider_cfg["userinfo_endpoint"]
+    uri, headers, body = client.add_token(userinfo_endpoint)
+    userinfo_response = requests.get(uri, headers=headers, data=body)
+
+    # make sure email is verified with google
+    if userinfo_response.json().get("email_verified"):
+        unique_id = userinfo_response.json()["sub"]
+        users_email = userinfo_response.json()["email"]
+        picture = userinfo_response.json()["picture"]
+        users_name = userinfo_response.json()["given_name"]
+
+        # if the user doesn't exist locally, deny access
+        user = User.get_from_email(users_email)
+        # if not User.get(unique_id):
+        #     User.create(unique_id, users_name, users_email, picture)
+        if user is None:
+            #raise ValueError(f"NO USER! {users_email}")    
+            user = User.create(users_name, users_email, picture)
+        # Begin user session by logging the user in
+        # user = User(
+        #     id_=unique_id, name=users_name, email=users_email, profile_pic=picture
+        # )
+        login_user(user)
+        # Send user back to homepage
+        return redirect(url_for("index"))
+    else:
+        return "User email not available or not verified by Google.", 400
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("index"))
+
+@app.route("/profile")
+def profile():
+    if current_user.is_authenticated:
+        return jsonify(
+                name=current_user.name,
+                email=current_user.email,
+                pic=current_user.profile_pic)
+    else:
+        return redirect(url_for('login'));
+        # return jsonify(error='unauthorized' ), 403
+
+@app.route('/add', methods =["GET", "POST"])
+#@login_required
+def add():
+    if request.method == "POST":
+        if current_user.is_authenticated:
+            #request.form
+            title = request.form.get('title')
+            url = request.form.get('url')
+            description = request.form.get('description')
+            tags = request.form.get('tags')
+            tag_names = tags.split(',')
+
+            # add link details and tags to 3 separate tables 
+            # TODO: convert to _QUERY_ADD_LINK
+            with get_db_connection() as conn:
+                with conn.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) as cur:
+                    tag_ids = []
+                    for tag_name in tag_names:
+                        cur.execute("INSERT INTO sf_tag (name) VALUES (%s) ON CONFLICT DO NOTHING RETURNING tag_id", [tag_name])
+                        tag = cur.fetchone()
+                        if tag is not None:
+                            tag_ids.append(tag.tag_id)
+                if len(tag_names) > 0:
+                    with conn.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) as cur:
+                        cur.execute("INSERT INTO sf_links (title, url, description) VALUES (%s, %s, %s) RETURNING id", [title, url, description])
+                        link = cur.fetchone()
+                        link_id = link.id
+                    with conn.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) as cur:
+                        for tag_id in tag_ids:        
+                            cur.execute("INSERT INTO sf_tagmap (tag_id, link_id) VALUES (%s, %s)", [tag_id, link_id])
+            return redirect(url_for('link_get', link_id=link_id));
+    return render_template('add.html')
+
+@app.route("/add/<int:link_id>")
+def link_get(link_id):
+    inserted = query_db("SELECT title, url, description, datecreated FROM sf_links WHERE id=%s",params=(link_id,))
+    tags_for_inserted = query_db("SELECT DISTINCT sf_tag.name FROM sf_links, sf_tag, sf_tagmap WHERE sf_tagmap.tag_id = sf_tag.tag_id AND sf_tagmap.link_id=%s",params=(link_id,))
+    link = inserted[0]
+    tags = ''
+    if len(tags_for_inserted) > 0:
+        tags = ''.join(tags_for_inserted[0])
+    created_at = humanize.naturaltime(dt.datetime.now(timezone.utc) - link.datecreated)
+    return render_template(
+        'link.html',
+        link_id=link_id,
+        title=link.title,
+        url=link.url,
+        description=link.description,
+        created_at=created_at,
+        tags=tags
+    )
+#    return f'<li>{link_id} - {created_at} - <a href="{link.url}">{link.title}</a> {link.description} ({tags})</li>'
+
+@app.errorhandler(404)
+def not_found(e):
+    # get the search term from the url query string
+    if request.path.split("/")[1] == 'search':
+        searchterm = '%' + request.args.get('q') + '%'
+    else:
+        searchterm = '%' + request.path.split("/")[1] + '%'
+
+    limit = request.args.get('limit', 5, type=int)
+    page = request.args.get('page', 1, type=int)
+    offset = (page - 1) * limit  # page=2, limit=10, offset = 10
+
+    links = db_links_select(
+        title = searchterm,
+        description = searchterm, 
+        limit = limit, 
+        offset = offset,
+    )
+
+    return render_template(
+        '404.html', 
+        links=links, 
+        context_name_for_sheri="stuff", 
+        limit=limit,
+        page=page,
+        offset=offset,
+        searchterm=searchterm, 
+        current_user=current_user
+    )
+
+if __name__ == "__main__":
+    app.run(ssl_context='adhoc')
