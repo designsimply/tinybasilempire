@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>404 means search for {{ searchterm }}</h1>
+    <p>
+        <a href="{{ request.path }}?limit={{ limit }}&page={{ page-1 }}">previous</a> 
+        <a href="{{ request.path }}?limit={{ limit }}&page={{ page+1 }}">next</a>
+    </p>
+
+    {% include 'includes/linkslist.html' %}
+{% endblock %}
