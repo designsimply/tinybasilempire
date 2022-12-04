@@ -23,7 +23,7 @@ import humanize
 import config
 from db.db import get_db_connection, query_db
 from db.users import User
-from db.sql import _QUERY_SEARCH_LINKS
+from db.sql import _QUERY_ALL_LINKS, _QUERY_SEARCH_LINKS
  
 client = WebApplicationClient(config.GOOGLE_CLIENT_ID)
 
@@ -44,8 +44,12 @@ def get_google_provider_cfg():
 def load_user(user_id):
     return User.get(user_id)
 
-def db_links_select(title="%%", description="%%", limit=5, offset=0):
+def db_links_select(limit=5, offset=0):
+    return query_db(_QUERY_ALL_LINKS,params=(limit, offset))
+
+def db_links_search(title="%%", description="%%", limit=5, offset=0):
     return query_db(_QUERY_SEARCH_LINKS,params=(title, description, limit, offset))
+
 
 #def pagination_params():
     #todo move limit, page, offset into a function
@@ -181,7 +185,8 @@ def add():
             tag_names = tags.split(',')
 
             # add link details and tags to 3 separate tables 
-            # TODO: convert to _QUERY_ADD_LINK
+            # TODO: create this into a function in `db/links` 
+            # call the function `link_insert(...)`
             with get_db_connection() as conn:
                 with conn.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) as cur:
                     tag_ids = []
@@ -221,19 +226,17 @@ def link_get(link_id):
     )
 #    return f'<li>{link_id} - {created_at} - <a href="{link.url}">{link.title}</a> {link.description} ({tags})</li>'
 
-@app.errorhandler(404)
-def not_found(e):
-    # get the search term from the url query string
-    if request.path.split("/")[1] == 'search':
-        searchterm = '%' + request.args.get('q') + '%'
-    else:
-        searchterm = '%' + request.path.split("/")[1] + '%'
+@app.route("/search")
+def s():
+    searchterm = ''
+    if request.args.get('q'):
+        searchterm = request.args.get('q')
 
     limit = request.args.get('limit', 5, type=int)
     page = request.args.get('page', 1, type=int)
     offset = (page - 1) * limit  # page=2, limit=10, offset = 10
 
-    links = db_links_select(
+    links = db_links_search(
         title = searchterm,
         description = searchterm, 
         limit = limit, 
@@ -241,11 +244,33 @@ def not_found(e):
     )
 
     return render_template(
-        '404.html', 
+        'search.html', 
         links=links, 
-        context_name_for_sheri="stuff", 
-        limit=limit,
         page=page,
+        limit=limit,
+        offset=offset,
+        searchterm=searchterm, 
+        current_user=current_user
+    )
+
+@app.route("/s/<string:searchterm>")
+def search(searchterm):
+    limit = request.args.get('limit', 5, type=int)
+    page = request.args.get('page', 1, type=int)
+    offset = (page - 1) * limit  # page=2, limit=10, offset = 10
+
+    links = db_links_search(
+        title = searchterm,
+        description = searchterm, 
+        limit = limit, 
+        offset = offset,
+    )
+
+    return render_template(
+        'search.html', 
+        links=links, 
+        page=page,
+        limit=limit,
         offset=offset,
         searchterm=searchterm, 
         current_user=current_user
