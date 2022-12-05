@@ -6,7 +6,7 @@ from db.db import query_db
 class User(UserMixin):
     """Database User.
 
-    This User represents the database users table. The attributes should map 1:1.
+    This User represents the database users table. Attributes should map 1:1.
 
     id, name, email, profile_pic
 
@@ -20,7 +20,10 @@ class User(UserMixin):
 
     @staticmethod
     def get_from_email(user_email):
-        users = query_db("select * from users where email=%s", params=(user_email,))
+        users = query_db(
+            "SELECT id, name, email, profile_pic FROM users WHERE email=%s",
+            params=(user_email,),
+        )
         if len(users) == 0:
             return None
         elif len(users) > 1:

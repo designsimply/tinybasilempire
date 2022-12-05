@@ -1,12 +1,8 @@
-import os
 import json
-import psycopg2
-import psycopg2.extras
 import requests
 
 # third-party libraries
 from flask import Flask, render_template, redirect, request, url_for, jsonify
-from flask_login import UserMixin
 from flask_login import (
     LoginManager,
     current_user,
@@ -15,26 +11,28 @@ from flask_login import (
     logout_user,
 )
 from oauthlib.oauth2 import WebApplicationClient
-from datetime import timedelta, datetime, timezone
 import datetime as dt
+from datetime import timezone
 import humanize
 
 # internal imports
 import config
-from db.db import get_db_connection, query_db
+from db.db import query_db
 from db.users import User
 from db.links import add_new_link
-from db.sql import _QUERY_ALL_LINKS, _QUERY_SEARCH_LINKS
+from db.sql import _QUERY_ALL_LINKS, _QUERY_SEARCH_LINKS, _GET_LINK, _GET_TAGNAMES
 
 client = WebApplicationClient(config.GOOGLE_CLIENT_ID)
 
 app = Flask(__name__)
 
-app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
+app.secret_key = config.SECRET_KEY
 
-# user session management setup from https://flask-login.readthedocs.io/en/latest
+# user session management setup from
+# https://flask-login.readthedocs.io/en/latest
 login_manager = LoginManager()
 login_manager.init_app(app)
+
 
 # find out what url to hit for google login
 def get_google_provider_cfg():
@@ -137,7 +135,6 @@ def callback():
 
     # make sure email is verified with google
     if userinfo_response.json().get("email_verified"):
-        unique_id = userinfo_response.json()["sub"]
         users_email = userinfo_response.json()["email"]
         picture = userinfo_response.json()["picture"]
         users_name = userinfo_response.json()["given_name"]
@@ -206,11 +203,11 @@ def add():
 @app.route("/add/<int:link_id>")
 def link_get(link_id):
     inserted = query_db(
-        "SELECT title, url, description, datecreated FROM sf_links WHERE id=%s",
+        _GET_LINK,
         params=(link_id,),
     )
     tags_for_inserted = query_db(
-        "SELECT DISTINCT sf_tag.name FROM sf_links, sf_tag, sf_tagmap WHERE sf_tagmap.tag_id = sf_tag.tag_id AND sf_tagmap.link_id=%s",
+        _GET_TAGNAMES,
         params=(link_id,),
     )
     link = inserted[0]
@@ -227,9 +224,11 @@ def link_get(link_id):
         created_at=created_at,
         tags=tags,
     )
-
-
-#    return f'<li>{link_id} - {created_at} - <a href="{link.url}">{link.title}</a> {link.description} ({tags})</li>'
+    # return f'<li>{link_id} - {created_at} - <a href="{link.url}">{link.title}</a> {link.description} ({tags})</li>'  # noqa
+    # return f"""
+    #     <li>{link_id} - {created_at} - <a href="{link.url}">
+    #     {link.title}</a> {link.description} ({tags})</li>
+    # """
 
 
 @app.route("/search")

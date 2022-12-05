@@ -4,37 +4,42 @@
 <!--     {% if request.form %}
         {{ request.form }}
     {% else %} -->
-    <form id="add" action="{{ url_for('add') }}" method="post">
-        <fieldset>
-            <label for="title" class="placeholder active">Title</label>
-            <input class="u-full-width" type="text" name="title" tabindex="5" autofocus="" value="{{ request.args.get('title', '') }}" required>
-            <div class="row">
-                <div class="six columns">
-                    <label for="url" class="placeholder ">Link</label>
-                    <input class="u-full-width" type="text" name="url" id="url" tabindex="6" class="av-password" value="{{ request.args.get('url', '') }}">
-                    <label for="tags" class="placeholder ">Tags</label>
-                    <input class="u-full-width" type="text" name="tags" id="tags" tabindex="8" class="av-password" value="{{ request.args.get('tags', '') }}">
-                </div>
-                <div class="six columns">
-                    <label for="description" class="placeholder">Description</label>
-                    <textarea style="min-height: 8em;" class="u-full-width" name="description" id="description" tabindex="7">{{ request.args.get('desc', '') }}</textarea>
-                </div>
+<form id="add" action="{{ url_for('add') }}" method="post">
+    <fieldset>
+        <label for="title" class="placeholder active">Title</label>
+        <input class="u-full-width" type="text" name="title" tabindex="5" autofocus=""
+            value="{{ request.args.get('title', '') }}" required>
+        <div class="row">
+            <div class="six columns">
+                <label for="url" class="placeholder ">Link</label>
+                <input class="u-full-width" type="text" name="url" id="url" tabindex="6" class="av-password"
+                    value="{{ request.args.get('url', '') }}">
+                <label for="tags" class="placeholder ">Tags</label>
+                <input class="u-full-width" type="text" name="tags" id="tags" tabindex="8" class="av-password"
+                    value="{{ request.args.get('tags', '') }}">
             </div>
-            <input class="button-primary" type="submit" tabindex="9" value="Add">
-        </fieldset>
-    </form>
+            <div class="six columns">
+                <label for="description" class="placeholder">Description</label>
+                <textarea style="min-height: 8em;" class="u-full-width" name="description" id="description"
+                    tabindex="7">{{ request.args.get('desc', '') }}</textarea>
+            </div>
+        </div>
+        <input class="button-primary" type="submit" tabindex="9" value="Add">
+    </fieldset>
+</form>
 
-    <ul>
+<ul>
     <!-- {% endif %} -->
 
     {% for link in links %}
-        <li>
+    <li>
         {% if current_user.is_authenticated %}
-            <a class="button" href="/edit">edit</a> 
+        <a class="edit" href="#">edit</a>
+        <a class="edit" href="#">✎</a>
         {% endif %}
-        <a href="{{ link.url }}">{{ link.title }}</a> 
+        <a href="{{ link.url }}">{{ link.title }}</a>
         {{ link.description }}
-        </li>
+    </li>
     {% endfor %}
-    </ul>
+</ul>
 {% endblock %}
