@@ -20,9 +20,7 @@
                     <textarea style="min-height: 8em;" class="u-full-width" name="description" id="description" tabindex="7">{{ request.args.get('desc', '') }}</textarea>
                 </div>
             </div>
-            <input value="Add" aria-label="Add" name="btn" role="button" tabindex="9" type="submit">
-            <input name="status" type="hidden" value="update">
-            <input name="qs" type="hidden" value=""> 
+            <input class="button-primary" type="submit" tabindex="9" value="Add">
         </fieldset>
     </form>
 

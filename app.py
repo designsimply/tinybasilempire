@@ -23,6 +23,7 @@ import humanize
 import config
 from db.db import get_db_connection, query_db
 from db.users import User
+from db.links import add_new_link
 from db.sql import _QUERY_ALL_LINKS, _QUERY_SEARCH_LINKS
  
 client = WebApplicationClient(config.GOOGLE_CLIENT_ID)
@@ -181,29 +182,15 @@ def add():
             title = request.form.get('title')
             url = request.form.get('url')
             description = request.form.get('description')
-            tags = request.form.get('tags')
-            tag_names = tags.split(',')
+            tags = request.form.get('tags', '')
+            if tags == '':
+                tag_names = []
+            else:
+                tag_names = tags.split(',')
 
-            # add link details and tags to 3 separate tables 
-            # TODO: create this into a function in `db/links` 
-            # call the function `link_insert(...)`
-            with get_db_connection() as conn:
-                with conn.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) as cur:
-                    tag_ids = []
-                    for tag_name in tag_names:
-                        cur.execute("INSERT INTO sf_tag (name) VALUES (%s) ON CONFLICT DO NOTHING RETURNING tag_id", [tag_name])
-                        tag = cur.fetchone()
-                        if tag is not None:
-                            tag_ids.append(tag.tag_id)
-                if len(tag_names) > 0:
-                    with conn.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) as cur:
-                        cur.execute("INSERT INTO sf_links (title, url, description) VALUES (%s, %s, %s) RETURNING id", [title, url, description])
-                        link = cur.fetchone()
-                        link_id = link.id
-                    with conn.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) as cur:
-                        for tag_id in tag_ids:        
-                            cur.execute("INSERT INTO sf_tagmap (tag_id, link_id) VALUES (%s, %s)", [tag_id, link_id])
-            return redirect(url_for('link_get', link_id=link_id));
+            #return f'{request.form}'
+            new_link, _new_link_tag_names = add_new_link(title, url, description, tag_names)
+            return redirect(url_for('link_get', link_id=new_link.id));
     return render_template('add.html')
 
 @app.route("/add/<int:link_id>")
