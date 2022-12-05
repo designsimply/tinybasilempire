@@ -7,7 +7,7 @@
     <form id="add" action="{{ url_for('add') }}" method="post">
         <fieldset>
             <label for="title" class="placeholder active">Title</label>
-            <input class="u-full-width" type="text" name="title" tabindex="5" value="{{ request.args.get('title', '') }}" required>
+            <input class="u-full-width" type="text" name="title" tabindex="5" autofocus="" value="{{ request.args.get('title', '') }}" required>
             <div class="row">
                 <div class="six columns">
                     <label for="url" class="placeholder ">Link</label>

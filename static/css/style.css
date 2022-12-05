@@ -12,9 +12,21 @@ abbr {
 	color: #bbb;
 }
 
-form#search input[name="q"], form#search input[type="submit"], ::placeholder {
+form#search input[name="q"], form#search input[type="submit"], ::placeholder, 
+.button.button-primary:hover, button.button-primary:hover, input[type="submit"].button-primary:hover, input[type="reset"].button-primary:hover, input[type="button"].button-primary:hover, .button.button-primary:focus, button.button-primary:focus, input[type="submit"].button-primary:focus, input[type="reset"].button-primary:focus, input[type="button"].button-primary:focus {
 	background: gainsboro;
+	border-color: gainsboro;
 	color: darkslategray;
+}
+
+.button.button-primary, button.button-primary, input[type="submit"].button-primary, input[type="reset"].button-primary, input[type="button"].button-primary {
+	color: #fff;
+    background-color: steelblue;
+    border-color: steelblue;
+}
+
+a.edit, a.del {
+	color: lightgray;
 }
 
 /* Forms
@@ -22,11 +34,7 @@ form#search input[name="q"], form#search input[type="submit"], ::placeholder {
 form#search {
 	text-align: center;
 }
-/*
-form#search input[name="q"] {
-	width: 80%;
-}
-*/
+
 form#search input[type="submit"] {
 	position: relative;
 	left: -10px;
@@ -45,3 +53,7 @@ li {
 	margin-bottom: 0.3rem;
 }
 
+a.edit, a.del {
+	font-size: .8em;
+	text-decoration: none;
+}

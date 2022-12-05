@@ -3,8 +3,7 @@
         <li>
         <abbr class="date" title="{{ link.datecreated }}">{{ link.timesince }}</abbr>
         {% if current_user.is_authenticated %}
-            <a href="#">✏️</a> 
-            <a href="#">❌</a> 
+            <a class="edit" href="#">✎</a><a class="del" href="#">X</a>
         {% endif %}
         <a href="{{ link.url }}">{{ link.title }}</a> 
         {{ link.description }}
