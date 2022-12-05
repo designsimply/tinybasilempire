@@ -1,31 +1,57 @@
+/* Align
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+html {
+	display: flex;
+	flex-flow: column;
+	height: 100%;
+	justify-content: space-around;
+}
+
+
 /* Colors
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 a {
-  color: steelblue; 
+	color: steelblue;
 }
 
 a:hover {
-  color: #0FA0CE; 
+	color: #0FA0CE;
 }
 
 abbr {
 	color: #bbb;
 }
 
-form#search input[name="q"], form#search input[type="submit"], ::placeholder, 
-.button.button-primary:hover, button.button-primary:hover, input[type="submit"].button-primary:hover, input[type="reset"].button-primary:hover, input[type="button"].button-primary:hover, .button.button-primary:focus, button.button-primary:focus, input[type="submit"].button-primary:focus, input[type="reset"].button-primary:focus, input[type="button"].button-primary:focus {
+form#search input[name="q"],
+form#search input[type="submit"],
+::placeholder,
+.button.button-primary:hover,
+button.button-primary:hover,
+input[type="submit"].button-primary:hover,
+input[type="reset"].button-primary:hover,
+input[type="button"].button-primary:hover,
+.button.button-primary:focus,
+button.button-primary:focus,
+input[type="submit"].button-primary:focus,
+input[type="reset"].button-primary:focus,
+input[type="button"].button-primary:focus {
 	background: gainsboro;
 	border-color: gainsboro;
 	color: darkslategray;
 }
 
-.button.button-primary, button.button-primary, input[type="submit"].button-primary, input[type="reset"].button-primary, input[type="button"].button-primary {
+.button.button-primary,
+button.button-primary,
+input[type="submit"].button-primary,
+input[type="reset"].button-primary,
+input[type="button"].button-primary {
 	color: #fff;
-    background-color: steelblue;
-    border-color: steelblue;
+	background-color: steelblue;
+	border-color: steelblue;
 }
 
-a.edit, a.del {
+a.edit,
+a.del {
 	color: lightgray;
 }
 
@@ -40,7 +66,8 @@ form#search input[type="submit"] {
 	left: -10px;
 }
 
-form#search input[name="q"], form#search input[type="submit"] {
+form#search input[name="q"],
+form#search input[type="submit"] {
 	border: 0;
 	border-radius: 5px;
 	font-size: 1.4em;
@@ -50,10 +77,15 @@ form#search input[name="q"], form#search input[type="submit"] {
 }
 
 li {
+	font-size: 2;
 	margin-bottom: 0.3rem;
 }
 
-a.edit, a.del {
-	font-size: .8em;
+a.edit,
+a.del {
 	text-decoration: none;
+}
+
+abbr {
+	font-size: .75em;
 }

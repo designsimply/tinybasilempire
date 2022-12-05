@@ -2,14 +2,16 @@
     <a href="{{ url_for('index') }}">home</a>
     <a href="#">tags</a>
     {% if current_user.is_authenticated %}
-        <a href="{{ url_for('add') }}">add</a>
+    <a href="{{ url_for('add') }}">add</a>
+    <!--
         <a href="{{ url_for('profile') }}">profile</a>
         <a>{{current_user.name}} {{current_user.email}}</a>
         <img style="height: 15px;" src="{{current_user.profile_pic}}" alt="{{current_user.name}}"></img>
-        <a href="/logout">logout</a>
+    -->
+    <a href="/logout">logout</a>
     {% else %}
-        <a href="/login">login</a>
+    <a href="/login">login</a>
     {% endif %}
-    <a href="javascript:javascript:(function()%7B%20var%20q;%20q=((window.getSelection%20&&%20window.getSelection())%20%7C%7C(document.getSelection%20&&%20document.getSelection())%20%7C%7C(document.selection%20&&document.selection.createRange%20&&document.selection.createRange().text));location.href='{{ request.url_root }}add?url=%27+encodeURIComponent(location.href)+%27&title=%27+document.title+%27&desc=%27+q+%27&tags=%27;%7D)();">+stuff</a>
+    <a
+        href="javascript:javascript:(function()%7B%20var%20q;%20q=((window.getSelection%20&&%20window.getSelection())%20%7C%7C(document.getSelection%20&&%20document.getSelection())%20%7C%7C(document.selection%20&&document.selection.createRange%20&&document.selection.createRange().text));location.href='{{ request.url_root }}add?url=%27+encodeURIComponent(location.href)+%27&title=%27+document.title+%27&desc=%27+q+%27&tags=%27;%7D)();">+stuff</a>
 </nav>
-

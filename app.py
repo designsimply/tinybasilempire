@@ -25,7 +25,7 @@ from db.db import get_db_connection, query_db
 from db.users import User
 from db.links import add_new_link
 from db.sql import _QUERY_ALL_LINKS, _QUERY_SEARCH_LINKS
- 
+
 client = WebApplicationClient(config.GOOGLE_CLIENT_ID)
 
 app = Flask(__name__)
@@ -40,46 +40,48 @@ login_manager.init_app(app)
 def get_google_provider_cfg():
     return requests.get(config.GOOGLE_DISCOVERY_URL).json()
 
-# flask-login helper to retrieve a user from the db 
+
+# flask-login helper to retrieve a user from the db
 @login_manager.user_loader
 def load_user(user_id):
     return User.get(user_id)
 
+
 def db_links_select(limit=5, offset=0):
-    return query_db(_QUERY_ALL_LINKS,params=(limit, offset))
+    return query_db(_QUERY_ALL_LINKS, params=(limit, offset))
+
 
 def db_links_search(title="%%", description="%%", limit=5, offset=0):
-    return query_db(_QUERY_SEARCH_LINKS,params=(title, description, limit, offset))
+    return query_db(_QUERY_SEARCH_LINKS, params=(title, description, limit, offset))
 
 
-#def pagination_params():
-    #todo move limit, page, offset into a function
+# def pagination_params():
+# todo move limit, page, offset into a function
 
-@app.route('/')
+
+@app.route("/")
 def index():
-    limit = request.args.get('limit', 10, type=int)
-    page = request.args.get('page', 1, type=int)
+    limit = request.args.get("limit", 10, type=int)
+    page = request.args.get("page", 1, type=int)
     offset = (page - 1) * limit  # page=2, limit=10, offset = 10
 
     # make a link object and add this as a method
-    #timesince = humanize.naturaldelta(dt.timedelta(datecreated))
+    # timesince = humanize.naturaldelta(dt.timedelta(datecreated))
 
     links = db_links_select(
-        limit = limit, 
-        offset = offset,
+        limit=limit,
+        offset=offset,
     )
 
     return render_template(
-        'index.html', 
-        links=links, 
-        context_name_for_sheri="stuff", 
+        "index.html",
+        links=links,
+        context_name_for_sheri="stuff",
         limit=limit,
         page=page,
         offset=offset,
-        current_user=current_user
+        current_user=current_user,
     )
-
-
 
 
 @app.route("/login")
@@ -93,7 +95,7 @@ def login():
     google_provider_cfg = get_google_provider_cfg()
     authorization_endpoint = google_provider_cfg["authorization_endpoint"]
 
-    # request google login and scope what to retrieve 
+    # request google login and scope what to retrieve
     request_uri = client.prepare_request_uri(
         authorization_endpoint,
         redirect_uri=request.base_url + "/callback",
@@ -101,9 +103,10 @@ def login():
     )
     return redirect(request_uri)
 
+
 @app.route("/login/callback")
 def callback():
-    # get auth code back from google 
+    # get auth code back from google
     code = request.args.get("code")
 
     # get google authorization code and url for tokens
@@ -115,7 +118,7 @@ def callback():
         token_endpoint,
         authorization_response=request.url,
         redirect_url=request.base_url,
-        code=code
+        code=code,
     )
     token_response = requests.post(
         token_url,
@@ -144,7 +147,7 @@ def callback():
         # if not User.get(unique_id):
         #     User.create(unique_id, users_name, users_email, picture)
         if user is None:
-            #raise ValueError(f"NO USER! {users_email}")    
+            # raise ValueError(f"NO USER! {users_email}")
             user = User.create(users_name, users_email, picture)
         # Begin user session by logging the user in
         # user = User(
@@ -156,112 +159,130 @@ def callback():
     else:
         return "User email not available or not verified by Google.", 400
 
+
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
     return redirect(url_for("index"))
 
+
 @app.route("/profile")
 def profile():
     if current_user.is_authenticated:
         return jsonify(
-                name=current_user.name,
-                email=current_user.email,
-                pic=current_user.profile_pic)
+            name=current_user.name,
+            email=current_user.email,
+            pic=current_user.profile_pic,
+        )
     else:
-        return redirect(url_for('login'));
+        return redirect(url_for("login"))
         # return jsonify(error='unauthorized' ), 403
 
-@app.route('/add', methods =["GET", "POST"])
-#@login_required
+
+@app.route("/add", methods=["GET", "POST"])
+# @login_required
 def add():
     if request.method == "POST":
         if current_user.is_authenticated:
-            #request.form
-            title = request.form.get('title')
-            url = request.form.get('url')
-            description = request.form.get('description')
-            tags = request.form.get('tags', '')
-            if tags == '':
+            # request.form
+            title = request.form.get("title")
+            url = request.form.get("url")
+            description = request.form.get("description")
+            tags = request.form.get("tags", "")
+            if tags == "":
                 tag_names = []
             else:
-                tag_names = tags.split(',')
+                tag_names = tags.split(",")
 
-            #return f'{request.form}'
-            new_link, _new_link_tag_names = add_new_link(title, url, description, tag_names)
-            return redirect(url_for('link_get', link_id=new_link.id));
-    return render_template('add.html')
+            # return f'{request.form}'
+            new_link, _new_link_tag_names = add_new_link(
+                title, url, description, tag_names
+            )
+            return redirect(url_for("link_get", link_id=new_link.id))
+    return render_template("add.html")
+
 
 @app.route("/add/<int:link_id>")
 def link_get(link_id):
-    inserted = query_db("SELECT title, url, description, datecreated FROM sf_links WHERE id=%s",params=(link_id,))
-    tags_for_inserted = query_db("SELECT DISTINCT sf_tag.name FROM sf_links, sf_tag, sf_tagmap WHERE sf_tagmap.tag_id = sf_tag.tag_id AND sf_tagmap.link_id=%s",params=(link_id,))
+    inserted = query_db(
+        "SELECT title, url, description, datecreated FROM sf_links WHERE id=%s",
+        params=(link_id,),
+    )
+    tags_for_inserted = query_db(
+        "SELECT DISTINCT sf_tag.name FROM sf_links, sf_tag, sf_tagmap WHERE sf_tagmap.tag_id = sf_tag.tag_id AND sf_tagmap.link_id=%s",
+        params=(link_id,),
+    )
     link = inserted[0]
-    tags = ''
+    tags = ""
     if len(tags_for_inserted) > 0:
-        tags = ''.join(tags_for_inserted[0])
+        tags = "".join(tags_for_inserted[0])
     created_at = humanize.naturaltime(dt.datetime.now(timezone.utc) - link.datecreated)
     return render_template(
-        'link.html',
+        "link.html",
         link_id=link_id,
         title=link.title,
         url=link.url,
         description=link.description,
         created_at=created_at,
-        tags=tags
+        tags=tags,
     )
+
+
 #    return f'<li>{link_id} - {created_at} - <a href="{link.url}">{link.title}</a> {link.description} ({tags})</li>'
+
 
 @app.route("/search")
 def s():
-    searchterm = ''
-    if request.args.get('q'):
-        searchterm = request.args.get('q')
+    searchterm = ""
+    if request.args.get("q"):
+        searchterm = request.args.get("q")
 
-    limit = request.args.get('limit', 5, type=int)
-    page = request.args.get('page', 1, type=int)
+    limit = request.args.get("limit", 5, type=int)
+    page = request.args.get("page", 1, type=int)
     offset = (page - 1) * limit  # page=2, limit=10, offset = 10
 
     links = db_links_search(
-        title = searchterm,
-        description = searchterm, 
-        limit = limit, 
-        offset = offset,
+        title=searchterm,
+        description=searchterm,
+        limit=limit,
+        offset=offset,
     )
 
     return render_template(
-        'search.html', 
-        links=links, 
+        "search.html",
+        links=links,
         page=page,
         limit=limit,
         offset=offset,
-        searchterm=searchterm, 
-        current_user=current_user
+        searchterm=searchterm,
+        current_user=current_user,
     )
+
 
 @app.route("/s/<string:searchterm>")
 def search(searchterm):
-    limit = request.args.get('limit', 5, type=int)
-    page = request.args.get('page', 1, type=int)
+    limit = request.args.get("limit", 5, type=int)
+    page = request.args.get("page", 1, type=int)
     offset = (page - 1) * limit  # page=2, limit=10, offset = 10
 
     links = db_links_search(
-        title = searchterm,
-        description = searchterm, 
-        limit = limit, 
-        offset = offset,
+        title=searchterm,
+        description=searchterm,
+        limit=limit,
+        offset=offset,
     )
 
     return render_template(
-        'search.html', 
-        links=links, 
+        "search.html",
+        links=links,
         page=page,
         limit=limit,
         offset=offset,
-        searchterm=searchterm, 
-        current_user=current_user
+        searchterm=searchterm,
+        current_user=current_user,
     )
 
+
 if __name__ == "__main__":
-    app.run(ssl_context='adhoc')
+    app.run(ssl_context="adhoc")
