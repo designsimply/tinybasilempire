@@ -323,7 +323,3 @@ def search(searchterm):
         searchterm=searchterm,
         current_user=current_user,
     )
-
-
-if __name__ == "__main__":
-    app.run(ssl_context="adhoc")

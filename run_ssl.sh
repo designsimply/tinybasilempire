@@ -7,4 +7,4 @@ source .venv/bin/activate
 source .secrets
 
 # run your application
-flask run --cert=adhoc
+flask run --cert="cert.pem" --key="priv_key.pem"
