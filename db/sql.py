@@ -29,6 +29,23 @@ LIMIT %s
 OFFSET %s
 """
 
+_QUERY_SEARCH_LINKS_BY_URL = """
+SELECT
+    id
+    , url
+    , title
+    , description
+    , datecreated
+    , NOW() - datecreated AS timesince
+FROM sf_links
+WHERE
+    url LIKE %s
+    or url ~* %s
+ORDER BY datecreated DESC
+LIMIT %s
+OFFSET %s
+"""
+
 _ADD_NEW_LINK = """
 INSERT INTO sf_links
     (title, url, description)

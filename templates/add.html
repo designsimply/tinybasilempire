@@ -1,40 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<!--     {% if request.form %}
-        {{ request.form }}
-    {% else %} -->
+{% if links %}
+<h5 style="text-align: center;">Wait… are you adding a duplicate?<br>{{ defragged[:-1] }}</h5>
+<p>
+    <a href="{{ request.path }}?limit={{ limit }}&page={{ page-1 }}">previous</a>
+    <a href="{{ request.path }}?limit={{ limit }}&page={{ page+1 }}">next</a>
+</p>
+{% include 'includes/linkslist.html' %}
+{% endif %}
 <form id="add" action="{{ url_for('add') }}" method="post">
     <fieldset>
         <label for="title" class="placeholder active">Title</label>
         <input class="u-full-width" type="text" name="title" tabindex="5" autofocus=""
             value="{{ request.args.get('title', '') }}" required>
-        <div class="row">
-            <div class="six columns">
-                <label for="url" class="placeholder ">Link</label>
-                <input class="u-full-width" type="text" name="url" id="url" tabindex="6" class="av-password"
-                    value="{{ request.args.get('url', '') }}">
-                <label for="tags" class="placeholder ">Tags</label>
-                <input class="u-full-width" type="text" name="tags" id="tags" tabindex="8" class="av-password"
-                    value="{{ request.args.get('tags', '') }}">
-            </div>
-            <div class="six columns">
-                <label for="description" class="placeholder">Description</label>
-                <textarea style="min-height: 8em;" class="u-full-width" name="description" id="description"
-                    tabindex="7">{{ request.args.get('desc', '') }}</textarea>
-            </div>
-        </div>
+        <label for="url" class="placeholder ">Link</label>
+        <input class="u-full-width" type="text" name="url" id="url" tabindex="6" class="av-password"
+            value="{{ request.args.get('url', '') }}">
+        <label for="tags" class="placeholder ">Tags</label>
+        <input class="u-full-width" type="text" name="tags" id="tags" tabindex="8" class="av-password"
+            value="{{ request.args.get('tags', '') }}">
+        <label for="description" class="placeholder">Description</label>
+        <textarea style="min-height: 8em;" class="u-full-width" name="description" id="description"
+            tabindex="7">{{ request.args.get('desc', '') }}</textarea>
         <input class="button-primary" type="submit" tabindex="9" value="Add">
     </fieldset>
 </form>
-
+<!-- 
 <ul>
-    <!-- {% endif %} -->
-
     {% for link in links %}
     <li>
         {% if current_user.is_authenticated %}
-        <a class="edit" href="#">edit</a>
         <a class="edit" href="#">✎</a>
         {% endif %}
         <a href="{{ link.url }}">{{ link.title }}</a>
@@ -42,4 +38,5 @@
     </li>
     {% endfor %}
 </ul>
+ -->
 {% endblock %}

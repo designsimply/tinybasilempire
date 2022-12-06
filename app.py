@@ -11,6 +11,7 @@ from flask_login import (
     logout_user,
 )
 from oauthlib.oauth2 import WebApplicationClient
+import urllib
 import datetime as dt
 from datetime import timezone
 import humanize
@@ -20,7 +21,13 @@ import config
 from db.db import query_db
 from db.users import User
 from db.links import add_new_link
-from db.sql import _QUERY_ALL_LINKS, _QUERY_SEARCH_LINKS, _GET_LINK, _GET_TAGNAMES
+from db.sql import (
+    _QUERY_ALL_LINKS,
+    _QUERY_SEARCH_LINKS,
+    _GET_LINK,
+    _GET_TAGNAMES,
+    _QUERY_SEARCH_LINKS_BY_URL,
+)
 
 client = WebApplicationClient(config.GOOGLE_CLIENT_ID)
 
@@ -51,6 +58,12 @@ def db_links_select(limit=5, offset=0):
 
 def db_links_search(title="%%", description="%%", limit=5, offset=0):
     return query_db(_QUERY_SEARCH_LINKS, params=(title, description, limit, offset))
+
+
+def search_links_by_url(defragged="", limit=5, offset=0):
+    return query_db(
+        _QUERY_SEARCH_LINKS_BY_URL, params=(defragged, defragged, limit, offset)
+    )
 
 
 # def pagination_params():
@@ -180,9 +193,40 @@ def profile():
 @app.route("/add", methods=["GET", "POST"])
 # @login_required
 def add():
-    if request.method == "POST":
+    if request.method == "GET":
+        limit = request.args.get("limit", 5, type=int)
+        page = request.args.get("page", 1, type=int)
+        offset = (page - 1) * limit  # page=2, limit=10, offset = 10
+        url = request.args.get("url", "", type=str)
+        title = request.form.get("title", "", type=str)
+        # if url is None and title is None:
+        if url is None:
+            links = []
+        else:
+            if url is not None:
+                defragged = urllib.parse.urldefrag(url).url + "%"
+            else:
+                defragged = ""
+            if title is None:
+                title = "%%"
+            links = search_links_by_url(
+                defragged=defragged,
+                # title=title,
+                limit=limit,
+                offset=offset,
+            )
+        return render_template(
+            "add.html",
+            current_user=current_user,
+            links=links,
+            page=page,
+            limit=limit,
+            offset=offset,
+            title=title,
+            defragged=defragged,
+        )
+    elif request.method == "POST":
         if current_user.is_authenticated:
-            # request.form
             title = request.form.get("title")
             url = request.form.get("url")
             description = request.form.get("description")
@@ -193,10 +237,8 @@ def add():
                 tag_names = tags.split(",")
 
             # return f'{request.form}'
-            new_link, _new_link_tag_names = add_new_link(
-                title, url, description, tag_names
-            )
-            return redirect(url_for("link_get", link_id=new_link.id))
+            new_link = add_new_link(title, url, description, tag_names)
+            return redirect("/add/" + str(new_link[0][0]))
     return render_template("add.html")
 
 
