@@ -1,4 +1,4 @@
-import os
+import config
 import psycopg2
 import psycopg2.extras
 
@@ -6,12 +6,10 @@ import psycopg2.extras
 def get_db_connection():
     """Database connection."""
     conn = psycopg2.connect(
-        host="localhost",
-        database="stuffdb",
-        # TDDO move these variables to config. config.DB_USERNAME
-        # any os.environ should be in config
-        user=os.environ["DB_USERNAME"],
-        password=os.environ["DB_PASSWORD"],
+        host=config.DB_HOST,
+        database=config.DB_NAME,
+        user=config.DB_USER,
+        password=config.DB_PASS,
     )
     return conn
 
