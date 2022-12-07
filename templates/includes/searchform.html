@@ -1,8 +1,11 @@
+{% if searchterm %}
+{% set searchform_placeholder = searchterm %}
+{% else %}
+{% set searchform_placeholder = '🌱 tiny basil empire 🌱' %}
+{% endif %}
 <form id="search" action="/search" method="GET" role="search">
-    <fieldset>
-        <input class="u-full-width" name="q" maxlength="2048" type="text" aria-autocomplete="both" aria-haspopup="false"
-            autocapitalize="off" autocomplete="off" autocorrect="off" role="combobox" spellcheck="false" title="Search"
-            aria-label="Search" placeholder="💠 Search…" tabindex="0" value="">
-        <!-- <input class="button-primary" type="submit" tabindex="1" value="Search"> -->
-    </fieldset>
+    <input class="u-full-width" name="q" maxlength="2048" type="text" aria-autocomplete="both" aria-haspopup="false"
+        autocapitalize="off" autocomplete="off" autocorrect="off" role="combobox" spellcheck="false" title="Search"
+        aria-label="Search" placeholder="{{ searchform_placeholder }}" tabindex="0" value="">
+    <!-- <input class="button-primary" type="submit" tabindex="1" value="Search"> -->
 </form>

@@ -1,30 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    {% set searchform_placeholder = '🌱 tiny basil empire 🌱' %}
+    {% set header_font = "Merriweather" %}
+    {% set body_font = 'Open Sans' %}
     <meta charset="UTF-8">
-    <title>{% block myblockname %}{% endblock %}</title>
-    <link href="//fonts.googleapis.com/css?family=Inter:400,300,600" rel="stylesheet" type="text/css">
+    <title>{{ searchform_placeholder }}</title>
+    <link href="https://fonts.googleapis.com/css?family={{ header_font }}:300,400,600" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family={{ body_font }}:300,400,600" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/skeleton.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-family: '{{ body_font }}',
+            sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        form#search input[name="q"],
+        form#search input[name="q"]::placeholder {
+            font-family: '{{ header_font }}',
+            serif;
+
+        }
+    </style>
 </head>
+
 <body>
-<div class="section header">
-    <div class="container">
-        <!-- <h1>{{ context_name_for_sheri }}</h1> -->
-        {% include 'includes/searchform.html' %}
-        {% include 'includes/nav.html' %}
+    <div class="section header">
+        <div class="container">
+            <!-- <h1>{{ context_name_for_sheri }}</h1> -->
+            {% include 'includes/searchform.html' %}
+            {% include 'includes/nav.html' %}
+        </div>
     </div>
-</div>
-<div class="section content">
-    <div class="container">
-        {% block content %} {% endblock %}
+    <div class="section content">
+        <div class="container">
+            {% block content %} {% endblock %}
+        </div>
     </div>
-</div>
-<div class="section footer">
-    <div class="container">
-        {% include 'includes/nav.html' %}
+    <div class="section footer">
+        <div class="container">
+            {% include 'includes/nav.html' %}
+        </div>
     </div>
-</div>
 </body>
+
 </html>
