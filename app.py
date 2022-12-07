@@ -26,7 +26,7 @@ from db.sql import (
     _QUERY_SEARCH_LINKS,
     _GET_LINK,
     _GET_TAGNAMES,
-    _QUERY_SEARCH_LINKS_BY_URL,
+    _SEARCH_FOR_POTENTIAL_DUPES,
 )
 
 client = WebApplicationClient(config.GOOGLE_CLIENT_ID)
@@ -60,9 +60,9 @@ def db_links_search(title="%%", description="%%", limit=5, offset=0):
     return query_db(_QUERY_SEARCH_LINKS, params=(title, description, limit, offset))
 
 
-def search_links_by_url(defragged="", limit=5, offset=0):
+def search_links_by_defragged_url(fuzzy, defragged, limit=5, offset=0):
     return query_db(
-        _QUERY_SEARCH_LINKS_BY_URL, params=(defragged, defragged, limit, offset)
+        _SEARCH_FOR_POTENTIAL_DUPES, params=(fuzzy, defragged, limit, offset)
     )
 
 
@@ -190,6 +190,23 @@ def profile():
         # return jsonify(error='unauthorized' ), 403
 
 
+def tag_string_to_list(tags):
+    if tags == "":
+        return []
+    else:
+        tag_names = tags.split(",")
+        tag_list = [tag.strip() for tag in tag_names]
+        return tag_list
+
+
+def tag_list_to_string(tags):
+    if len(tags) == 0:
+        return ""
+    else:
+        tag_names = ", ".join(tags)
+        return tag_names
+
+
 @app.route("/add", methods=["GET", "POST"])
 # @login_required
 def add():
@@ -199,72 +216,56 @@ def add():
         offset = (page - 1) * limit  # page=2, limit=10, offset = 10
         url = request.args.get("url", "", type=str)
         title = request.form.get("title", "", type=str)
-        # if url is None and title is None:
-        if url is None:
-            links = []
-        else:
-            if url is not None:
-                defragged = urllib.parse.urldefrag(url).url + "%"
-            else:
-                defragged = ""
-            if title is None:
-                title = "%%"
-            links = search_links_by_url(
+
+        if len(url) > 0:
+            defragged = urllib.parse.urldefrag(url).url
+            links = search_links_by_defragged_url(
+                fuzzy=defragged + "%",
                 defragged=defragged,
-                # title=title,
                 limit=limit,
                 offset=offset,
             )
-        return render_template(
-            "add.html",
-            current_user=current_user,
-            links=links,
-            page=page,
-            limit=limit,
-            offset=offset,
-            title=title,
-            defragged=defragged,
-        )
+            return render_template(
+                "add.html",
+                links=links,
+                page=page,
+                limit=limit,
+                offset=offset,
+                defragged=defragged,
+            )
+        else:
+            return render_template("add.html")
+
     elif request.method == "POST":
         if current_user.is_authenticated:
             title = request.form.get("title")
             url = request.form.get("url")
             description = request.form.get("description")
             tags = request.form.get("tags", "")
-            if tags == "":
-                tag_names = []
-            else:
-                tag_names = tags.split(",")
-
-            # return f'{request.form}'
-            new_link = add_new_link(title, url, description, tag_names)
-            return redirect("/add/" + str(new_link[0][0]))
+            tag_list = tag_string_to_list(tags)
+            link, tag_list_rows = add_new_link(title, url, description, tag_list)
+            return redirect("/link/" + str(link.id))
     return render_template("add.html")
 
 
-@app.route("/add/<int:link_id>")
+@app.route("/link/<int:link_id>")
 def link_get(link_id):
-    inserted = query_db(
-        _GET_LINK,
-        params=(link_id,),
-    )
-    tags_for_inserted = query_db(
-        _GET_TAGNAMES,
-        params=(link_id,),
-    )
-    link = inserted[0]
-    tags = ""
-    if len(tags_for_inserted) > 0:
-        tags = "".join(tags_for_inserted[0])
+    link = query_db(_GET_LINK, params=(link_id,))
+    link = link[0]
+    tag_list = query_db(_GET_TAGNAMES, params=[link_id])
+    tag_names = []
+    for tag in tag_list:
+        tag_names.append(tag.name)
+    tags = ", ".join(tag_names)
     created_at = humanize.naturaltime(dt.datetime.now(timezone.utc) - link.datecreated)
     return render_template(
         "link.html",
-        link_id=link_id,
+        link_id=link.id,
         title=link.title,
         url=link.url,
         description=link.description,
-        created_at=created_at,
         tags=tags,
+        created_at=created_at,
     )
     # return f'<li>{link_id} - {created_at} - <a href="{link.url}">{link.title}</a> {link.description} ({tags})</li>'  # noqa
     # return f"""

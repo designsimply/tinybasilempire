@@ -19,7 +19,7 @@ SELECT
     , title
     , description
     , datecreated
-    , NOW() - datecreated AS timesince
+    -- , NOW() - datecreated AS timesince
 FROM sf_links
 WHERE
     title ~* %s
@@ -29,7 +29,7 @@ LIMIT %s
 OFFSET %s
 """
 
-_QUERY_SEARCH_LINKS_BY_URL = """
+_SEARCH_FOR_POTENTIAL_DUPES = """
 SELECT
     id
     , url
@@ -46,6 +46,21 @@ LIMIT %s
 OFFSET %s
 """
 
+_SEARCH_FOR_EXACT_URL = """
+SELECT
+    id
+    , url
+    , title
+    , description
+    , datecreated
+FROM sf_links
+WHERE
+    url = %s
+ORDER BY datecreated DESC
+LIMIT 5
+OFFSET 0
+"""
+
 _ADD_NEW_LINK = """
 INSERT INTO sf_links
     (title, url, description)
@@ -54,16 +69,33 @@ VALUES
 RETURNING id
 """
 
+_ADD_LINK = """
+INSERT INTO sf_links
+    (title, url, description)
+VALUES
+    (%s, %s, %s)
+RETURNING id, title, url, description
+"""
+
 _GET_LINK = """
 SELECT
-    title, url, description, datecreated
+    id, title, url, description, datecreated
 FROM
     sf_links
 WHERE
     id=%s
 """
 
-_ADD_TAGS = """
+_GET_TAG_ID = """
+SELECT
+    tag_id
+FROM
+    sf_tag
+WHERE
+    name=%s
+"""
+
+_ADD_TAG = """
 INSERT INTO sf_tag
     (name)
 VALUES
@@ -74,14 +106,14 @@ RETURNING tag_id
 
 _ADD_TAGMAP = """
 INSERT INTO sf_tagmap
-    (tag_id, link_id)
+    (link_id, tag_id)
 VALUES
     (%s, %s)
 ON CONFLICT DO NOTHING
 RETURNING tagmap_id
 """
 
-_GET_TAGNAMES = """
+_GET_TAGNAMES_SELECT_DISTINCT = """
 SELECT
 DISTINCT
     sf_tag.name
@@ -91,7 +123,7 @@ WHERE
     sf_tagmap.tag_id = sf_tag.tag_id
     AND sf_tagmap.link_id=%s
 """
-_GET_TAGNAMES_WITH_JOIN = """
+_GET_TAGNAMES = """
 SELECT
     sf_tag.name
 FROM

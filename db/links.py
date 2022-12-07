@@ -1,41 +1,49 @@
-import psycopg2
-import psycopg2.extras
-from db.db import get_db_connection
-from db.sql import _ADD_NEW_LINK, _ADD_TAGS, _ADD_TAGMAP, _GET_TAGNAMES_WITH_JOIN
+from db.db import query_db
+from db.sql import (
+    _ADD_LINK,
+    _ADD_TAG,
+    _GET_TAG_ID,
+    _ADD_TAGMAP,
+    _GET_TAGNAMES,
+)
 
 
 # TODO: create Link class
-def add_new_link(title, url, description, tag_names):
-    with get_db_connection() as conn:
-        with conn.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) as cur:
-            cur.execute(
-                _ADD_NEW_LINK,
-                [title, url, description],
-            )
-            new_link = cur.fetchone()
-            inserted_link_id = new_link.id
+def add_link(title, url, description):
+    links = query_db(_ADD_LINK, params=(title, url, description))
+    link = links[0]
+    return link
 
-        if len(tag_names) > 0:
-            with conn.cursor(cursor_factory=psycopg2.extras.NamedTupleCursor) as cur:
-                tag_ids = []
-                for tag_name in tag_names:
-                    cur.execute(
-                        _ADD_TAGS,
-                        [tag_name],
-                    )
-                    inserted_tag = cur.fetchone()
-                    tag_ids.append(inserted_tag.tag_id)
-                for tag_id in tag_ids:
-                    cur.execute(
-                        _ADD_TAGMAP,
-                        [tag_id, inserted_link_id],
-                    )
-                cur.execute(
-                    _GET_TAGNAMES_WITH_JOIN,
-                    [inserted_link_id],
-                )
-                new_link_tag_names = cur.fetchall()
+
+def add_tags(tag_list):
+    tag_ids = []
+    for tag in tag_list:
+        tag_exists = query_db(_GET_TAG_ID, params=[tag])
+        if len(tag_exists) > 0:
+            tag_ids.append(tag_exists[0])
         else:
-            new_link_tag_names = ""
+            tag_inserted = query_db(_ADD_TAG, params=[tag])
+            tag_ids.append(tag_inserted[0])
+    return tag_ids
 
-    return new_link, new_link_tag_names
+
+def map_tags(link_id, tag_ids):
+    tag_list = []
+    tagmap_ids = []
+    for tag_id in tag_ids:
+        tagmap = query_db(_ADD_TAGMAP, params=[link_id, tag_id])
+        tagmap_ids.append(tagmap[0])
+    tag_list = query_db(_GET_TAGNAMES, params=[link_id])
+    return tag_list
+
+
+def add_new_link(title, url, description, tag_list):
+    link = add_link(title, url, description)
+
+    if len(tag_list) > 0:
+        tag_ids = add_tags(tag_list)
+        tag_list = map_tags(link.id, tag_ids)
+    else:
+        tag_list = []
+
+    return link, tag_list

@@ -17,12 +17,12 @@
         <label for="url" class="placeholder ">Link</label>
         <input class="u-full-width" type="text" name="url" id="url" tabindex="6" class="av-password"
             value="{{ request.args.get('url', '') }}">
-        <label for="tags" class="placeholder ">Tags</label>
-        <input class="u-full-width" type="text" name="tags" id="tags" tabindex="8" class="av-password"
-            value="{{ request.args.get('tags', '') }}">
         <label for="description" class="placeholder">Description</label>
         <textarea style="min-height: 8em;" class="u-full-width" name="description" id="description"
             tabindex="7">{{ request.args.get('desc', '') }}</textarea>
+        <label for="tags" class="placeholder ">Tags</label>
+        <input class="u-full-width" type="text" name="tags" id="tags" tabindex="8" class="av-password"
+            value="{{ request.args.get('tags', '') }}">
         <input class="button-primary" type="submit" tabindex="9" value="Add">
     </fieldset>
 </form>
