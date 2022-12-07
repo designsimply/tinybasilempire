@@ -52,6 +52,18 @@ def load_user(user_id):
     return User.get(user_id)
 
 
+# friendlier formats for time since
+def strfdelta(tdelta, fmt):
+    d = {"days": tdelta.days}
+    d["hours"], rem = divmod(tdelta.seconds, 3600)
+    d["minutes"], d["seconds"] = divmod(rem, 60)
+    return fmt.format(**d)
+
+
+# make strfdelta function available in all templates
+app.jinja_env.globals["strfdelta"] = strfdelta
+
+
 def db_links_select(limit=5, offset=0):
     return query_db(_QUERY_ALL_LINKS, params=(limit, offset))
 
@@ -260,6 +272,7 @@ def link_get(link_id):
     created_at = humanize.naturaltime(dt.datetime.now(timezone.utc) - link.datecreated)
     return render_template(
         "link.html",
+        link=link,
         link_id=link.id,
         title=link.title,
         url=link.url,
