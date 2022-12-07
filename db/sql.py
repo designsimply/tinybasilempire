@@ -19,7 +19,7 @@ SELECT
     , title
     , description
     , datecreated
-    -- , NOW() - datecreated AS timesince
+    , NOW() - datecreated AS timesince
 FROM sf_links
 WHERE
     title ~* %s
