@@ -15,15 +15,16 @@ function search() {
 
 // single keys
 Mousetrap.bind('4', function () { console.log('4'); });
-Mousetrap.bind('/', function () { document.getElementById("search").focus(); return false; });
+Mousetrap.bind('/', function () { document.getElementById("q").focus(); return false; });
 Mousetrap.bind("?", function () { alert('show shortcuts!'); });
 Mousetrap.bind("h", function () { document.getElementById("home").click(); });
 Mousetrap.bind("t", function () { document.getElementById("tags").click(); });
 Mousetrap.bind("a", function () { document.getElementById("add").click(); });
-Mousetrap.bind("[", function () { document.getElementById("next").click(); });
-Mousetrap.bind("]", function () { document.getElementById("previous").click(); });
+Mousetrap.bind("]", function () { document.getElementById("next").click(); });
+Mousetrap.bind("[", function () { document.getElementById("previous").click(); });
 Mousetrap.bind("j", function () { document.getElementById("next").click(); });
 Mousetrap.bind("k", function () { document.getElementById("previous").click(); });
+Mousetrap.bind("s h e r i", function () { alert('hello sheri'); });
 //Mousetrap.bind('esc', function () { console.log('escape'); }, 'keyup');
 
 // combinations
