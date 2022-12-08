@@ -29,6 +29,15 @@ LIMIT %s
 OFFSET %s
 """
 
+_QUERY_SEARCH_COUNT = """
+SELECT
+    COUNT(*) as count
+FROM sf_links
+WHERE
+    title ~* %s
+    OR description ~* %s
+"""
+
 _SEARCH_FOR_POTENTIAL_DUPES = """
 SELECT
     id

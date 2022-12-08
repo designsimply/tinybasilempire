@@ -24,6 +24,7 @@ from db.links import add_new_link
 from db.sql import (
     _QUERY_ALL_LINKS,
     _QUERY_SEARCH_LINKS,
+    _QUERY_SEARCH_COUNT,
     _GET_LINK,
     _GET_TAGNAMES,
     _SEARCH_FOR_POTENTIAL_DUPES,
@@ -70,6 +71,10 @@ def db_links_select(limit=5, offset=0):
 
 def db_links_search(title="%%", description="%%", limit=5, offset=0):
     return query_db(_QUERY_SEARCH_LINKS, params=(title, description, limit, offset))
+
+
+def db_links_search_count(title="%%", description="%%"):
+    return query_db(_QUERY_SEARCH_COUNT, params=(title, description))
 
 
 def search_links_by_defragged_url(fuzzy, defragged, limit=5, offset=0):
@@ -304,9 +309,13 @@ def s():
         offset=offset,
     )
 
+    count = db_links_search_count(title=searchterm, description=searchterm)
+    total = count[0].count
+
     return render_template(
         "search.html",
         links=links,
+        total=total,
         page=page,
         limit=limit,
         offset=offset,
@@ -328,9 +337,13 @@ def search(searchterm):
         offset=offset,
     )
 
+    count = db_links_search_count(title=searchterm, description=searchterm)
+    total = count[0].count
+
     return render_template(
         "search.html",
         links=links,
+        total=int(total),
         page=page,
         limit=limit,
         offset=offset,

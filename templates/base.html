@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/skeleton.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{ url_for('static', filename='js/mousetrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/keyboard-shortcuts.js') }}"></script>
     <style>
         body {
             font-family: '{{ body_font }}',
@@ -37,7 +39,7 @@
     <div class="section header">
         <div class="container">
             <!-- <h1>{{ context_name_for_sheri }}</h1> -->
-            {% include 'includes/searchform.html' %}
+            {% include 'includes/form.html' %}
             {% include 'includes/nav.html' %}
         </div>
     </div>

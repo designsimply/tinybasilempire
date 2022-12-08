@@ -12,8 +12,8 @@ abbr {
 	color: #bbb;
 }
 
-form#search input[name="q"],
-form#search input[name="q"]::placeholder {
+input#search,
+input#search::placeholder {
 	color: #666;
 }
 
@@ -29,17 +29,9 @@ input[type="button"].button-primary {
 
 /* Forms
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-form#search {
-	margin: 1.6em 0 0 0;
-}
 
-/* form#search input[type="submit"] {
-	position: relative;
-	left: -12px;
-} */
-
-form#search input[name="q"],
-form#search input[type="submit"] {
+input#search {
+	margin: .8em 0 0 0;
 	border: 0;
 	border-radius: 6px;
 	font-size: 3.2em;
