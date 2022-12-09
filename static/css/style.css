@@ -74,3 +74,18 @@ nav.list {
 	width: 100%;
 }
 
+@media (max-width: 900px) {
+	form#search input[name="q"] {
+		font-size: 2.4em;
+	}
+
+	li {
+		line-height: 2em;
+		max-height: 2em;
+		overflow: hidden;
+	}
+
+	abbr {
+		display: none;
+	}
+}
