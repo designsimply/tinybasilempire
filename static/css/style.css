@@ -29,7 +29,6 @@ input[type="button"].button-primary {
 
 /* Forms
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-
 form#search input[name="q"] {
 	margin: .8em 0 0 0;
 	border: 0;
@@ -39,6 +38,8 @@ form#search input[name="q"] {
 	text-align: center;
 }
 
+/* Other
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
 li {
 	margin-bottom: 0.2rem;
 }
@@ -46,6 +47,11 @@ li {
 a.edit,
 a.del {
 	text-decoration: none;
+}
+
+a#next {
+	position: absolute;
+	right: 0;
 }
 
 abbr.date {
@@ -57,3 +63,14 @@ abbr.date {
 abbr.date::after {
 	content: " - ";
 }
+
+nav a {
+	text-decoration: none;
+}
+
+nav.list {
+	display: inline-block;
+	height: 2em;
+	width: 100%;
+}
+

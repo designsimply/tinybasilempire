@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<p>
-    {% if page > 1 %}
-    <a id="previous" href="{{ request.path }}?limit={{ limit }}&page={{ page-1 }}">previous</a>
-    {% endif %}
-    <a id="next" href="{{ request.path }}?limit={{ limit }}&page={{ page+1 }}">next</a>
-</p>
-{% include 'includes/linkslist.html' %}
+<nav class="list">
+    <p>
+        {% if page > 1 %}
+        <a id="previous" href="{{ request.path }}?limit={{ limit }}&page={{ page-1 }}">previous</a>
+        {% endif %}
+        <a id="next" href="{{ request.path }}?limit={{ limit }}&page={{ page+1 }}">next</a>
+    </p>
+</nav>
+{% include 'includes/list.html' %}
 {% endblock %}

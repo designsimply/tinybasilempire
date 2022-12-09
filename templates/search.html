@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<p>
-    {% if page > 1 %}
-    <a id="previous" href="{{ request.path }}?q={{searchterm}}&limit={{ limit }}&page={{ page-1 }}">previous</a>
-    {% endif %}
-    {% if limit * page < total %} <a id="next"
-        href="{{ request.path }}?q={{searchterm}}&limit={{ limit }}&page={{ page+1 }}">next</a>
+<nav class="list">
+    <p>
+        {% if page > 1 %}
+        <a id="previous" href="{{ request.path }}?q={{searchterm}}&limit={{ limit }}&page={{ page-1 }}">previous</a>
         {% endif %}
-
-</p>
-
-{% include 'includes/linkslist.html' %}
+        {% if limit * page < total %} <a id="next"
+            href="{{ request.path }}?q={{searchterm}}&limit={{ limit }}&page={{ page+1 }}">next</a>
+            {% endif %}
+    </p>
+</nav>
+{% include 'includes/list.html' %}
 {% endblock %}
