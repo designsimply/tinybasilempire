@@ -29,11 +29,12 @@ from db.sql import (
     _GET_TAGNAMES,
     _SEARCH_FOR_POTENTIAL_DUPES,
 )
+from flask_sslify import SSLify
 
 client = WebApplicationClient(config.GOOGLE_CLIENT_ID)
 
 app = Flask(__name__)
-
+sslify = SSLify(app)
 app.secret_key = config.SECRET_KEY
 
 # user session management setup from
