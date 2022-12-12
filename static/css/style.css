@@ -53,6 +53,11 @@ li {
 	margin-bottom: 0.2rem;
 }
 
+.current {
+	border: 1px solid #ddd;
+	border-radius: .5em;
+}
+
 a.edit,
 a.del {
 	text-decoration: none;

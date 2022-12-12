@@ -1,6 +1,6 @@
-<ul>
+<ul class="list">
     {% for link in links %}
-    <li>
+    <li class="item">
         <abbr class="date" title="{{ link.datecreated }}">
             {% if strfdelta %}
             {{ strfdelta(link.timesince, "{days} d {hours} h ago") }}
@@ -9,7 +9,7 @@
         {% if current_user.is_authenticated %}
         <a class="edit" href="#">🛠</a> <a class="del" href="#">🔪</a>
         {% endif %}
-        <a href="{{ link.url }}">{{ link.title }}</a>
+        <a class="link" href="{{ link.url }}">{{ link.title }}</a>
         {% if link.description %}
         〰️ {{ link.description }}
         {% endif %}
