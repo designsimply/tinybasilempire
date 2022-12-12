@@ -1,6 +1,6 @@
 <nav class="main">
     <a id="home" href="{{ url_for('index') }}">home</a>
-    <a id="tags" href="#">tags</a>
+    <a id="tags" href="{{ url_for('tags') }}">tags</a>
     {% if current_user.is_authenticated %}
     <a id="add" href="{{ url_for('add') }}">add</a>
     <!--

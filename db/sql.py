@@ -12,6 +12,51 @@ LIMIT %s
 OFFSET %s
 """
 
+_QUERY_ALL_TAGS = """
+SELECT name
+FROM sf_tag
+ORDER BY name
+LIMIT %s
+OFFSET %s
+"""
+
+_QUERY_TAGS_COUNT = """
+SELECT COUNT(*) as count
+FROM sf_tag
+"""
+
+_QUERY_GET_TAG_LINKS = """
+SELECT
+    id
+    , url
+    , title
+    , description
+    , datecreated
+    , NOW() - datecreated AS timesince
+FROM
+    sf_tagmap tm
+    , sf_links l
+    , sf_tag t
+WHERE tm.tag_id = t.tag_id
+    AND ( t.name = %s )
+    AND l.id = tm.link_id
+ORDER BY lastmodified DESC
+LIMIT %s
+OFFSET %s
+"""
+
+_QUERY_GET_TAG_LINKS_COUNT = """
+SELECT
+    COUNT (*) as count
+FROM
+    sf_tagmap tm
+    , sf_links l
+    , sf_tag t
+WHERE tm.tag_id = t.tag_id
+    AND ( t.name = %s )
+    AND l.id = tm.link_id
+"""
+
 _QUERY_SEARCH_LINKS = """
 SELECT
     id

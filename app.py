@@ -23,10 +23,14 @@ from db.users import User
 from db.links import add_new_link
 from db.sql import (
     _QUERY_ALL_LINKS,
+    _QUERY_ALL_TAGS,
+    _QUERY_TAGS_COUNT,
     _QUERY_SEARCH_LINKS,
     _QUERY_SEARCH_COUNT,
     _GET_LINK,
     _GET_TAGNAMES,
+    _QUERY_GET_TAG_LINKS,
+    _QUERY_GET_TAG_LINKS_COUNT,
     _SEARCH_FOR_POTENTIAL_DUPES,
 )
 from flask_sslify import SSLify
@@ -68,6 +72,22 @@ app.jinja_env.globals["strfdelta"] = strfdelta
 
 def db_links_select(limit=5, offset=0):
     return query_db(_QUERY_ALL_LINKS, params=(limit, offset))
+
+
+def db_tags_select(limit=5, offset=0):
+    return query_db(_QUERY_ALL_TAGS, params=(limit, offset))
+
+
+def db_tags_count():
+    return query_db(_QUERY_TAGS_COUNT)
+
+
+def db_tag_links(tag_name="%%", limit=10, offset=0):
+    return query_db(_QUERY_GET_TAG_LINKS, params=(tag_name, limit, offset))
+
+
+def db_tag_links_count(tag_name="%%"):
+    return query_db(_QUERY_GET_TAG_LINKS_COUNT, params=[tag_name])
 
 
 def db_links_search(title="%%", description="%%", limit=5, offset=0):
@@ -267,7 +287,7 @@ def add():
 
 
 @app.route("/link/<int:link_id>")
-def link_get(link_id):
+def link(link_id):
     link = query_db(_GET_LINK, params=(link_id,))
     link = link[0]
     tag_list = query_db(_GET_TAGNAMES, params=[link_id])
@@ -291,6 +311,57 @@ def link_get(link_id):
     #     <li>{link_id} - {created_at} - <a href="{link.url}">
     #     {link.title}</a> {link.description} ({tags})</li>
     # """
+
+
+@app.route("/tags")
+def tags():
+    limit = request.args.get("limit", 100, type=int)
+    page = request.args.get("page", 1, type=int)
+    offset = (page - 1) * limit  # page=2, limit=10, offset = 10
+
+    tags = db_tags_select(
+        limit=limit,
+        offset=offset,
+    )
+
+    total = db_tags_count()
+
+    return render_template(
+        "tags.html",
+        tags=tags,
+        limit=limit,
+        offset=offset,
+        page=page,
+        total=total[0].count,
+        current_user=current_user,
+    )
+
+
+@app.route("/tag/<string:tag_name>")
+def tag(tag_name):
+    limit = request.args.get("limit", 10, type=int)
+    page = request.args.get("page", 1, type=int)
+    offset = (page - 1) * limit
+
+    links = db_tag_links(
+        tag_name=tag_name,
+        limit=limit,
+        offset=offset,
+    )
+
+    count = db_tag_links_count(tag_name=tag_name)
+    total = count[0].count
+
+    return render_template(
+        "search.html",
+        links=links,
+        total=int(total),
+        page=page,
+        limit=limit,
+        offset=offset,
+        tag_name=tag_name,
+        current_user=current_user,
+    )
 
 
 @app.route("/search")

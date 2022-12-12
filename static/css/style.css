@@ -40,6 +40,15 @@ form#search input[name="q"] {
 
 /* Other
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
+ul {
+	list-style: none;
+}
+
+ul.tags {
+	columns: 8;
+	list-style-type: none;
+}
+
 li {
 	margin-bottom: 0.2rem;
 }
@@ -63,15 +72,16 @@ abbr.date {
 	display: inline-block;
 }
 
-abbr.date::after {
+/* abbr.date::after {
 	content: " - ";
-}
+} */
 
 nav a {
 	text-decoration: none;
 }
 
-nav.list {
+nav.list,
+nav.tag-list {
 	display: inline-block;
 	height: 2em;
 	width: 100%;
