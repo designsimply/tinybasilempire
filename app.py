@@ -18,7 +18,7 @@ import humanize
 
 # internal imports
 import config
-from db.db import query_db
+from db import query_db
 from db.users import User
 from db.links import add_new_link
 from db.sql import (

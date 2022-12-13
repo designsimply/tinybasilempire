@@ -1,4 +1,4 @@
-from db.db import query_db
+from db import query_db
 from db.sql import (
     _ADD_LINK,
     _ADD_TAG,
