@@ -14,11 +14,14 @@ OFFSET %s
 
 QUERY_ALL_TAGS = """
 SELECT DISTINCT
-    name
+    name,
+    COUNT(sf_tag.name) as count
 FROM
     sf_tag, sf_tagmap
 WHERE
     sf_tag.tag_id = sf_tagmap.tag_id
+GROUP BY
+    sf_tag.name
 ORDER BY
     sf_tag.name
 LIMIT %s

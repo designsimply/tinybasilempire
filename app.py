@@ -315,7 +315,7 @@ def link(link_id):
 
 @app.route("/tags")
 def tags():
-    limit = request.args.get("limit", 100, type=int)
+    limit = request.args.get("limit", 60, type=int)
     page = request.args.get("page", 1, type=int)
     offset = (page - 1) * limit  # page=2, limit=10, offset = 10
 

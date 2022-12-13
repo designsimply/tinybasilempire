@@ -8,7 +8,8 @@ a:hover {
 	color: #0FA0CE;
 }
 
-abbr {
+abbr,
+.tag-count {
 	color: #bbb;
 }
 
@@ -94,7 +95,9 @@ nav.tag-list {
 
 @media (max-width: 900px) {
 	form#search input[name="q"] {
-		font-size: 2.4em;
+
+	ul.tags {
+		columns: 2;
 	}
 
 	li {

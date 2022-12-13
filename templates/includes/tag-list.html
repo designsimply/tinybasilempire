@@ -1,7 +1,8 @@
 <ul class="tags">
     {% for tag in tags %}
     <li class="tag item">
-        <a class="link" href="/tag/{{ tag.name }}">{{ tag.name }}</a>
+        <a class="link" href="/tag/{{ tag.name }}">{{ tag.name }}</a> <span class="tag-count">({{ tag.count
+            }})</span>
     </li>
     {% endfor %}
 </ul>
