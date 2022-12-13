@@ -1,4 +1,4 @@
-_QUERY_ALL_LINKS = """
+QUERY_ALL_LINKS = """
 SELECT
     id
     , url
@@ -12,20 +12,25 @@ LIMIT %s
 OFFSET %s
 """
 
-_QUERY_ALL_TAGS = """
-SELECT name
-FROM sf_tag
-ORDER BY name
+QUERY_ALL_TAGS = """
+SELECT DISTINCT
+    name
+FROM
+    sf_tag, sf_tagmap
+WHERE
+    sf_tag.tag_id = sf_tagmap.tag_id
+ORDER BY
+    sf_tag.name
 LIMIT %s
 OFFSET %s
 """
 
-_QUERY_TAGS_COUNT = """
+QUERY_TAGS_COUNT = """
 SELECT COUNT(*) as count
 FROM sf_tag
 """
 
-_QUERY_GET_TAG_LINKS = """
+QUERY_GET_TAG_LINKS = """
 SELECT
     id
     , url
@@ -45,7 +50,7 @@ LIMIT %s
 OFFSET %s
 """
 
-_QUERY_GET_TAG_LINKS_COUNT = """
+QUERY_GET_TAG_LINKS_COUNT = """
 SELECT
     COUNT (*) as count
 FROM
@@ -57,7 +62,7 @@ WHERE tm.tag_id = t.tag_id
     AND l.id = tm.link_id
 """
 
-_QUERY_SEARCH_LINKS = """
+QUERY_SEARCH_LINKS = """
 SELECT
     id
     , url
@@ -74,7 +79,7 @@ LIMIT %s
 OFFSET %s
 """
 
-_QUERY_SEARCH_COUNT = """
+QUERY_SEARCH_COUNT = """
 SELECT
     COUNT(*) as count
 FROM sf_links
@@ -83,7 +88,7 @@ WHERE
     OR description ~* %s
 """
 
-_SEARCH_FOR_POTENTIAL_DUPES = """
+SEARCH_FOR_POTENTIAL_DUPES = """
 SELECT
     id
     , url
@@ -100,7 +105,7 @@ LIMIT %s
 OFFSET %s
 """
 
-_SEARCH_FOR_EXACT_URL = """
+SEARCH_FOR_EXACT_URL = """
 SELECT
     id
     , url
@@ -115,7 +120,7 @@ LIMIT 5
 OFFSET 0
 """
 
-_ADD_NEW_LINK = """
+ADD_NEW_LINK = """
 INSERT INTO sf_links
     (title, url, description)
 VALUES
@@ -123,7 +128,7 @@ VALUES
 RETURNING id
 """
 
-_ADD_LINK = """
+ADD_LINK = """
 INSERT INTO sf_links
     (title, url, description)
 VALUES
@@ -131,7 +136,7 @@ VALUES
 RETURNING id, title, url, description
 """
 
-_GET_LINK = """
+GET_LINK = """
 SELECT
     id, title, url, description, datecreated
 FROM
@@ -140,7 +145,7 @@ WHERE
     id=%s
 """
 
-_GET_TAG_ID = """
+GET_TAG_ID = """
 SELECT
     tag_id
 FROM
@@ -149,7 +154,7 @@ WHERE
     name=%s
 """
 
-_ADD_TAG = """
+ADD_TAG = """
 INSERT INTO sf_tag
     (name)
 VALUES
@@ -158,7 +163,7 @@ ON CONFLICT DO NOTHING
 RETURNING tag_id
 """
 
-_ADD_TAGMAP = """
+ADD_TAGMAP = """
 INSERT INTO sf_tagmap
     (link_id, tag_id)
 VALUES
@@ -167,7 +172,7 @@ ON CONFLICT DO NOTHING
 RETURNING tagmap_id
 """
 
-_GET_TAGNAMES_SELECT_DISTINCT = """
+GET_TAGNAMES_SELECT_DISTINCT = """
 SELECT
 DISTINCT
     sf_tag.name
@@ -177,7 +182,7 @@ WHERE
     sf_tagmap.tag_id = sf_tag.tag_id
     AND sf_tagmap.link_id=%s
 """
-_GET_TAGNAMES = """
+GET_TAGNAMES = """
 SELECT
     sf_tag.name
 FROM

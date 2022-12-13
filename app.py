@@ -22,16 +22,16 @@ from db import query_db
 from db.users import User
 from db.links import add_new_link
 from db.sql import (
-    _QUERY_ALL_LINKS,
-    _QUERY_ALL_TAGS,
-    _QUERY_TAGS_COUNT,
-    _QUERY_SEARCH_LINKS,
-    _QUERY_SEARCH_COUNT,
-    _GET_LINK,
-    _GET_TAGNAMES,
-    _QUERY_GET_TAG_LINKS,
-    _QUERY_GET_TAG_LINKS_COUNT,
-    _SEARCH_FOR_POTENTIAL_DUPES,
+    QUERY_ALL_LINKS,
+    QUERY_ALL_TAGS,
+    QUERY_TAGS_COUNT,
+    QUERY_SEARCH_LINKS,
+    QUERY_SEARCH_COUNT,
+    GET_LINK,
+    GET_TAGNAMES,
+    QUERY_GET_TAG_LINKS,
+    QUERY_GET_TAG_LINKS_COUNT,
+    SEARCH_FOR_POTENTIAL_DUPES,
 )
 from flask_sslify import SSLify
 
@@ -71,36 +71,36 @@ app.jinja_env.globals["strfdelta"] = strfdelta
 
 
 def db_links_select(limit=5, offset=0):
-    return query_db(_QUERY_ALL_LINKS, params=(limit, offset))
+    return query_db(QUERY_ALL_LINKS, params=(limit, offset))
 
 
 def db_tags_select(limit=5, offset=0):
-    return query_db(_QUERY_ALL_TAGS, params=(limit, offset))
+    return query_db(QUERY_ALL_TAGS, params=(limit, offset))
 
 
 def db_tags_count():
-    return query_db(_QUERY_TAGS_COUNT)
+    return query_db(QUERY_TAGS_COUNT)
 
 
 def db_tag_links(tag_name="%%", limit=10, offset=0):
-    return query_db(_QUERY_GET_TAG_LINKS, params=(tag_name, limit, offset))
+    return query_db(QUERY_GET_TAG_LINKS, params=(tag_name, limit, offset))
 
 
 def db_tag_links_count(tag_name="%%"):
-    return query_db(_QUERY_GET_TAG_LINKS_COUNT, params=[tag_name])
+    return query_db(QUERY_GET_TAG_LINKS_COUNT, params=[tag_name])
 
 
 def db_links_search(title="%%", description="%%", limit=5, offset=0):
-    return query_db(_QUERY_SEARCH_LINKS, params=(title, description, limit, offset))
+    return query_db(QUERY_SEARCH_LINKS, params=(title, description, limit, offset))
 
 
 def db_links_search_count(title="%%", description="%%"):
-    return query_db(_QUERY_SEARCH_COUNT, params=(title, description))
+    return query_db(QUERY_SEARCH_COUNT, params=(title, description))
 
 
 def search_links_by_defragged_url(fuzzy, defragged, limit=5, offset=0):
     return query_db(
-        _SEARCH_FOR_POTENTIAL_DUPES, params=(fuzzy, defragged, limit, offset)
+        SEARCH_FOR_POTENTIAL_DUPES, params=(fuzzy, defragged, limit, offset)
     )
 
 
@@ -288,9 +288,9 @@ def add():
 
 @app.route("/link/<int:link_id>")
 def link(link_id):
-    link = query_db(_GET_LINK, params=(link_id,))
+    link = query_db(GET_LINK, params=(link_id,))
     link = link[0]
-    tag_list = query_db(_GET_TAGNAMES, params=[link_id])
+    tag_list = query_db(GET_TAGNAMES, params=[link_id])
     tag_names = []
     for tag in tag_list:
         tag_names.append(tag.name)
