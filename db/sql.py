@@ -26,8 +26,12 @@ OFFSET %s
 """
 
 QUERY_TAGS_COUNT = """
-SELECT COUNT(*) as count
-FROM sf_tag
+SELECT
+    COUNT (DISTINCT name) as count
+FROM
+    sf_tag, sf_tagmap
+WHERE
+    sf_tag.tag_id = sf_tagmap.tag_id
 """
 
 QUERY_GET_TAG_LINKS = """
