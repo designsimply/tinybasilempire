@@ -286,7 +286,7 @@ def add():
             description = request.form.get("description")
             tags = request.form.get("tags", "")
             tag_list = tag_string_to_list(tags)
-            link, tag_list_rows = add_new_link(title, url, description, tag_list)
+            link, tag_list = add_new_link(title, url, description, tag_list)
             return redirect("/link/" + str(link.id))
     return render_template("add.html")
 
