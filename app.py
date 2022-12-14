@@ -16,11 +16,16 @@ import datetime as dt
 from datetime import timezone
 import humanize
 
+
 # internal imports
 import config
 from db import query_db
 from db.users import User
-from db.links import add_new_link
+from db.links import (
+    add_new_link,
+    tag_string_to_list,
+    db_get_tag_names_mapped_to_link,
+)
 from db.sql import (
     QUERY_ALL_LINKS,
     QUERY_ALL_TAGS,
@@ -290,11 +295,8 @@ def add():
 def link(link_id):
     link = query_db(GET_LINK, params=(link_id,))
     link = link[0]
-    tag_list = query_db(GET_TAGNAMES, params=[link_id])
-    tag_names = []
-    for tag in tag_list:
-        tag_names.append(tag.name)
-    tags = ", ".join(tag_names)
+    tag_names = db_get_tag_names_mapped_to_link(link_id)
+    tag_names_joined = ", ".join(tag_names)
     created_at = humanize.naturaltime(dt.datetime.now(timezone.utc) - link.datecreated)
     return render_template(
         "link.html",
@@ -303,14 +305,14 @@ def link(link_id):
         title=link.title,
         url=link.url,
         description=link.description,
-        tags=tags,
+        tags=tag_names_joined,
         created_at=created_at,
     )
-    # return f'<li>{link_id} - {created_at} - <a href="{link.url}">{link.title}</a> {link.description} ({tags})</li>'  # noqa
+    # debugging example
     # return f"""
     #     <li>{link_id} - {created_at} - <a href="{link.url}">
     #     {link.title}</a> {link.description} ({tags})</li>
-    # """
+    # """ # noqa
 
 
 @app.route("/tags")

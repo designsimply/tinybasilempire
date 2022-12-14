@@ -161,6 +161,15 @@ WHERE
     name=%s
 """
 
+GET_TAG_NAME = """
+SELECT
+    name
+FROM
+    sf_tag
+WHERE
+    tag_id=%s
+"""
+
 ADD_TAG = """
 INSERT INTO sf_tag
     (name)
@@ -179,18 +188,18 @@ ON CONFLICT DO NOTHING
 RETURNING tagmap_id
 """
 
-GET_TAGNAMES_SELECT_DISTINCT = """
-SELECT
-DISTINCT
-    sf_tag.name
-FROM
-    sf_links, sf_tag, sf_tagmap
+DELETE_TAGMAP = """
+DELETE FROM
+    sf_tagmap
 WHERE
-    sf_tagmap.tag_id = sf_tag.tag_id
-    AND sf_tagmap.link_id=%s
+    link_id = %s
+    AND tag_id = %s
+RETURNING tagmap_id;
 """
-GET_TAGNAMES = """
+
+GET_TAGS_MAPPED_TO_LINK_ID = """
 SELECT
+    sf_tag.tag_id,
     sf_tag.name
 FROM
     sf_tag
