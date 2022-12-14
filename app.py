@@ -26,6 +26,7 @@ from db.links import (
     add_new_link,
     tag_string_to_list,
     db_get_tag_names_mapped_to_link,
+    update_link,
 )
 from db.sql import (
     QUERY_ALL_LINKS,
@@ -34,7 +35,6 @@ from db.sql import (
     QUERY_SEARCH_LINKS,
     QUERY_SEARCH_COUNT,
     GET_LINK,
-    GET_TAGNAMES,
     QUERY_GET_TAG_LINKS,
     QUERY_GET_TAG_LINKS_COUNT,
     SEARCH_FOR_POTENTIAL_DUPES,
@@ -234,23 +234,6 @@ def profile():
         # return jsonify(error='unauthorized' ), 403
 
 
-def tag_string_to_list(tags):
-    if tags == "":
-        return []
-    else:
-        tag_names = tags.split(",")
-        tag_list = [tag.strip() for tag in tag_names]
-        return tag_list
-
-
-def tag_list_to_string(tags):
-    if len(tags) == 0:
-        return ""
-    else:
-        tag_names = ", ".join(tags)
-        return tag_names
-
-
 @app.route("/add", methods=["GET", "POST"])
 # @login_required
 def add():
@@ -302,7 +285,48 @@ class EditForm:
     tags: str
 
 
-@dataclass
+@app.route("/edit/<int:link_id>", methods=["GET", "POST"])
+# @login_required
+def edit(link_id):
+    link = []
+    link = query_db(GET_LINK, params=(link_id,))
+    if link:
+        link = link[0]
+    tag_names_from_db = db_get_tag_names_mapped_to_link(link_id)
+    tag_names_from_db_joined = ", ".join(tag_names_from_db)
+
+    if link.datecreated:
+        created_at = humanize.naturaltime(
+            dt.datetime.now(timezone.utc) - link.datecreated
+        )
+    else:
+        created_at = ""
+
+    if link.lastmodified:
+        modified_at = humanize.naturaltime(
+            dt.datetime.now(timezone.utc) - link.lastmodified
+        )
+    else:
+        modified_at = ""
+
+    if request.method == "POST":
+        form = EditForm(**request.form)
+        link, tags_mapped, tags_unmapped = update_link(
+            link_id, form.title, form.url, form.description, form.tags
+        )
+        if link:
+            return redirect("/link/" + str(link.id))
+
+    return render_template(
+        "edit.html",
+        link=link,
+        link_id_string=str(link_id),
+        tags=tag_names_from_db_joined,
+        created_at=created_at,
+        modified_at=modified_at,
+    )
+
+
 @app.route("/link/<int:link_id>")
 def link(link_id):
     link = query_db(GET_LINK, params=(link_id,))

@@ -7,7 +7,7 @@
             {% endif %}
         </abbr>
         {% if current_user.is_authenticated %}
-        <a class="edit" href="#">🛠</a> <a class="del" href="#">🔪</a>
+        <a class="edit" href="{{ url_for('edit', link_id=link.id) }}">🛠</a>
         {% endif %}
         <a class="link" href="{{ link.url }}">{{ link.title }}</a>
         {% if link.description %}

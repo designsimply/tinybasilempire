@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if link.id %}
+<form id="edit" action="" method="post">
+    <fieldset>
+        <label for="title" class="placeholder active">Title</label>
+        <input class="u-full-width" type="text" name="title" tabindex="5" value="{{ link.title }}" required>
+        <label for="url" class="placeholder ">Link</label>
+        <input class="u-full-width" type="text" name="url" id="url" tabindex="6" class="av-password"
+            value="{{ link.url }}">
+        <div class="row">
+            <div class="six columns">
+
+                <label for="description" class="placeholder">Description</label>
+                <textarea style="min-height: 8em;" class="u-full-width" name="description" id="description"
+                    tabindex="7">{{ link.description }}</textarea>
+            </div>
+            <div class="six columns">
+
+                <label for="tags" class="placeholder ">Tags</label>
+                <input class="u-full-width" type="text" name="tags" id="tags" tabindex="8" class="av-password"
+                    value="{{ tags }}">
+                <div class="buttons-container">
+                    <a class="delete button" tabindex="10" href="{{ url_for('link', link_id=link.id) }}">Delete</a>
+                    <input class="button-primary" type="submit" tabindex="9" value="Save">
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form>
+<p>
+    <small>Originally added {{created_at}} on {{link.datecreated}}.</small>
+    {% if link.datecreated != link.lastmodified %}
+    <br><small>Last modified {{modified_at}} on {{link.lastmodified}}.</small>
+    {% endif %}
+</p>
+{% else %}
+<p>Link {{link_id}} was not found.</p>
+{% endif %}
+{% endblock %}

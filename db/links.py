@@ -7,6 +7,7 @@ from db.sql import (
     ADD_TAGMAP,
     DELETE_TAGMAP,
     GET_TAGS_MAPPED_TO_LINK_ID,
+    UPDATE_LINK_NAMED,
 )
 
 
@@ -108,3 +109,46 @@ def add_new_link(title, url, description, tag_list):
         tag_list = []
 
     return link, tag_list
+
+
+def update_link(link_id, title, url, description, tag_names):
+    links = query_db(
+        UPDATE_LINK_NAMED,
+        params={
+            "link_id": link_id,
+            "title": title,
+            "url": url,
+            "description": description,
+        },
+    )
+    link = links[0]
+
+    current_tag_names = db_get_tag_names_mapped_to_link(link_id)
+    current_tag_set = set(current_tag_names)
+    new_tag_names = tag_names = tag_string_to_list(tag_names)
+    new_tag_set = set(new_tag_names)
+    tag_names_to_add = new_tag_set - current_tag_set
+    tag_names_to_remove = current_tag_set - new_tag_set
+    tag_ids_to_add = db_convert_tag_names_to_ids(tag_names_to_add)
+    tag_ids_to_remove = db_convert_tag_names_to_ids(tag_names_to_remove)
+
+    if len(tag_ids_to_remove) > 0:
+        # leave old tags in the tags table for now
+        # tag_ids = remove_tags(tag_ids_to_remove)
+        tags_unmapped = unmap_tags(link.id, tag_ids_to_remove)
+    else:
+        tags_unmapped = []
+
+    if len(tag_ids_to_add) > 0:
+        tag_ids = add_tags(tag_names_to_add)
+        tags_mapped = map_tags(link.id, tag_ids)
+    else:
+        tags_mapped = []
+
+    return link, tags_mapped, tags_unmapped
+
+
+def delete_link(link_id):
+    # $sfdb->query( "DELETE FROM sf_links WHERE id = $link_id;" );
+    # $sfdb->query( "DELETE FROM sf_tagmap WHERE link_id = $link_id;" );
+    return f"{link_id}"

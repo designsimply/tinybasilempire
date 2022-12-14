@@ -143,6 +143,27 @@ VALUES
 RETURNING id, title, url, description
 """
 
+UPDATE_LINK = """
+UPDATE sf_links
+SET
+    title=%s, url=%s, description=%s
+WHERE
+    id = %s
+RETURNING id, title, url, description, datecreated
+"""
+
+UPDATE_LINK_NAMED = """
+UPDATE sf_links
+SET
+    title=%(title)s
+    , url=%(url)s
+    , description=%(description)s
+    , lastmodified=CURRENT_TIMESTAMP
+WHERE
+    id = %(link_id)s
+RETURNING id, title, url, description, datecreated, lastmodified
+"""
+
 GET_LINK = """
 SELECT
     id, title, url, description, datecreated, lastmodified
