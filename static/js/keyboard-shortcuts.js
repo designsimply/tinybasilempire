@@ -43,8 +43,8 @@ Mousetrap.bind('command+shift+k', function () { alert('command shift k'); });
 
 // map multiple combinations to the same callback
 // return false to prevent default browser behavior and stop event bubbling
-Mousetrap.bind(['n', '['], function () { document.getElementById('next').click(); return false; });
-Mousetrap.bind(['p', ']'], function () { document.getElementById('previous').click(); return false; });
+Mousetrap.bind(['n', ']'], function () { document.getElementById('next').click(); return false; });
+Mousetrap.bind(['p', '['], function () { document.getElementById('previous').click(); return false; });
 
 // gmail style sequences
 Mousetrap.bind('g i', function () { document.getElementById('home').click(); });
