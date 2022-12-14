@@ -11,6 +11,7 @@ from flask_login import (
     logout_user,
 )
 from oauthlib.oauth2 import WebApplicationClient
+from dataclasses import dataclass
 import urllib
 import datetime as dt
 from datetime import timezone
@@ -291,6 +292,17 @@ def add():
     return render_template("add.html")
 
 
+@dataclass
+class EditForm:
+    """This is for the Edit Link Form values."""
+
+    title: str
+    url: str
+    description: str
+    tags: str
+
+
+@dataclass
 @app.route("/link/<int:link_id>")
 def link(link_id):
     link = query_db(GET_LINK, params=(link_id,))
