@@ -39,6 +39,12 @@ form#search input[name="q"] {
 	text-align: center;
 }
 
+form .buttons-container {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 3rem;
+}
+
 /* Other
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 ul {
