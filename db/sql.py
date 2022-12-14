@@ -145,7 +145,7 @@ RETURNING id, title, url, description
 
 GET_LINK = """
 SELECT
-    id, title, url, description, datecreated
+    id, title, url, description, datecreated, lastmodified
 FROM
     sf_links
 WHERE
