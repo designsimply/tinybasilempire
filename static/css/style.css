@@ -46,12 +46,12 @@ ul {
 }
 
 ul.tags {
-	columns: 8;
+	columns: 6;
 	list-style-type: none;
 }
 
 li {
-	margin-bottom: 0.2rem;
+	margin-bottom: 0.5rem;
 }
 
 .current {
@@ -60,7 +60,7 @@ li {
 }
 
 a.edit,
-a.del {
+a.delete {
 	text-decoration: none;
 }
 
