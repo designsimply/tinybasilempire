@@ -17,9 +17,9 @@ def get_db_connection():
 # do all the sql!
 def query_db(sql, params=None):
     if params is not None:
-        if not isinstance(params, (list, tuple)):
+        if not isinstance(params, (list, tuple, dict)):
             raise TypeError(
-                f"Params is {type(params)} not list or tuple. Try using [] not ()."
+                f"Params is {type(params)} not list, tuple, dict. Try using [] not ()."
             )
     cursor_factory = psycopg2.extras.NamedTupleCursor
     with get_db_connection() as conn:
