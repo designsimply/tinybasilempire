@@ -19,11 +19,13 @@ SELECT DISTINCT
 FROM
     sf_tag, sf_tagmap
 WHERE
-    sf_tag.tag_id = sf_tagmap.tag_id
+    sf_tag.name  <> ''
+    AND sf_tag.tag_id = sf_tagmap.tag_id
 GROUP BY
     sf_tag.name
 ORDER BY
     sf_tag.name
+    -- count DESC
 LIMIT %s
 OFFSET %s
 """
@@ -166,7 +168,13 @@ RETURNING id, title, url, description, datecreated, lastmodified
 
 GET_LINK = """
 SELECT
-    id, title, url, description, datecreated, lastmodified
+    id
+    , title
+    , url
+    , description
+    , datecreated
+    , lastmodified
+    , NOW() - datecreated AS timesince
 FROM
     sf_links
 WHERE

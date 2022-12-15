@@ -288,10 +288,12 @@ class EditForm:
 @app.route("/edit/<int:link_id>", methods=["GET", "POST"])
 # @login_required
 def edit(link_id):
-    link = []
-    link = query_db(GET_LINK, params=(link_id,))
-    if link:
-        link = link[0]
+    links = []
+    links = query_db(GET_LINK, params=(link_id,))
+    if links:
+        link = links[0]
+    else:
+        link = ""
     tag_names_from_db = db_get_tag_names_mapped_to_link(link_id)
     tag_names_from_db_joined = ", ".join(tag_names_from_db)
 
@@ -302,12 +304,16 @@ def edit(link_id):
     else:
         created_at = ""
 
+    datecreated = link.datecreated.strftime("%Y-%m-%d %I:%M %p")
+
     if link.lastmodified:
         modified_at = humanize.naturaltime(
             dt.datetime.now(timezone.utc) - link.lastmodified
         )
     else:
         modified_at = ""
+
+    lastmodified = link.lastmodified.strftime("%Y-%m-%d %I:%M %p")
 
     if request.method == "POST":
         form = EditForm(**request.form)
@@ -319,30 +325,53 @@ def edit(link_id):
 
     return render_template(
         "edit.html",
-        link=link,
+        links=links,
         link_id_string=str(link_id),
         tags=tag_names_from_db_joined,
         created_at=created_at,
+        datecreated=datecreated,
         modified_at=modified_at,
+        lastmodified=lastmodified,
     )
 
 
 @app.route("/link/<int:link_id>")
 def link(link_id):
-    link = query_db(GET_LINK, params=(link_id,))
-    link = link[0]
+    links = query_db(GET_LINK, params=(link_id,))
+    link = links[0]
     tag_names = db_get_tag_names_mapped_to_link(link_id)
     tag_names_joined = ", ".join(tag_names)
     created_at = humanize.naturaltime(dt.datetime.now(timezone.utc) - link.datecreated)
+    if link.datecreated:
+        created_at = humanize.naturaltime(
+            dt.datetime.now(timezone.utc) - link.datecreated
+        )
+    else:
+        created_at = ""
+
+    datecreated = link.datecreated.strftime("%Y-%m-%d %I:%M %p")
+
+    if link.lastmodified:
+        modified_at = humanize.naturaltime(
+            dt.datetime.now(timezone.utc) - link.lastmodified
+        )
+    else:
+        modified_at = ""
+
+    lastmodified = link.lastmodified.strftime("%Y-%m-%d %I:%M %p")
+
     return render_template(
         "link.html",
-        link=link,
+        links=links,
         link_id=link.id,
         title=link.title,
         url=link.url,
         description=link.description,
         tags=tag_names_joined,
         created_at=created_at,
+        datecreated=datecreated,
+        modified_at=modified_at,
+        lastmodified=lastmodified,
     )
     # debugging example
     # return f"""

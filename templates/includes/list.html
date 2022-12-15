@@ -2,7 +2,7 @@
     {% for link in links %}
     <li class="item">
         <abbr class="date" title="{{ link.datecreated }}">
-            {% if strfdelta %}
+            {% if strfdelta and link.timesince %}
             {{ strfdelta(link.timesince, "{days} d {hours} h ago") }}
             {% endif %}
         </abbr>
