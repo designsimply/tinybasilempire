@@ -1,0 +1,9 @@
+<p>
+    {% set link = links[0] %}
+    {% if link %}
+    {% if link.datecreated != link.lastmodified %}
+    <br><small>Last modified {{modified_at}} on {{lastmodified}}.</small>
+    {% endif %}
+    <small>Created {{created_at}} on {{datecreated}}.</small>
+    {% endif %}
+</p>
