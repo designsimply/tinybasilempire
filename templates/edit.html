@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% set link = links[0] %}
 {% if link.id %}
 <form id="edit" action="" method="post">
     <fieldset>
@@ -29,12 +30,7 @@
         </div>
     </fieldset>
 </form>
-<p>
-    <small>Originally added {{created_at}} on {{link.datecreated}}.</small>
-    {% if link.datecreated != link.lastmodified %}
-    <br><small>Last modified {{modified_at}} on {{link.lastmodified}}.</small>
-    {% endif %}
-</p>
+{% include 'includes/link-meta.html' %}
 {% else %}
 <p>Link {{link_id}} was not found.</p>
 {% endif %}
