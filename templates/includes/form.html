@@ -4,6 +4,8 @@
 {% set searchform_value = 'tag:'+tag_name %}
 {% elif link_id_string %}
 {% set searchform_value = 'edit:'+link_id_string %}
+{% elif link_id %}
+{% set searchform_value = '{}:{}'.format('link', link_id) %}
 {% else %}
 {% set searchform_placeholder = '🌱 tiny basil empire 🌱' %}
 {% endif %}
