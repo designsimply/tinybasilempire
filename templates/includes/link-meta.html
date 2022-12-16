@@ -1,9 +1,11 @@
 <p>
-    {% set link = links[0] %}
-    {% if link %}
-    {% if link.datecreated != link.lastmodified %}
-    <br><small>Last modified {{modified_at}} on {{lastmodified}}.</small>
+    {% if link_meta %}
+    {% if link_meta.datedeleted %}
+    <small>Deleted {{link_meta.deleted_at}} on {{link_meta.datedeleted}}.</small><br>
     {% endif %}
-    <small>Created {{created_at}} on {{datecreated}}.</small>
+    {% if link_meta.datecreated != link_meta.lastmodified %}
+    <small>Last modified {{link_meta.modified_at}} on {{link_meta.lastmodified}}.</small><br>
+    {% endif %}
+    <small>Created {{link_meta.created_at}} on {{link_meta.datecreated}}.</small><br>
     {% endif %}
 </p>

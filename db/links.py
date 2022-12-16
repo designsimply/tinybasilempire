@@ -1,3 +1,7 @@
+import datetime as dt
+from datetime import timezone
+import humanize
+
 from db import query_db
 from db.sql import (
     ADD_LINK,
@@ -77,6 +81,46 @@ def tag_list_to_string(tags):
     else:
         tag_names = ", ".join(tags)
         return tag_names
+
+
+def format_link_dates(link):
+    if link.datecreated:
+        created_at = humanize.naturaltime(
+            dt.datetime.now(timezone.utc) - link.datecreated
+        )
+        datecreated = link.datecreated.strftime("%Y-%m-%d %I:%M %p")
+    else:
+        created_at = ""
+        datecreated = ""
+
+    if link.lastmodified:
+        modified_at = humanize.naturaltime(
+            dt.datetime.now(timezone.utc) - link.lastmodified
+        )
+        lastmodified = link.lastmodified.strftime("%Y-%m-%d %I:%M %p")
+    else:
+        modified_at = ""
+        lastmodified = ""
+
+    # if link.datedeleted:
+    #     deleted_at = humanize.naturaltime(
+    #         dt.datetime.now(timezone.utc) - link.datedeleted
+    #     )
+    #     datedeleted = link.datedeleted.strftime("%Y-%m-%d %I:%M %p")
+    # else:
+    deleted_at = ""
+    datedeleted = ""
+
+    link_meta = {
+        "created_at": created_at,
+        "modified_at": modified_at,
+        "deleted_at": deleted_at,
+        "datecreated": datecreated,
+        "lastmodified": lastmodified,
+        "datedeleted": datedeleted,
+    }
+
+    return link_meta
 
 
 def map_tags(link_id, tag_ids):

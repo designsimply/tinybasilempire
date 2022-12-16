@@ -13,9 +13,6 @@ from flask_login import (
 from oauthlib.oauth2 import WebApplicationClient
 from dataclasses import dataclass
 import urllib
-import datetime as dt
-from datetime import timezone
-import humanize
 
 
 # internal imports
@@ -27,6 +24,7 @@ from db.links import (
     tag_string_to_list,
     db_get_tag_names_mapped_to_link,
     update_link,
+    format_link_dates,
 )
 from db.sql import (
     QUERY_ALL_LINKS,
@@ -290,49 +288,31 @@ class EditForm:
 def edit(link_id):
     links = []
     links = query_db(GET_LINK, params=(link_id,))
-    if links:
+
+    if len(links) < 1:
+        link = []
+
+    else:
         link = links[0]
-    else:
-        link = ""
-    tag_names_from_db = db_get_tag_names_mapped_to_link(link_id)
-    tag_names_from_db_joined = ", ".join(tag_names_from_db)
+        link_meta = format_link_dates(link)
+        tag_names_from_db = db_get_tag_names_mapped_to_link(link_id)
+        tag_names_from_db_joined = ", ".join(tag_names_from_db)
 
-    if link.datecreated:
-        created_at = humanize.naturaltime(
-            dt.datetime.now(timezone.utc) - link.datecreated
+        if request.method == "POST":
+            form = EditForm(**request.form)
+            link, tags_mapped, tags_unmapped = update_link(
+                link_id, form.title, form.url, form.description, form.tags
+            )
+            if link:
+                return redirect("/link/" + str(link.id))
+
+        return render_template(
+            "edit.html",
+            links=links,
+            link_id_string=str(link_id),
+            tags=tag_names_from_db_joined,
+            link_meta=link_meta,
         )
-    else:
-        created_at = ""
-
-    datecreated = link.datecreated.strftime("%Y-%m-%d %I:%M %p")
-
-    if link.lastmodified:
-        modified_at = humanize.naturaltime(
-            dt.datetime.now(timezone.utc) - link.lastmodified
-        )
-    else:
-        modified_at = ""
-
-    lastmodified = link.lastmodified.strftime("%Y-%m-%d %I:%M %p")
-
-    if request.method == "POST":
-        form = EditForm(**request.form)
-        link, tags_mapped, tags_unmapped = update_link(
-            link_id, form.title, form.url, form.description, form.tags
-        )
-        if link:
-            return redirect("/link/" + str(link.id))
-
-    return render_template(
-        "edit.html",
-        links=links,
-        link_id_string=str(link_id),
-        tags=tag_names_from_db_joined,
-        created_at=created_at,
-        datecreated=datecreated,
-        modified_at=modified_at,
-        lastmodified=lastmodified,
-    )
 
 
 @app.route("/link/<int:link_id>")
@@ -341,37 +321,13 @@ def link(link_id):
     link = links[0]
     tag_names = db_get_tag_names_mapped_to_link(link_id)
     tag_names_joined = ", ".join(tag_names)
-    created_at = humanize.naturaltime(dt.datetime.now(timezone.utc) - link.datecreated)
-    if link.datecreated:
-        created_at = humanize.naturaltime(
-            dt.datetime.now(timezone.utc) - link.datecreated
-        )
-    else:
-        created_at = ""
-
-    datecreated = link.datecreated.strftime("%Y-%m-%d %I:%M %p")
-
-    if link.lastmodified:
-        modified_at = humanize.naturaltime(
-            dt.datetime.now(timezone.utc) - link.lastmodified
-        )
-    else:
-        modified_at = ""
-
-    lastmodified = link.lastmodified.strftime("%Y-%m-%d %I:%M %p")
+    link_meta = format_link_dates(link)
 
     return render_template(
         "link.html",
         links=links,
-        link_id=link.id,
-        title=link.title,
-        url=link.url,
-        description=link.description,
         tags=tag_names_joined,
-        created_at=created_at,
-        datecreated=datecreated,
-        modified_at=modified_at,
-        lastmodified=lastmodified,
+        link_meta=link_meta,
     )
     # debugging example
     # return f"""
