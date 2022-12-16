@@ -1,11 +1,12 @@
 <ul class="list">
     {% for link in links %}
     <li class="item">
+        {% if strfdelta and link.timesince %}
         <abbr class="date" title="{{ link.datecreated }}">
-            {% if strfdelta and link.timesince %}
-            {{ strfdelta(link.timesince, "{days} d {hours} h ago") }}
-            {% endif %}
+            <a href="{{ url_for('link', link_id=link.id) }}">
+                {{ strfdelta(link.timesince, "{days}d{hours}h ago") }}</a>
         </abbr>
+        {% endif %}
         {% if current_user.is_authenticated %}
         <a class="edit" href="{{ url_for('edit', link_id=link.id) }}">🛠</a>
         {% endif %}
