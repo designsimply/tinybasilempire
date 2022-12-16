@@ -9,8 +9,13 @@ a:hover {
 }
 
 abbr,
+abbr a,
 .tag-count {
 	color: #bbb;
+}
+
+.current {
+	border: 1px solid #ddd;
 }
 
 form#search input[name="q"],
@@ -58,10 +63,10 @@ ul.tags {
 
 li {
 	margin-bottom: 0.5rem;
+	padding: .2em;
 }
 
 .current {
-	border: 1px solid #ddd;
 	border-radius: .5em;
 }
 
@@ -75,18 +80,12 @@ a#next {
 	right: 0;
 }
 
-abbr.date {
+abbr.date,
+abbr a {
 	border: 0;
 	text-decoration: none;
-	font-size: .8em;
-	width: 8em;
-	max-width: 8em;
-	display: inline-block;
+	font-size: .9em;
 }
-
-/* abbr.date::after {
-	content: " - ";
-} */
 
 nav a {
 	text-decoration: none;
