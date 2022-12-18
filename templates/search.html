@@ -12,7 +12,7 @@
     </p>
 </nav>
 {% include 'includes/list.html' %}
-<p><small>Found {{total}} result{% if total > 1 %}s{% endif %} for
+<p><small>Found {{total}} result{% if total != 1 %}s{% endif %} for
         {% if tag_name %}tag:{{tag_name}}{% endif%}{{searchterm}}.</small>
 </p>
 {% endblock %}
