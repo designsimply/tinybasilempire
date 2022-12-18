@@ -114,12 +114,17 @@ def search_links_by_defragged_url(fuzzy, defragged, limit=5, offset=0):
 
 @app.route("/")
 def index():
+    return render_template(
+        "base.html",
+        current_user=current_user,
+    )
+
+
+@app.route("/latest")
+def latest():
     limit = request.args.get("limit", 10, type=int)
     page = request.args.get("page", 1, type=int)
     offset = (page - 1) * limit  # page=2, limit=10, offset = 10
-
-    # make a link object and add this as a method
-    # timesince = humanize.naturaldelta(dt.timedelta(datecreated))
 
     links = db_links_select(
         limit=limit,
@@ -127,9 +132,8 @@ def index():
     )
 
     return render_template(
-        "index.html",
+        "latest.html",
         links=links,
-        context_name_for_sheri="stuff",
         limit=limit,
         page=page,
         offset=offset,
