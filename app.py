@@ -322,10 +322,17 @@ def edit(link_id):
 @app.route("/link/<int:link_id>")
 def link(link_id):
     links = query_db(GET_LINK, params=(link_id,))
-    link = links[0]
-    tag_names = db_get_tag_names_mapped_to_link(link_id)
-    tag_names_joined = ", ".join(tag_names)
-    link_meta = format_link_dates(link)
+    if len(links) > 0:
+        link = links[0]
+        link_meta = format_link_dates(link)
+        tag_names = db_get_tag_names_mapped_to_link(link_id)
+
+        return render_template(
+            "link.html",
+            links=links,
+            tags=tag_names,
+            link_meta=link_meta,
+        )
 
     return render_template(
         "link.html",

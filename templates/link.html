@@ -1,16 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<!-- <ul style="padding-top: 2em">
-    <li>
-        {% if current_user.is_authenticated %}<a class="edit" href="/edit">{% endif %}
-            <abbr>{{created_at}}</abbr>
-            {% if current_user.is_authenticated %}</a>{% endif %}
-        〰️ <a title="{{link_id}}" href="{{url}}">{{title}}</a>
-        〰️ {{description}}
-        {% if tags %} ({{tags}}) {% endif %}
-    </li>
-</ul> -->
 <div style="height:2em;"></div>
 {% include 'includes/list.html' %}
 {% include 'includes/link-meta.html' %}

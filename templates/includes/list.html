@@ -14,7 +14,9 @@
         {% if link.description %}
         〰️ {{ link.description }}
         {% endif %}
-        {% if tags %}({{ tags }}){% endif %}
+        {% if tags %}
+        ({% for tag in tags %}<a href="/tag/{{tag}}">{{tag}}</a>{% endfor %})
+        {% endif %}
     </li>
     {% endfor %}
 </ul>
