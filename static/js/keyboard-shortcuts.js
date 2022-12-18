@@ -8,6 +8,7 @@ function search() {
 Mousetrap.bind('/', function () { document.getElementById("q").focus(); document.getElementById("q").select(); return false; });
 Mousetrap.bind("?", function () { alert('TODO: show Keyboard Shortcuts Overlay'); });
 Mousetrap.bind("h", function () { document.getElementById('home').click(); });
+Mousetrap.bind("l", function () { document.getElementById('latest').click(); });
 Mousetrap.bind("t", function () { document.getElementById('tags').click(); });
 Mousetrap.bind("a", function () { document.getElementById('add').click(); });
 Mousetrap.bind("o", function () { document.getElementsByClassName('current')[0].getElementsByClassName('link')[0].click(); });
