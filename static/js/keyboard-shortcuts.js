@@ -13,7 +13,7 @@ Mousetrap.bind("t", function () { document.getElementById('tags').click(); });
 Mousetrap.bind("a", function () { document.getElementById('add').click(); });
 Mousetrap.bind("o", function () { document.getElementsByClassName('current')[0].getElementsByClassName('link')[0].click(); });
 Mousetrap.bind("e", function () { document.getElementsByClassName('current')[0].getElementsByClassName('edit')[0].click(); });
-Mousetrap.bind("l", function () { document.getElementsByClassName('current')[0].getElementsByClassName('date')[0].getElementsByTagName('a')[0].click(); });
+Mousetrap.bind("i", function () { document.getElementsByClassName('current')[0].getElementsByClassName('date')[0].getElementsByTagName('a')[0].click(); });
 Mousetrap.bind("s h e r i", function () { alert('hello sheri'); });
 Mousetrap.bind("d y l a n", function () { alert('hello dylan'); });
 Mousetrap.bind("j", function () {
