@@ -141,6 +141,35 @@ nav.tag-list {
 	width: 100%;
 }
 
+/* Delete Route
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+body.delete .header,
+body.delete .footer,
+body.link .header,
+body.link .footer {
+	display: none;
+}
+
+body.delete,
+body.link {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	text-align: center;
+}
+
+body.delete>div,
+body.link>div {
+	width: 100%;
+}
+
+body.delete .list,
+body.delete .list li {
+	margin: 0;
+	padding: 0;
+}
+
 @media (max-width: 1000px) {
 	html {
 		font-size: 65%;
