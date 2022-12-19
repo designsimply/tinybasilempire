@@ -341,6 +341,13 @@ def link(link_id):
             tags=tag_names,
             link_meta=link_meta,
         )
+    else:
+        link = []
+        error = f"Record {link_id} was not found."
+        return render_template(
+            "404.html",
+            error=error,
+        )
 
 
 @app.route("/delete/<int:link_id>", methods=["GET", "POST"])

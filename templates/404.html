@@ -1,11 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>404 means search for {{ searchterm }}</h1>
-<p>
-    <a href="{{ request.path }}?limit={{ limit }}&page={{ page-1 }}">previous</a>
-    <a href="{{ request.path }}?limit={{ limit }}&page={{ page+1 }}">next</a>
-</p>
-
+<h1>😬</h1>
+<p>{{error}}</p>
+{% if searchterm %}
+<h1>Maybe you wanted to search for {{ searchterm }}?</h1>
 {% include 'includes/list.html' %}
+{% endif %}
 {% endblock %}
