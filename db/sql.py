@@ -245,3 +245,18 @@ JOIN
 WHERE
     link_id=%s
 """
+
+HARD_DELETE = """
+WITH deleted_link AS (
+  DELETE FROM
+    sf_links
+  WHERE
+    sf_links.id = %s
+  RETURNING id
+)
+DELETE FROM
+    sf_tagmap
+WHERE
+    link_id IN (SELECT id FROM deleted_link)
+RETURNING link_id
+"""

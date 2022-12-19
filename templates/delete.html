@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if deleted_link_id %}
+<p style='width:100%;text-align:center;'>Record {{deleted_link_id}} was deleted.</p>
+<p><a id="back" class="button" tabindex="1" href="javascript:history.go(-2)">go back</a></p>
+<script>window.onload = function () { document.getElementById("back").focus(); };</script>
+{% else %}
+<h1>😱</h1>
+<p>The following link will be permanently deleted!</p>
+{% include 'includes/list.html' %}
+{% include 'includes/link-meta.html' %}
+<h2>Are you sure?</h2>
+<form id="delete" action="" method="post">
+    <a class="button" tabindex="10" href="javascript:history.go(-1)">No</a>
+    <input name="ays" class="button-primary" type="submit" tabindex="1" value="Yes">
+</form>
+{% endif %}
+{% endblock %}

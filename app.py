@@ -25,6 +25,7 @@ from db.links import (
     db_get_tag_names_mapped_to_link,
     update_link,
     format_link_dates,
+    delete_link_and_mapped_tags,
 )
 from db.sql import (
     QUERY_ALL_LINKS,
@@ -341,17 +342,37 @@ def link(link_id):
             link_meta=link_meta,
         )
 
-    return render_template(
-        "link.html",
-        links=links,
-        tags=tag_names_joined,
-        link_meta=link_meta,
-    )
-    # debugging example
-    # return f"""
-    #     <li>{link_id} - {created_at} - <a href="{link.url}">
-    #     {link.title}</a> {link.description} ({tags})</li>
-    # """ # noqa
+
+@app.route("/delete/<int:link_id>", methods=["GET", "POST"])
+# @login_required
+def delete(link_id):
+    links = query_db(GET_LINK, params=(link_id,))
+    if len(links) > 0:
+        link = links[0]
+        tag_names = db_get_tag_names_mapped_to_link(link_id)
+        link_meta = format_link_dates(link)
+
+        if request.method == "POST":
+            if request.form.get("ays") == "Yes":
+                deleted = delete_link_and_mapped_tags(link_id)
+                return render_template(
+                    "delete.html",
+                    deleted_link_id=deleted[0].link_id,
+                )
+
+        return render_template(
+            "delete.html",
+            links=links,
+            tags=tag_names,
+            link_meta=link_meta,
+        )
+    else:
+        link = []
+        error = f"Record {link_id} was not found."
+        return render_template(
+            "404.html",
+            error=error,
+        )
 
 
 @app.route("/tags")

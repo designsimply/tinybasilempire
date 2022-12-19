@@ -12,6 +12,7 @@ from db.sql import (
     DELETE_TAGMAP,
     GET_TAGS_MAPPED_TO_LINK_ID,
     UPDATE_LINK_NAMED,
+    HARD_DELETE,
 )
 
 
@@ -192,7 +193,10 @@ def update_link(link_id, title, url, description, tag_names):
     return link, tags_mapped, tags_unmapped
 
 
-def delete_link(link_id):
-    # $sfdb->query( "DELETE FROM sf_links WHERE id = $link_id;" );
-    # $sfdb->query( "DELETE FROM sf_tagmap WHERE link_id = $link_id;" );
-    return f"{link_id}"
+def delete_link_and_mapped_tags(link_id):
+    deleted_link_id = query_db(HARD_DELETE, params=[link_id])
+
+    # if links:
+    #     link = links[0]
+
+    return deleted_link_id
