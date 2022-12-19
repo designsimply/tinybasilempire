@@ -85,11 +85,12 @@ def tag_list_to_string(tags):
 
 
 def format_link_dates(link):
+    # TODO: make a link object and add timesince as a method
     if link.datecreated:
         created_at = humanize.naturaltime(
             dt.datetime.now(timezone.utc) - link.datecreated
         )
-        datecreated = link.datecreated.strftime("%Y-%m-%d %I:%M %p")
+        datecreated = link.datecreated.strftime("%Y-%m-%d %I:%M %p %Z")
     else:
         created_at = ""
         datecreated = ""
@@ -98,7 +99,7 @@ def format_link_dates(link):
         modified_at = humanize.naturaltime(
             dt.datetime.now(timezone.utc) - link.lastmodified
         )
-        lastmodified = link.lastmodified.strftime("%Y-%m-%d %I:%M %p")
+        lastmodified = link.lastmodified.strftime("%Y-%m-%d %I:%M %p %Z")
     else:
         modified_at = ""
         lastmodified = ""
