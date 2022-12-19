@@ -171,9 +171,8 @@ body.delete .footer {
 	display: none;
 }
 
-body.link h1,
 body.delete h1 {
-	font-size: 7em;
+	font-size: 7rem;
 }
 
 body.delete,
