@@ -232,11 +232,12 @@ def logout():
 
 
 @app.route("/profile")
+@login_required
 def profile():
     if current_user.is_authenticated:
         return jsonify(
-            name=current_user.name,
             email=current_user.email,
+            name=current_user.name,
             pic=current_user.profile_pic,
         )
     else:
@@ -245,7 +246,7 @@ def profile():
 
 
 @app.route("/add", methods=["GET", "POST"])
-# @login_required
+@login_required
 def add():
     if request.method == "GET":
         limit = request.args.get("limit", 5, type=int)
@@ -296,7 +297,7 @@ class EditForm:
 
 
 @app.route("/edit/<int:link_id>", methods=["GET", "POST"])
-# @login_required
+@login_required
 def edit(link_id):
     links = []
     links = query_db(GET_LINK, params=(link_id,))
@@ -356,7 +357,7 @@ def link(link_id):
 
 
 @app.route("/delete/<int:link_id>", methods=["GET", "POST"])
-# @login_required
+@login_required
 def delete(link_id):
     links = query_db(GET_LINK, params=(link_id,))
     if len(links) > 0:
