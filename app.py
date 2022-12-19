@@ -154,7 +154,7 @@ def login():
     if config.AUTOLOGIN:
         user = User.get_from_email(config.DEV_EMAIL)
         login_user(user)
-        return redirect(url_for("index"))
+        return redirect(url_for("latest"))
 
     # get a login url for google
     google_provider_cfg = get_google_provider_cfg()
@@ -218,8 +218,8 @@ def callback():
         #     id_=unique_id, name=users_name, email=users_email, profile_pic=picture
         # )
         login_user(user)
-        # Send user back to homepage
-        return redirect(url_for("index"))
+        # Send user back to latest endpoint
+        return redirect(url_for("latest"))
     else:
         return "User email not available or not verified by Google.", 400
 
@@ -228,7 +228,7 @@ def callback():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for("index"))
+    return redirect(url_for("latest"))
 
 
 @app.route("/profile")
