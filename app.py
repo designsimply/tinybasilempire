@@ -207,17 +207,21 @@ def callback():
         users_name = userinfo_response.json()["given_name"]
 
         # if the user doesn't exist locally, deny access
+        # else use Google data to update our database
         user = User.get_from_email(users_email)
-        # if not User.get(unique_id):
-        #     User.create(unique_id, users_name, users_email, picture)
         if user is None:
-            # raise ValueError(f"NO USER! {users_email}")
-            user = User.create(users_name, users_email, picture)
-        # Begin user session by logging the user in
-        # user = User(
-        #     id_=unique_id, name=users_name, email=users_email, profile_pic=picture
-        # )
-        login_user(user)
+            error = f"{users_email}, I don't know you! Only known users are allowed."
+            return render_template(
+                "404.html",
+                error=error,
+            )
+        else:
+            user = User.update(users_name, users_email, picture)
+            # Begin user session by logging the user in
+            # user = User(
+            #     id_=unique_id, name=users_name, email=users_email, profile_pic=picture
+            # )
+            login_user(user)
         # Send user back to latest endpoint
         return redirect(url_for("latest"))
     else:
