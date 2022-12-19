@@ -33,6 +33,20 @@ input[type="button"].button-primary {
 	border-color: steelblue;
 }
 
+body.delete input[type="submit"].button-primary {
+	background-color: black;
+	border-color: black;
+}
+
+.delete.button:hover,
+.delete.button:focus,
+body.delete input[type="submit"].button-primary:hover,
+body.delete input[type="submit"].button-primary:focus {
+	background-color: firebrick;
+	border-color: firebrick;
+	color: whitesmoke;
+}
+
 /* Forms
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 form#search input[name="q"] {
