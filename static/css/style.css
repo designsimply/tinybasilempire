@@ -109,6 +109,11 @@ li {
 	padding: .2em;
 }
 
+body.latest ul.list li.item {
+	max-height: 1.6em;
+	overflow: hidden;
+}
+
 .current {
 	border-radius: .5em;
 }
