@@ -2,7 +2,9 @@
 
 {% block content %}
 <h1>😬</h1>
-<p>{{error}}</p>
+<p class="error">{{error}}</p>
+<p><a id="back" class="button" tabindex="1" href="javascript:history.go(-1)">Go Back</a></p>
+<script>window.onload = function () { document.getElementById("back").focus(); };</script>
 {% if searchterm %}
 <h1>Maybe you wanted to search for {{ searchterm }}?</h1>
 {% include 'includes/list.html' %}
