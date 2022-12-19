@@ -72,6 +72,27 @@ body .footer {
 	text-align: center;
 }
 
+/* Hero Icons
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+#previous,
+#next {
+	visibility: hidden;
+}
+
+#previous svg,
+#next svg {
+	visibility: visible;
+	width: 1.5em;
+	height: 1.5em;
+}
+
+svg {
+	width: 1em;
+	height: 1em;
+	color: rgb(138, 138, 138);
+	vertical-align: middle;
+}
+
 /* Other
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 ul {
