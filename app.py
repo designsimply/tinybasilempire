@@ -154,7 +154,7 @@ def login():
     if config.AUTOLOGIN:
         user = User.get_from_email(config.DEV_EMAIL)
         login_user(user)
-        return redirect(url_for("index"))
+        return redirect(url_for("latest"))
 
     # get a login url for google
     google_provider_cfg = get_google_provider_cfg()
@@ -207,19 +207,23 @@ def callback():
         users_name = userinfo_response.json()["given_name"]
 
         # if the user doesn't exist locally, deny access
+        # else use Google data to update our database
         user = User.get_from_email(users_email)
-        # if not User.get(unique_id):
-        #     User.create(unique_id, users_name, users_email, picture)
         if user is None:
-            # raise ValueError(f"NO USER! {users_email}")
-            user = User.create(users_name, users_email, picture)
-        # Begin user session by logging the user in
-        # user = User(
-        #     id_=unique_id, name=users_name, email=users_email, profile_pic=picture
-        # )
-        login_user(user)
-        # Send user back to homepage
-        return redirect(url_for("index"))
+            error = f"{users_email}, I don't know you! Only known users are allowed."
+            return render_template(
+                "404.html",
+                error=error,
+            )
+        else:
+            user = User.update(users_name, users_email, picture)
+            # Begin user session by logging the user in
+            # user = User(
+            #     id_=unique_id, name=users_name, email=users_email, profile_pic=picture
+            # )
+            login_user(user)
+        # Send user back to latest endpoint
+        return redirect(url_for("latest"))
     else:
         return "User email not available or not verified by Google.", 400
 
@@ -228,15 +232,16 @@ def callback():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for("index"))
+    return redirect(url_for("latest"))
 
 
 @app.route("/profile")
+@login_required
 def profile():
     if current_user.is_authenticated:
         return jsonify(
-            name=current_user.name,
             email=current_user.email,
+            name=current_user.name,
             pic=current_user.profile_pic,
         )
     else:
@@ -245,7 +250,7 @@ def profile():
 
 
 @app.route("/add", methods=["GET", "POST"])
-# @login_required
+@login_required
 def add():
     if request.method == "GET":
         limit = request.args.get("limit", 5, type=int)
@@ -296,7 +301,7 @@ class EditForm:
 
 
 @app.route("/edit/<int:link_id>", methods=["GET", "POST"])
-# @login_required
+@login_required
 def edit(link_id):
     links = []
     links = query_db(GET_LINK, params=(link_id,))
@@ -356,7 +361,7 @@ def link(link_id):
 
 
 @app.route("/delete/<int:link_id>", methods=["GET", "POST"])
-# @login_required
+@login_required
 def delete(link_id):
     links = query_db(GET_LINK, params=(link_id,))
     if len(links) > 0:

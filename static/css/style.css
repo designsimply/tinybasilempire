@@ -70,6 +70,7 @@ html {
 	height: 100%;
 }
 
+body.callback,
 body.index {
 	height: 80%;
 	width: 100%;
@@ -77,6 +78,7 @@ body.index {
 	align-items: center;
 }
 
+body.callback .content,
 body .header {
 	text-align: center;
 	width: 100%;
@@ -160,10 +162,12 @@ nav.tag-list {
 	width: 100%;
 }
 
-/* Delete Route
+/* Endpoint-specific
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 body.index .content,
 body.index .footer,
+body.callback .header,
+body.callback .footer,
 body.link .header,
 body.link .footer,
 body.delete .header,
