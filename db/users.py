@@ -54,6 +54,32 @@ class User(UserMixin):
             )
 
     @staticmethod
+    def update(name, email, profile_pic):
+        users = query_db(
+            "UPDATE users "
+            "SET name=%(name)s, email=%(email)s, profile_pic=%(profile_pic)s "
+            "WHERE email = %(email)s"
+            "RETURNING * ",
+            params={
+                "name": name,
+                "email": email,
+                "profile_pic": profile_pic,
+            },
+        )
+        if len(users) == 0:
+            return None
+        elif len(users) > 1:
+            raise RuntimeError(f"Too many users! {users}")
+        else:
+            user = users[0]
+            return User(
+                id_=user.id,
+                name=user.name,
+                email=user.email,
+                profile_pic=user.profile_pic,
+            )
+
+    @staticmethod
     def create(name, email, profile_pic):
         users = query_db(
             "INSERT INTO users (name, email, profile_pic) "
