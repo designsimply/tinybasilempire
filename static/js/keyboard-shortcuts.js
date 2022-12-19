@@ -40,7 +40,7 @@ Mousetrap.bind("k", function () {
 //Mousetrap.bind('esc', function () { console.log('escape'); }, 'keyup');
 
 // key combinations
-Mousetrap.bind('command+shift+k', function () { alert('command shift k'); });
+Mousetrap.bind('command+shift+o', function () { links = document.getElementsByClassName('link'); if (typeof links !== 'undefined') { for (i = 0; i < links.length; i++) { window.open(links[i].href); } } });
 
 // map multiple combinations to the same callback
 // return false to prevent default browser behavior and stop event bubbling
