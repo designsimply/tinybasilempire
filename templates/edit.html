@@ -23,7 +23,8 @@
                 <input class="u-full-width" type="text" name="tags" id="tags" tabindex="8" class="av-password"
                     value="{{ tags }}">
                 <div class="buttons-container">
-                    <a class="delete button" tabindex="10" href="{{ url_for('link', link_id=link.id) }}">Delete</a>
+                    <a id="delete" class="delete button" tabindex="10"
+                        href="{{ url_for('delete', link_id=link.id) }}">Delete</a>
                     <input class="button-primary" type="submit" tabindex="9" value="Save">
                 </div>
             </div>
