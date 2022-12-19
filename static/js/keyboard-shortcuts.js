@@ -14,6 +14,14 @@ Mousetrap.bind("a", function () { document.getElementById('add').click(); });
 Mousetrap.bind("o", function () { document.getElementsByClassName('current')[0].getElementsByClassName('link')[0].click(); });
 Mousetrap.bind("e", function () { document.getElementsByClassName('current')[0].getElementsByClassName('edit')[0].click(); });
 Mousetrap.bind("i", function () { document.getElementsByClassName('current')[0].getElementsByClassName('date')[0].getElementsByTagName('a')[0].click(); });
+Mousetrap.bind("#", function () {
+  if (typeof document.getElementsByClassName('current')[0] !== 'undefined') {
+    document.getElementsByClassName('current')[0].getElementsByClassName('delete')[0].click();
+  }
+  if (typeof document.getElementById('delete') !== 'undefined') {
+    document.getElementById('delete').click();
+  }
+});
 Mousetrap.bind("s h e r i", function () { alert('hello sheri'); });
 Mousetrap.bind("d y l a n", function () { alert('hello dylan'); });
 Mousetrap.bind("j", function () {
