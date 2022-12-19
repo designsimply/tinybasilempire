@@ -38,12 +38,10 @@
 <body class="{{request.endpoint}}">
     <div class="section header">
         <div class="container">
-            <!-- <h1>{{ context_name_for_sheri }}</h1> -->
             {% include 'includes/form.html' %}
             {% include 'includes/nav.html' %}
         </div>
     </div>
-    {% if request.endpoint != 'index' %}
     <div class="section content">
         <div class="container">
             {% block content %} {% endblock %}
@@ -54,7 +52,6 @@
             {% include 'includes/nav.html' %}
         </div>
     </div>
-    {% endif %}
 </body>
 
 </html>

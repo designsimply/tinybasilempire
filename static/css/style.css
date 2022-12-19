@@ -162,11 +162,18 @@ nav.tag-list {
 
 /* Delete Route
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-body.delete .header,
-body.delete .footer,
+body.index .content,
+body.index .footer,
 body.link .header,
-body.link .footer {
+body.link .footer,
+body.delete .header,
+body.delete .footer {
 	display: none;
+}
+
+body.link h1,
+body.delete h1 {
+	font-size: 7em;
 }
 
 body.delete,
