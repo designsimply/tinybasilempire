@@ -303,6 +303,11 @@ def edit(link_id):
 
     if len(links) < 1:
         link = []
+        error = f"A search for link id {link_id} returned zero results."
+        return render_template(
+            "404.html",
+            error=error,
+        )
 
     else:
         link = links[0]
