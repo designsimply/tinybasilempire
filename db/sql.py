@@ -12,6 +12,13 @@ LIMIT %s
 OFFSET %s
 """
 
+QEURY_LINKS_COUNT = """
+SELECT
+    COUNT(*) as count
+FROM
+    sf_links
+"""
+
 QUERY_ALL_TAGS = """
 SELECT DISTINCT
     name,

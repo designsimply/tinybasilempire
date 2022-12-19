@@ -1,17 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<nav class="tag-list">
-    <p>
-        {% if page > 1 %}
-        <a id="previous" href="{{ request.path }}?limit={{ limit }}&page={{ page-1 }}">previous</a>
-        {% endif %}
-        {% if limit * page < total %} <a id="next" title="{{ total }}"
-            href="{{ request.path }}?limit={{ limit }}&page={{ page+1 }}">
-            next</a>
-            {% endif %}
-    </p>
-</nav>
 {% include 'includes/tag-list.html' %}
 <p>There are {{total}} tags.</p>
 {% endblock %}

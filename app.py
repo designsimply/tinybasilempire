@@ -28,6 +28,7 @@ from db.links import (
 )
 from db.sql import (
     QUERY_ALL_LINKS,
+    QEURY_LINKS_COUNT,
     QUERY_ALL_TAGS,
     QUERY_TAGS_COUNT,
     QUERY_SEARCH_LINKS,
@@ -78,6 +79,10 @@ def db_links_select(limit=5, offset=0):
     return query_db(QUERY_ALL_LINKS, params=(limit, offset))
 
 
+def db_links_count():
+    return query_db(QEURY_LINKS_COUNT)
+
+
 def db_tags_select(limit=5, offset=0):
     return query_db(QUERY_ALL_TAGS, params=(limit, offset))
 
@@ -124,7 +129,8 @@ def index():
 def latest():
     limit = request.args.get("limit", 10, type=int)
     page = request.args.get("page", 1, type=int)
-    offset = (page - 1) * limit  # page=2, limit=10, offset = 10
+    offset = (page - 1) * limit
+    total = db_links_count()
 
     links = db_links_select(
         limit=limit,
@@ -137,6 +143,7 @@ def latest():
         limit=limit,
         page=page,
         offset=offset,
+        total=total[0].count,
         current_user=current_user,
     )
 
