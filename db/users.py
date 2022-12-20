@@ -21,7 +21,7 @@ class User(UserMixin):
     @staticmethod
     def get_from_email(user_email):
         users = query_db(
-            "SELECT id, name, email, profile_pic FROM users WHERE email=%s",
+            "SELECT id, name, email, profile_pic FROM basil_users WHERE email=%s",
             params=(user_email,),
         )
         if len(users) == 0:
@@ -39,7 +39,7 @@ class User(UserMixin):
 
     @staticmethod
     def get(user_id):
-        users = query_db("select * from users where id=%s", params=(user_id,))
+        users = query_db("select * from basil_users where id=%s", params=(user_id,))
         if len(users) == 0:
             return None
         elif len(users) > 1:
@@ -56,7 +56,7 @@ class User(UserMixin):
     @staticmethod
     def update(name, email, profile_pic):
         users = query_db(
-            "UPDATE users "
+            "UPDATE basil_users "
             "SET name=%(name)s, email=%(email)s, profile_pic=%(profile_pic)s "
             "WHERE email = %(email)s"
             "RETURNING * ",
@@ -82,7 +82,7 @@ class User(UserMixin):
     @staticmethod
     def create(name, email, profile_pic):
         users = query_db(
-            "INSERT INTO users (name, email, profile_pic) "
+            "INSERT INTO basil_users (name, email, profile_pic) "
             "VALUES (%s, %s, %s) "
             "RETURNING * ",
             (name, email, profile_pic),
