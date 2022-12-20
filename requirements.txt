@@ -17,5 +17,9 @@ Flask-SSLify
 # user session management
 flask-login
 
+# helpers for datetime formatting
 humanize
 datetime
+
+# deployment with zappa
+zappa
