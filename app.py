@@ -1,5 +1,5 @@
 import json
-import requests
+import urllib3
 
 # third-party libraries
 from flask import Flask, render_template, redirect, request, url_for, jsonify
@@ -55,7 +55,10 @@ login_manager.init_app(app)
 
 # find out what url to hit for google login
 def get_google_provider_cfg():
-    return requests.get(config.GOOGLE_DISCOVERY_URL).json()
+    with urllib3.PoolManager() as http:
+        response = http.request("GET", config.GOOGLE_DISCOVERY_URL)
+        data = json.loads(response.data.decode("utf8"))
+    return data
 
 
 # flask-login helper to retrieve a user from the db
@@ -179,32 +182,41 @@ def callback():
     token_endpoint = google_provider_cfg["token_endpoint"]
 
     # send a request to get tokens
-    token_url, headers, body = client.prepare_token_request(
+    token_url, token_headers, body = client.prepare_token_request(
         token_endpoint,
         authorization_response=request.url,
         redirect_url=request.base_url,
         code=code,
     )
-    token_response = requests.post(
-        token_url,
-        headers=headers,
-        data=body,
-        auth=(config.GOOGLE_CLIENT_ID, config.GOOGLE_CLIENT_SECRET),
-    )
+    with urllib3.PoolManager() as http:
+        auth_headers = urllib3.make_headers(
+            basic_auth=f"{config.GOOGLE_CLIENT_ID}:{config.GOOGLE_CLIENT_SECRET}"
+        )
+
+        headers = {**token_headers, **auth_headers}
+        response = http.request(
+            "POST",
+            token_url,
+            headers=headers,
+            body=body,
+        )
+        token_response = json.loads(response.data.decode("utf8"))
 
     # parse the tokens
-    client.parse_request_body_response(json.dumps(token_response.json()))
+    client.parse_request_body_response(json.dumps(token_response))
 
     # get profile information from google
     userinfo_endpoint = google_provider_cfg["userinfo_endpoint"]
     uri, headers, body = client.add_token(userinfo_endpoint)
-    userinfo_response = requests.get(uri, headers=headers, data=body)
+    with urllib3.PoolManager() as http:
+        response = http.request("GET", uri, headers=headers, body=body)
+        userinfo = json.loads(response.data.decode("utf8"))
 
     # make sure email is verified with google
-    if userinfo_response.json().get("email_verified"):
-        users_email = userinfo_response.json()["email"]
-        picture = userinfo_response.json()["picture"]
-        users_name = userinfo_response.json()["given_name"]
+    if userinfo.get("email_verified"):
+        users_email = userinfo["email"]
+        picture = userinfo["picture"]
+        users_name = userinfo["given_name"]
 
         # if the user doesn't exist locally, deny access
         # else use Google data to update our database
