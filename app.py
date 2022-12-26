@@ -38,6 +38,7 @@ from db.sql import (
     QUERY_GET_TAG_LINKS,
     QUERY_GET_TAG_LINKS_COUNT,
     SEARCH_FOR_POTENTIAL_DUPES,
+    SEARCH_FOR_POTENTIAL_DUPES_COUNT,
 )
 from flask_sslify import SSLify
 
@@ -115,6 +116,10 @@ def search_links_by_defragged_url(fuzzy, defragged, limit=5, offset=0):
     return query_db(
         SEARCH_FOR_POTENTIAL_DUPES, params=(fuzzy, defragged, limit, offset)
     )
+
+
+def search_links_by_defragged_url_count(fuzzy, defragged):
+    return query_db(SEARCH_FOR_POTENTIAL_DUPES_COUNT, params=[fuzzy, defragged])
 
 
 # def pagination_params():
@@ -279,12 +284,19 @@ def add():
                 limit=limit,
                 offset=offset,
             )
+
+            count = search_links_by_defragged_url_count(
+                fuzzy=defragged + "%", defragged=defragged
+            )
+            total = count[0].count
+
             return render_template(
                 "add.html",
                 links=links,
                 page=page,
                 limit=limit,
                 offset=offset,
+                total=total,
                 defragged=defragged,
             )
         else:

@@ -121,6 +121,15 @@ LIMIT %s
 OFFSET %s
 """
 
+SEARCH_FOR_POTENTIAL_DUPES_COUNT = """
+SELECT
+    COUNT(*) as count
+FROM basil_links
+WHERE
+    url LIKE %s
+    or url ~* %s
+"""
+
 SEARCH_FOR_EXACT_URL = """
 SELECT
     id

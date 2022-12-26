@@ -4,14 +4,6 @@
 {% if links %}
 <h5 title="{{ defragged[:-1] }}" style="text-align: center;">Wait… are you adding a duplicate?</h5>
 {% include 'includes/list.html' %}
-<nav class="list">
-    <p>
-        {% if page > 1 %}
-        <a id="previous" href="{{ request.path }}?limit={{ limit }}&page={{ page-1 }}">previous</a>
-        {% endif %}
-        <a id="next" href="{{ request.path }}?limit={{ limit }}&page={{ page+1 }}">next</a>
-    </p>
-</nav>
 {% endif %}
 <form id="add" action="{{ url_for('add') }}" method="post">
     <fieldset>
