@@ -2,11 +2,12 @@
 .secrets
 
 # python
-.venv
+.venv*
 __pycache__
 
 # local env
 .DS_Store
 .ackrc
 *.pem
+zappa*
 
