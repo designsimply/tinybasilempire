@@ -23,3 +23,7 @@ datetime
 
 # deployment with zappa
 zappa
+
+# formatter, linters, you know, bug avoidance
+black
+flake8
