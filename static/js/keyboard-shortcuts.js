@@ -32,6 +32,7 @@ Mousetrap.bind("j", function () {
     if (i >= list.length) { list[i - 1].classList.remove('current'); i = 0; }
     if (list[i - 1]) { list[i - 1].classList.remove('current'); };
     if (list[i]) { list[i].classList.add('current'); }
+    document.getElementsByClassName('current')[0].getElementsByClassName('link')[0].focus();
     i++;
   }
 });
@@ -43,6 +44,7 @@ Mousetrap.bind("k", function () {
     if (i < 0) { list[i + 1].classList.remove('current'); i = list.length - 1; }
     if (list[i + 1]) { list[i + 1].classList.remove('current'); };
     if (list[i]) { list[i].classList.add('current'); }
+    document.getElementsByClassName('current')[0].getElementsByClassName('link')[0].focus();
   }
 });
 //Mousetrap.bind('esc', function () { console.log('escape'); }, 'keyup');

@@ -162,6 +162,11 @@ nav.tag-list {
 	width: 100%;
 }
 
+a.link:focus-visible {
+	font-weight: bold;
+	outline: none;
+}
+
 /* Endpoint-specific
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 body.index .content,
