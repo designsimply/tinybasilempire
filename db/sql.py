@@ -255,17 +255,17 @@ WHERE
     link_id=%s
 """
 
-HARD_DELETE = """
-WITH deleted_link AS (
-  DELETE FROM
-    basil_links
-  WHERE
-    basil_links.id = %s
-  RETURNING id
-)
+HARD_DELETE_LINK_FROM_TAGMAP = """
 DELETE FROM
     basil_tagmap
 WHERE
-    link_id IN (SELECT id FROM deleted_link)
-RETURNING link_id
+    link_id = %s
+"""
+
+HARD_DELETE_LINK = """
+DELETE FROM
+    basil_links
+WHERE
+    basil_links.id = %s
+RETURNING id
 """

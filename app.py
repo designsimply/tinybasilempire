@@ -393,20 +393,20 @@ def delete(link_id):
         tag_names = db_get_tag_names_mapped_to_link(link_id)
         link_meta = format_link_dates(link)
 
-        if request.method == "POST":
-            if request.form.get("ays") == "Yes":
-                deleted = delete_link_and_mapped_tags(link_id)
-                return render_template(
-                    "delete.html",
-                    deleted_link_id=deleted[0].link_id,
-                )
-
-        return render_template(
-            "delete.html",
-            links=links,
-            tags=tag_names,
-            link_meta=link_meta,
-        )
+        if request.method == "POST" and request.form.get("ays") == "Yes":
+            deleted = delete_link_and_mapped_tags(link_id)
+            return render_template(
+                "delete.html",
+                deleted_link_id=deleted[0].id,
+            )
+        else:
+            # show 'are you sure?' form
+            return render_template(
+                "delete.html",
+                links=links,
+                tags=tag_names,
+                link_meta=link_meta,
+            )
     else:
         link = []
         error = f"Record {link_id} was not found."

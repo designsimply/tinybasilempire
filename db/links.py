@@ -12,7 +12,8 @@ from db.sql import (
     DELETE_TAGMAP,
     GET_TAGS_MAPPED_TO_LINK_ID,
     UPDATE_LINK_NAMED,
-    HARD_DELETE,
+    HARD_DELETE_LINK_FROM_TAGMAP,
+    HARD_DELETE_LINK,
 )
 
 
@@ -195,9 +196,7 @@ def update_link(link_id, title, url, description, tag_names):
 
 
 def delete_link_and_mapped_tags(link_id):
-    deleted_link_id = query_db(HARD_DELETE, params=[link_id])
-
-    # if links:
-    #     link = links[0]
+    query_db(HARD_DELETE_LINK_FROM_TAGMAP, params=[link_id])
+    deleted_link_id = query_db(HARD_DELETE_LINK, params=[link_id])
 
     return deleted_link_id
