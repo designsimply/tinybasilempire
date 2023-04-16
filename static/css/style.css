@@ -125,10 +125,10 @@ li {
 	padding: .2em;
 }
 
-body.latest ul.list li.item {
+/* body.latest ul.list li.item {
 	max-height: 1.6em;
 	overflow: hidden;
-}
+} */
 
 .current {
 	border-radius: .5em;
@@ -206,11 +206,27 @@ body.delete .list li {
 
 @media (max-width: 1000px) {
 	html {
-		font-size: 65%;
+		font-size: 1em;
 	}
 
 	form#search input[name="q"] {
 		font-size: 2em;
+	}
+
+	textarea,
+	input[type="text"] { 
+		font-size: 2rem;
+		line-height: 3rem;
+		height: 4rem;
+	}
+
+	#add textarea,
+	#edit textarea {
+		min-height: 4em;
+	}
+
+	.container {
+		width: 95%;
 	}
 
 	ul.tags {
@@ -218,13 +234,21 @@ body.delete .list li {
 	}
 
 	li {
-		line-height: 2em;
-		max-height: 2em;
+		line-height: 1.5em;
+		max-height: 4em;
 		overflow: hidden;
 	}
 
-	.header nav.main,
+	body.latest .header .main,
+	body.search .header .main,
+	body.s .header .main,
+	.content nav br,
+	.item .delete,
 	abbr {
 		display: none;
+	}
+
+	.item .edit { 
+		padding-right: 1em;
 	}
 }
