@@ -225,6 +225,12 @@ body.delete .list li {
 	padding: 0;
 }
 
+#add textarea,
+#edit textarea {
+	min-height: 8em;
+}
+
+
 @media (max-width: 1000px) {
 	html {
 		font-size: 1em;
