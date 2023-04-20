@@ -78,6 +78,8 @@ def strfdelta(tdelta, fmt):
 
 # make strfdelta function available in all templates
 app.jinja_env.globals["strfdelta"] = strfdelta
+app.jinja_env.globals["list"] = list
+app.jinja_env.globals["len"] = len
 
 
 def db_links_select(limit=5, offset=0):
