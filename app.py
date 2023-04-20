@@ -267,7 +267,7 @@ def profile():
 
 
 @app.route("/add", methods=["GET", "POST"])
-@login_required
+# @login_required
 def add():
     if request.method == "GET":
         limit = request.args.get("limit", 5, type=int)
@@ -311,7 +311,10 @@ def add():
             tag_list = tag_string_to_list(tags)
             link, tag_list = add_new_link(title, url, description, tag_list)
             return redirect("/link/" + str(link.id))
-    return render_template("add.html")
+        else:
+            return redirect("/login")
+    else:
+        return render_template("add.html")
 
 
 @dataclass
