@@ -1,0 +1,33 @@
+version: "3.8"
+
+volumes:
+  data-db:
+
+services:
+  web:
+    build: .
+    depends_on:
+      - db
+    ports:
+      - 5000:5000
+    volumes:
+      # Mount the code so you can edit and see changes.
+      - ./:/app/src
+    env_file:
+      - .secrets-example
+      - .secrets
+
+  db:
+    image: postgres
+    # Include container:host port mapping if you want to see this externally
+    # ports:
+    #   - 5321:5432 
+    volumes:
+      # Named volume is not necessary for this, can mount to the system
+      # See "Where to Store Data" in https://hub.docker.com/_/postgres
+      - data-db:/var/lib/postgresql/data
+      - ./db:/docker-entrypoint-initdb.d # automatically run schema.sql
+    environment:
+      POSTGRES_PASSWORD: keepitsecretkeepitsafe
+      POSTGRES_USER: pgadmin
+      POSTGRES_DB: db
