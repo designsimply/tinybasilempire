@@ -201,6 +201,8 @@ a.link:focus-visible {
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 body.index .content,
 body.index .footer,
+body.add .header .main,
+body.edit .header .main,
 body.callback .header,
 body.callback .footer,
 body.link .header,
