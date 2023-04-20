@@ -166,13 +166,9 @@ def login():
         login_user(user)
         return redirect(url_for("latest"))
 
-    print("can you even get the auth endpoint?")
-
     # get a login url for google
     google_provider_cfg = get_google_provider_cfg()
     authorization_endpoint = google_provider_cfg["authorization_endpoint"]
-
-    print("GOOGLE", authorization_endpoint)
 
     # request google login and scope what to retrieve
     request_uri = client.prepare_request_uri(
