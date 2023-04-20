@@ -16,25 +16,6 @@
     <script src="{{ url_for('static', filename='js/mousetrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/keyboard-shortcuts.js') }}"></script>
     <script src="{{ url_for('static', filename='js/dev-notice.js') }}"></script>
-    <style>
-        body {
-            font-family: '{{ body_font }}',
-            sans-serif;
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6,
-        form#search input[name="q"],
-        form#search input[name="q"]::placeholder {
-            font-family: '{{ header_font }}',
-            serif;
-
-        }
-    </style>
 </head>
 
 <body class="{{request.endpoint}}">
