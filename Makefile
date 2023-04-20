@@ -21,6 +21,9 @@ sh:
 py:
 	docker compose exec web shell
 
+psql: run
+	docker-compose exec db bash -c 'psql -U $$POSTGRES_USER -d $$POSTGRES_DB'
+
 # ############################################################################ #
 # Help
 # ############################################################################ #
@@ -34,4 +37,4 @@ help:
 	@echo ""
 
 .DEFAULT_GOAL=help
-.PHONY:  build help logs run sh stop py
+.PHONY:   build help logs psql py run sh stop

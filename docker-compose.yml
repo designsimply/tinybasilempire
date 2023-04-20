@@ -8,6 +8,7 @@ services:
     build: .
     depends_on:
       - db
+    command: dev.sh
     ports:
       - 5000:5000
     volumes:
@@ -21,7 +22,7 @@ services:
     image: postgres
     # Include container:host port mapping if you want to see this externally
     # ports:
-    #   - 5321:5432 
+    #   - 5432:5432
     volumes:
       # Named volume is not necessary for this, can mount to the system
       # See "Where to Store Data" in https://hub.docker.com/_/postgres
