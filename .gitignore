@@ -11,3 +11,6 @@ __pycache__
 *.pem
 zappa*
 
+# tmp
+*.sh
+Makefile
