@@ -6,7 +6,22 @@ function search() {
 
 // single keys
 Mousetrap.bind('/', function () { document.getElementById("q").focus(); document.getElementById("q").select(); return false; });
-Mousetrap.bind("?", function () { alert('TODO: show Keyboard Shortcuts Overlay'); });
+Mousetrap.bind("?", function () { alert(`TODO: fancier Keyboard Shortcuts Overlay.
+  h - Home
+  l - Latest
+  t - Tags
+  a - Add
+  o - Open
+  e - Edit
+  i - Item
+  # - Delete
+  n - Next page
+  p - Previous page
+  j - Next item
+  k - Previous item
+  command+shift+o - Open All
+  command+shift+e - Edit All
+  `); });
 Mousetrap.bind("h", function () { document.getElementById('home').click(); });
 Mousetrap.bind("l", function () { document.getElementById('latest').click(); });
 Mousetrap.bind("t", function () { document.getElementById('tags').click(); });
@@ -51,6 +66,7 @@ Mousetrap.bind("k", function () {
 
 // key combinations
 Mousetrap.bind('command+shift+o', function () { links = document.getElementsByClassName('link'); if (typeof links !== 'undefined') { for (i = 0; i < links.length; i++) { window.open(links[i].href); } } });
+Mousetrap.bind('command+shift+e', function () { links = document.getElementsByClassName('edit'); if (typeof links !== 'undefined') { for (i = 0; i < links.length; i++) { window.open(links[i].href); } } });
 
 // map multiple combinations to the same callback
 // return false to prevent default browser behavior and stop event bubbling
