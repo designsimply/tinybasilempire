@@ -274,7 +274,13 @@ def add():
         page = request.args.get("page", 1, type=int)
         offset = (page - 1) * limit  # page=2, limit=10, offset = 10
         url = request.args.get("url", "", type=str)
-        title = request.form.get("title", "", type=str)
+        title = request.args.get("title", "", type=str)
+        # TODO: move to function
+        req_args = []
+        for k, v in request.args.items():
+            if k != 'page' and k != 'limit':
+                req_args.append(k + '=' + v)
+        request_params = '&' + '&'.join(req_args)
 
         if len(url) > 0:
             defragged = urllib.parse.urldefrag(url).url
