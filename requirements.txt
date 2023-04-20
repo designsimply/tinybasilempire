@@ -1,5 +1,6 @@
 # user-friendly way to send HTTP requests
-requests
+# requests
+urllib3
 
 # python microframework
 Flask
