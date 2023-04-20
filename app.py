@@ -166,9 +166,13 @@ def login():
         login_user(user)
         return redirect(url_for("latest"))
 
+    print("can you even get the auth endpoint?")
+
     # get a login url for google
     google_provider_cfg = get_google_provider_cfg()
     authorization_endpoint = google_provider_cfg["authorization_endpoint"]
+
+    print("GOOGLE", authorization_endpoint)
 
     # request google login and scope what to retrieve
     request_uri = client.prepare_request_uri(
@@ -306,6 +310,7 @@ def add():
                 offset=offset,
                 total=total,
                 defragged=defragged,
+                request_params=request_params,
             )
         else:
             return render_template("add.html")
@@ -483,47 +488,43 @@ def s():
     searchterm = ""
     if request.args.get("q"):
         searchterm = request.args.get("q")
-
-    limit = request.args.get("limit", 5, type=int)
-    page = request.args.get("page", 1, type=int)
-    offset = (page - 1) * limit  # page=2, limit=10, offset = 10
-
-    links = db_links_search(
-        title=searchterm,
-        description=searchterm,
-        limit=limit,
-        offset=offset,
-    )
-
-    count = db_links_search_count(title=searchterm, description=searchterm)
-    total = count[0].count
-
-    return render_template(
-        "search.html",
-        links=links,
-        total=total,
-        page=page,
-        limit=limit,
-        offset=offset,
-        searchterm=searchterm,
-        current_user=current_user,
-    )
+        return redirect("/s/" + str(searchterm))
+    else:
+        return redirect("/")
 
 
 @app.route("/s/<string:searchterm>")
 def search(searchterm):
-    limit = request.args.get("limit", 5, type=int)
+    limit = request.args.get("limit", 10, type=int)
     page = request.args.get("page", 1, type=int)
     offset = (page - 1) * limit  # page=2, limit=10, offset = 10
+    urlsearchterm = None
+    terms = searchterm.split()
+    for word in terms:
+        if word.startswith("url:"):
+            urlsearchterm = word[4:]
 
-    links = db_links_search(
-        title=searchterm,
-        description=searchterm,
-        limit=limit,
-        offset=offset,
-    )
+    if urlsearchterm is not None:
+        defragged = urllib.parse.urldefrag(urlsearchterm).url
+        links = search_links_by_defragged_url(
+            fuzzy=defragged + "%",
+            defragged=defragged,
+            limit=limit,
+            offset=offset,
+        )
 
-    count = db_links_search_count(title=searchterm, description=searchterm)
+        count = search_links_by_defragged_url_count(
+            fuzzy=defragged + "%", defragged=defragged
+        )
+    else:
+        links = db_links_search(
+            title=searchterm,
+            description=searchterm,
+            limit=limit,
+            offset=offset,
+        )
+        count = db_links_search_count(title=searchterm, description=searchterm)
+
     total = count[0].count
 
     return render_template(
