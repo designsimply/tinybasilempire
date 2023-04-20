@@ -45,7 +45,7 @@ from flask_sslify import SSLify
 client = WebApplicationClient(config.GOOGLE_CLIENT_ID)
 
 app = Flask(__name__)
-sslify = SSLify(app)
+# sslify = SSLify(app)
 app.secret_key = config.SECRET_KEY
 
 # user session management setup from
@@ -161,6 +161,8 @@ def latest():
 def login():
     if config.AUTOLOGIN:
         user = User.get_from_email(config.DEV_EMAIL)
+        if user is None:
+            user = User.create(name="dev", email=config.DEV_EMAIL, profile_pic=None)
         login_user(user)
         return redirect(url_for("latest"))
 
