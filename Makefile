@@ -18,6 +18,8 @@ logs:
 sh:
 	docker compose exec web bash
 
+py:
+	docker compose exec web shell
 
 # ############################################################################ #
 # Help
@@ -32,4 +34,4 @@ help:
 	@echo ""
 
 .DEFAULT_GOAL=help
-.PHONY:  build help logs run sh stop
+.PHONY:  build help logs run sh stop py
