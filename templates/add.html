@@ -2,14 +2,14 @@
 
 {% block content %}
 {% if links %}
-<h5 title="{{ defragged[:-1] }}" style="text-align: center;">Wait… are you adding a duplicate?</h5>
+<h5 title="{{ defragged[:-1] }}" style="text-align: center; color: tomato;">Wait… are you adding a duplicate?</h5>
 {% include 'includes/list.html' %}
 {% endif %}
 <form id="add" action="{{ url_for('add') }}" method="post">
     <fieldset>
         <label for="title" class="placeholder active">Title</label>
         <input class="u-full-width" type="text" name="title" tabindex="5" autofocus=""
-            value="{{ request.args.get('title', '') }} {%if len(request.args)>4 %}&{{ list(request.args)[2] }}{% endif %}" required>
+            value="{{ request.args.get('title', '') -}} {%if len(request.args)>4 %}&{{ list(request.args)[2] }}{% endif %}" required>
         <label for="url" class="placeholder ">Link</label>
         <input class="u-full-width" type="text" name="url" id="url" tabindex="6" class="av-password"
             value="{{ request.args.get('url', '') }}">
