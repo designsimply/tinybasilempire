@@ -242,7 +242,7 @@ body.delete .list li {
 
 @media (max-width: 1000px) {
 	html {
-		font-size: 1em;
+		font-size: .8em;
 	}
 
 	form#search input[name="q"] {
