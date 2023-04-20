@@ -85,6 +85,15 @@ form .buttons-container {
 	margin-top: 3rem;
 }
 
+.button, button, 
+input[type="submit"], 
+input[type="reset"], 
+input[type="button"] {
+	font-size: 1.2rem;
+    height: 3rem;
+	line-height: 3rem;
+}
+
 /* Get flexible!
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 html {
