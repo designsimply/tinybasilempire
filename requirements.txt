@@ -5,6 +5,9 @@ urllib3
 # python microframework
 Flask
 
+# WSGI HTTP Server for UNIX.
+gunicorn
+
 # database connection layer
 psycopg2
 
