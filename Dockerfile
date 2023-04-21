@@ -34,5 +34,5 @@ COPY templates templates/
 COPY app.py .
 COPY config.py .
 
-EXPOSE 5000
+EXPOSE 8000
 CMD [ "run.sh" ]

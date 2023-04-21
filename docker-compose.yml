@@ -10,7 +10,7 @@ services:
       - db
     command: dev.sh
     ports:
-      - 5000:5000
+      - 8000:8000
     volumes:
       # Mount the code so you can edit and see changes.
       - ./:/app/src
