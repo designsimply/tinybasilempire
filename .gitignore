@@ -10,7 +10,3 @@ __pycache__
 .ackrc
 *.pem
 zappa*
-
-# tmp
-*.sh
-Makefile
