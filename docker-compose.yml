@@ -21,43 +21,55 @@ services:
     depends_on:
       - db
     command: dev.sh
-    ports:
-      - 8000
     expose:
       # internal
       - 8000
     volumes:
       # Mount the code so you can edit and see changes.
       - ./:/app/src
-      - ./tmp_var_www_html_web:/var/www/html
+      # - ./tmp_var_www_html_web:/var/www/html
     env_file:
       - .secrets-example
       - .secrets
+    networks:
+      - app-network
 
   nginx:
     image: nginx:1.23.4-alpine
-    # build: ./services/nginx
     ports:
-      # external
-      - 80:8080
+      - 80:80
     depends_on:
       - web
     volumes:
-      # - web-root:/var/www/html
+      - web-root:/var/www/html
       - ./services/nginx:/etc/nginx/conf.d
-      # - certbot-etc:/etc/letsencrypt
-      # - certbot-var:/var/lib/letsencrypt
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
       - ./tmp_var_www_html_nginx:/var/www/html # SHERI, use this to test and prove to yourself what it's writing.
-  # certbot:
-  #   image: certbot/certbot
-  #   volumes:
-  #     - certbot-etc:/etc/letsencrypt
-  #     - certbot-var:/var/lib/letsencrypt
-  #     - web-root:/var/www/html
-  #   depends_on:
-  #     - nginx
-  #   command: certonly --webroot --webroot-path=/var/www/html --email sheri@designsimply.com --agree-tos --no-eff-email --staging -d tinybasilempire.com -d www.tinybasilempire.com
+    networks:
+      - app-network
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+    depends_on:
+      - nginx
+    command: certonly --webroot --webroot-path=/var/www/html --email sheri@designsimply.com --agree-tos --no-eff-email --staging -d tinybasilempire.com -d www.tinybasilempire.com
 
 volumes:
   data-db:
+  certbot-etc:
+  certbot-var:
   web-root:
+    driver: local
+    driver_opts:
+      type: none
+      device: /var/www/html
+      o: bind
+
+networks:
+  app-network:
+    driver: bridge
