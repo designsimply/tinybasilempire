@@ -18,6 +18,15 @@ RUN python -m venv ${ENVDIR} \
     && pip install --no-cache -r requirements.txt
 
 # ------------------------------------------------------------------------ #
+# Reverse Proxy with nginx to handle client requests
+# ------------------------------------------------------------------------ #
+
+FROM nginx:1.23.4-alpine
+
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d
+
+# ------------------------------------------------------------------------ #
 # Source Files
 # ------------------------------------------------------------------------ #
 

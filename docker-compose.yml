@@ -1,23 +1,6 @@
 version: "3.8"
 
-volumes:
-  data-db:
-
 services:
-  web:
-    build: .
-    depends_on:
-      - db
-    command: dev.sh
-    ports:
-      - 8000:8000
-    volumes:
-      # Mount the code so you can edit and see changes.
-      - ./:/app/src
-    env_file:
-      - .secrets-example
-      - .secrets
-
   db:
     image: postgres
     # Include container:host port mapping if you want to see this externally
@@ -32,3 +15,29 @@ services:
       POSTGRES_PASSWORD: keepitsecretkeepitsafe
       POSTGRES_USER: pgadmin
       POSTGRES_DB: db
+
+  web:
+    build: .
+    depends_on:
+      - db
+    command: dev.sh
+    expose:
+      # internal
+      - 8000
+    volumes:
+      # Mount the code so you can edit and see changes.
+      - ./:/app/src
+    env_file:
+      - .secrets-example
+      - .secrets
+
+  nginx:
+    build: ./services/nginx
+    ports:
+      # external
+      - 80:8080
+    depends_on:
+      - web
+
+volumes:
+  data-db:
