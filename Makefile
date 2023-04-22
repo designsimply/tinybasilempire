@@ -11,14 +11,21 @@ run:
 
 restart: stop run
 
+restart-nginx:
+	docker compose stop nginx
+	docker compose up -d
+
 stop:
 	docker compose stop
 
 logs:
 	docker compose logs
 
-sh: run
+bash: run
 	docker compose exec web bash
+
+sh: run
+	docker compose exec nginx sh
 
 py: run
 	docker compose exec web shell.sh
