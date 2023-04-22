@@ -17,11 +17,11 @@ stop:
 logs:
 	docker compose logs
 
-sh:
+sh: run
 	docker compose exec web bash
 
-py:
-	docker compose exec web shell
+py: run
+	docker compose exec web shell.sh
 
 psql: run
 	docker-compose exec db bash -c 'psql -U $$POSTGRES_USER -d $$POSTGRES_DB'
