@@ -9,9 +9,7 @@ build:
 run:
 	docker compose up -d
 
-restart:
-	docker compose stop
-	docker compose up -d
+restart: stop run
 
 stop:
 	docker compose stop
