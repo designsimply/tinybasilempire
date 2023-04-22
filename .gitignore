@@ -1,5 +1,9 @@
-# ignore secrets
-.secrets
+# ignore secrets keep secrets example
+.secrets*
+!.secrets-example
+
+# self-signed certs
+*.pem
 
 # python
 .venv*
@@ -8,5 +12,4 @@ __pycache__
 # local env
 .DS_Store
 .ackrc
-*.pem
 zappa*
