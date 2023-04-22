@@ -21,10 +21,10 @@ RUN python -m venv ${ENVDIR} \
 # Reverse Proxy with nginx to handle client requests
 # ------------------------------------------------------------------------ #
 
-FROM nginx:1.23.4-alpine
+# FROM nginx:1.23.4-alpine
 
-RUN rm /etc/nginx/conf.d/default.conf
-COPY nginx.conf /etc/nginx/conf.d
+# RUN rm /etc/nginx/conf.d/default.conf
+# COPY nginx.conf /etc/nginx/conf.d
 
 # ------------------------------------------------------------------------ #
 # Source Files
