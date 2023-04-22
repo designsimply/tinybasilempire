@@ -10,7 +10,7 @@ services:
       # Named volume is not necessary for this, can mount to the system
       # See "Where to Store Data" in https://hub.docker.com/_/postgres
       - data-db:/var/lib/postgresql/data
-      - ./db:/docker-entrypoint-initdb.d # automatically run schema.sql
+      - ./db:/docker-entrypoint-initdb.d # automatically runs schema.sql 🎉
     environment:
       POSTGRES_PASSWORD: keepitsecretkeepitsafe
       POSTGRES_USER: pgadmin
@@ -21,23 +21,43 @@ services:
     depends_on:
       - db
     command: dev.sh
+    ports:
+      - 8000
     expose:
       # internal
       - 8000
     volumes:
       # Mount the code so you can edit and see changes.
       - ./:/app/src
+      - ./tmp_var_www_html_web:/var/www/html
     env_file:
       - .secrets-example
       - .secrets
 
   nginx:
-    build: ./services/nginx
+    image: nginx:1.23.4-alpine
+    # build: ./services/nginx
     ports:
       # external
       - 80:8080
     depends_on:
       - web
+    volumes:
+      # - web-root:/var/www/html
+      - ./services/nginx:/etc/nginx/conf.d
+      # - certbot-etc:/etc/letsencrypt
+      # - certbot-var:/var/lib/letsencrypt
+      - ./tmp_var_www_html_nginx:/var/www/html # SHERI, use this to test and prove to yourself what it's writing.
+  # certbot:
+  #   image: certbot/certbot
+  #   volumes:
+  #     - certbot-etc:/etc/letsencrypt
+  #     - certbot-var:/var/lib/letsencrypt
+  #     - web-root:/var/www/html
+  #   depends_on:
+  #     - nginx
+  #   command: certonly --webroot --webroot-path=/var/www/html --email sheri@designsimply.com --agree-tos --no-eff-email --staging -d tinybasilempire.com -d www.tinybasilempire.com
 
 volumes:
   data-db:
+  web-root:
