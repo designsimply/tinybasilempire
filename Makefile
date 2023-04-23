@@ -9,6 +9,8 @@ build:
 run:
 	docker compose up -d
 
+start: run
+
 restart: stop run
 
 restart-nginx:
