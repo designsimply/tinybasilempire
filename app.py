@@ -131,7 +131,7 @@ def index():
     return render_template(
         "base.html",
         current_user=current_user,
-        searchform_placeholder = config.SEARCHFORM_PLACEHOLDER,
+        searchform_placeholder=config.SEARCHFORM_PLACEHOLDER,
     )
 
 
@@ -155,7 +155,7 @@ def latest():
         offset=offset,
         total=total[0].count,
         current_user=current_user,
-        searchform_placeholder = config.SEARCHFORM_PLACEHOLDER,
+        searchform_placeholder=config.SEARCHFORM_PLACEHOLDER,
     )
 
 
@@ -309,7 +309,7 @@ def add():
                 total=total,
                 defragged=defragged,
                 request_params=request_params,
-                searchform_placeholder = config.SEARCHFORM_PLACEHOLDER,
+                searchform_placeholder=config.SEARCHFORM_PLACEHOLDER,
             )
         else:
             return render_template("add.html")
@@ -326,7 +326,10 @@ def add():
         else:
             return redirect("/login")
     else:
-        return render_template("add.html", searchform_placeholder = config.SEARCHFORM_PLACEHOLDER)
+        return render_template(
+            "add.html",
+            searchform_placeholder=config.SEARCHFORM_PLACEHOLDER
+            )
 
 
 @dataclass
@@ -452,6 +455,7 @@ def tags():
         page=page,
         total=total[0].count,
         current_user=current_user,
+        searchform_placeholder=config.SEARCHFORM_PLACEHOLDER,
     )
 
 
