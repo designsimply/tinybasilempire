@@ -10,10 +10,9 @@ services:
       # See "Where to Store Data" in https://hub.docker.com/_/postgres
       - data-db:/var/lib/postgresql/data
       - ./db:/docker-entrypoint-initdb.d # automatically runs schema.sql 🎉
-    environment:
-      POSTGRES_PASSWORD: keepitsecretkeepitsafe
-      POSTGRES_USER: pgadmin
-      POSTGRES_DB: tinybasilempiredb
+    env_file:
+      - .secrets-example
+      - .secrets
 
   web:
     build: .
