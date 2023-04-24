@@ -6,8 +6,6 @@
 {% set searchform_value = 'edit:'+link_id_string %}
 {% elif link_id %}
 {% set searchform_value = '{}:{}'.format('link', link_id) %}
-{% else %}
-{% set searchform_placeholder = 'tiny basil empire' %}
 {% endif %}
 <form id="search" action="/search" method="GET" role="search">
     <input id="q" name="q" class="u-full-width" maxlength="2048" type="text" aria-autocomplete="both"
