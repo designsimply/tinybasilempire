@@ -312,7 +312,10 @@ def add():
                 searchform_placeholder=config.SEARCHFORM_PLACEHOLDER,
             )
         else:
-            return render_template("add.html")
+            return render_template(
+                "add.html",
+                searchform_placeholder=config.SEARCHFORM_PLACEHOLDER,
+            )
 
     elif request.method == "POST":
         if current_user.is_authenticated:
@@ -328,8 +331,8 @@ def add():
     else:
         return render_template(
             "add.html",
-            searchform_placeholder=config.SEARCHFORM_PLACEHOLDER
-            )
+            searchform_placeholder=config.SEARCHFORM_PLACEHOLDER,
+        )
 
 
 @dataclass
