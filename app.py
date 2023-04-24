@@ -175,7 +175,7 @@ def login():
     # request google login and scope what to retrieve
     request_uri = client.prepare_request_uri(
         authorization_endpoint,
-        redirect_uri=request.base_url + "/callback",
+        redirect_uri=(request.base_url + "/callback").replace("http://","https://"),
         scope=["openid", "email", "profile"],
     )
     return redirect(request_uri)
@@ -193,8 +193,8 @@ def callback():
     # send a request to get tokens
     token_url, token_headers, body = client.prepare_token_request(
         token_endpoint,
-        authorization_response=request.url,
-        redirect_url=request.base_url,
+        authorization_response=(request.url).replace("http://","https://"),
+        redirect_url=(request.base_url).replace("http://","https://"),
         code=code,
     )
     with urllib3.PoolManager() as http:
