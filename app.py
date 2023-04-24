@@ -40,12 +40,10 @@ from db.sql import (
     SEARCH_FOR_POTENTIAL_DUPES,
     SEARCH_FOR_POTENTIAL_DUPES_COUNT,
 )
-from flask_sslify import SSLify
 
 client = WebApplicationClient(config.GOOGLE_CLIENT_ID)
 
 app = Flask(__name__)
-# sslify = SSLify(app)
 app.secret_key = config.SECRET_KEY
 
 # user session management setup from

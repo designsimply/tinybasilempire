@@ -14,10 +14,6 @@ psycopg2
 # battle-hardened OIDC library 
 oauthlib
 
-# quick way to enable running securely with https locally
-pyOpenSSL
-Flask-SSLify
-
 # user session management
 flask-login
 
