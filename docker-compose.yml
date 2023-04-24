@@ -19,7 +19,7 @@ services:
     build: .
     depends_on:
       - db
-    command: dev.sh
+    command: run.sh
     expose:
       - 8000
     volumes:
