@@ -1,4 +1,8 @@
 # ############################################################################ #
+# Variables
+# ############################################################################ #
+
+# ############################################################################ #
 # Targets
 # ############################################################################ #
 
@@ -6,16 +10,19 @@
 build:
 	docker compose build
 
-run:
+start:
 	docker compose up -d
 
-start: run
+dev: start 
 
-restart: stop run
+prod:
+	CMD=run.sh $(MAKE) start
+
+restart: stop start
 
 restart-nginx:
 	docker compose stop nginx
-	docker compose up -d
+	$(MAKE) start
 
 stop:
 	docker compose stop
@@ -23,17 +30,18 @@ stop:
 logs:
 	docker compose logs
 
-bash: run
+bash:
 	docker compose exec web bash
 
-sh: run
+sh:
 	docker compose exec nginx sh
 
-py: run
+py:
 	docker compose exec web shell.sh
 
-psql: run
-	docker-compose exec db bash -c 'psql -U $$POSTGRES_USER -d $$POSTGRES_DB'
+psql:
+	docker compose exec db bash -c 'psql -U $$POSTGRES_USER -d $$POSTGRES_DB'
+
 
 # ############################################################################ #
 # Help
@@ -48,4 +56,4 @@ help:
 	@echo ""
 
 .DEFAULT_GOAL=help
-.PHONY:   build help logs psql py run sh stop
+.PHONY:   bash build dev help logs prod psql py restart-nginx restart sh start stop
