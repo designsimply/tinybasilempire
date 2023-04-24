@@ -15,7 +15,9 @@ services:
       - .secrets
 
   web:
-    build: .
+    build:
+      dockerfile: ./services/web/Dockerfile
+      context: .
     depends_on:
       - db
     command: ${CMD:-dev.sh}
