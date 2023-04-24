@@ -55,7 +55,7 @@ services:
     depends_on:
       - nginx
     # command: certonly --webroot --webroot-path=/var/www/html --email sheri@designsimply.com --agree-tos --no-eff-email --staging -d tinybasilempire.com -d www.tinybasilempire.com
-    command: certonly --webroot --webroot-path=/var/www/html --email sheri@designsimply.com --agree-tos --no-eff-email --force-renewal -d tinybasilempire.com -d www.tinybasilempire.com
+    # command: certonly --webroot --webroot-path=/var/www/html --email sheri@designsimply.com --agree-tos --no-eff-email --force-renewal -d tinybasilempire.com -d www.tinybasilempire.com
 
 volumes:
   data-db:
