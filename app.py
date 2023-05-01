@@ -131,6 +131,7 @@ def index():
     return render_template(
         "base.html",
         current_user=current_user,
+        db_host=config.DB_HOST,
         searchform_placeholder=config.SEARCHFORM_PLACEHOLDER,
     )
 
@@ -155,6 +156,7 @@ def latest():
         offset=offset,
         total=total[0].count,
         current_user=current_user,
+        db_host=config.DB_HOST,
         searchform_placeholder=config.SEARCHFORM_PLACEHOLDER,
     )
 
