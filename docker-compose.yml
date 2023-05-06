@@ -10,6 +10,8 @@ services:
     env_file:
       - .secrets-example
       - .secrets
+    networks:
+      - reverse-proxy-network
 
   gunicorn:
     build:
@@ -25,8 +27,8 @@ services:
     env_file:
       - .secrets-example
       - .secrets
-    # networks:
-    #   - app-network
+    networks:
+      - reverse-proxy-network
 
   nginx:
     image: nginx:1.23.4-alpine
@@ -39,21 +41,8 @@ services:
       - ./services/nginx/conf.d:/etc/nginx/conf.d
       - ./services/nginx/dhparam:/etc/ssl/certs
       - web-root:/var/www/html
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
-    # networks:
-    #   - app-network
-
-  certbot:
-    image: certbot/certbot
-    volumes:
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
-      - web-root:/var/www/html
-    depends_on:
-      - nginx
-    # command: certonly --webroot --webroot-path=/var/www/html --email sheri@designsimply.com --agree-tos --no-eff-email --staging -d tinybasilempire.com -d www.tinybasilempire.com
-    # command: certonly --webroot --webroot-path=/var/www/html --email sheri@designsimply.com --agree-tos --no-eff-email --force-renewal -d tinybasilempire.com -d www.tinybasilempire.com
+    networks:
+      - reverse-proxy-network
 
 volumes:
   data-db:
