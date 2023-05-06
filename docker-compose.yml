@@ -47,3 +47,8 @@ volumes:
   certbot-etc:
   certbot-var:
   web-root:
+
+
+networks:
+  reverse-proxy-network:
+    external: true
