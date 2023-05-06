@@ -1,11 +1,8 @@
 version: "3.8"
 
 services:
-  db:
+  postgres:
     image: postgres
-    # Include container:host port mapping if you want to see this externally.
-    # ports:
-    #   - 5432:5432
     volumes:
       # See "Where to Store Data" in https://hub.docker.com/_/postgres
       - data-db:/var/lib/postgresql/data
@@ -19,7 +16,7 @@ services:
       dockerfile: ./services/web/Dockerfile
       context: .
     depends_on:
-      - db
+      - postgres
     command: ${CMD:-dev.sh}
     expose:
       - 8000
