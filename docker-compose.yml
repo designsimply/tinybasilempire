@@ -11,9 +11,9 @@ services:
       - .secrets-example
       - .secrets
 
-  web:
+  gunicorn:
     build:
-      dockerfile: ./services/web/Dockerfile
+      dockerfile: ./services/gunicorn/Dockerfile
       context: .
     depends_on:
       - postgres
@@ -34,7 +34,7 @@ services:
       - 80:80
       - 443:443
     depends_on:
-      - web
+      - gunicorn
     volumes:
       - ./services/nginx/conf.d:/etc/nginx/conf.d
       - ./services/nginx/dhparam:/etc/ssl/certs

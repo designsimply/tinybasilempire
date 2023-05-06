@@ -31,13 +31,13 @@ logs:
 	docker compose logs
 
 bash:
-	docker compose exec web bash
+	docker compose exec gunicorn bash
 
 sh:
 	docker compose exec nginx sh
 
 py:
-	docker compose exec web shell.sh
+	docker compose exec gunicorn shell.sh
 
 psql:
 	docker compose exec db bash -c 'psql -U $$POSTGRES_USER -d $$POSTGRES_DB'
