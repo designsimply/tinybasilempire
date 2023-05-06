@@ -2,8 +2,10 @@
 .secrets*
 !.secrets-example
 
-# self-signed certs
+# certifiticates
 *.pem
+*.crt
+*.key
 
 # python
 .venv*
