@@ -20,8 +20,6 @@ services:
     depends_on:
       - postgres
     command: ${CMD:-dev.sh}
-    expose:
-      - 8000
     volumes:
       - ./:/app/src
     env_file:
