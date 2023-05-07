@@ -6,6 +6,8 @@
 *.pem
 *.crt
 *.key
+certs
+letsencrypt
 
 # python
 .venv*
