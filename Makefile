@@ -9,7 +9,6 @@ export TINY_HTTPS_PORT=443
 # Targets
 # ############################################################################ #
 
-
 build:
 	docker compose build
 
@@ -43,7 +42,7 @@ py:
 	docker compose exec gunicorn shell.sh
 
 psql:
-	docker compose exec db bash -c 'psql -U $$POSTGRES_USER -d $$POSTGRES_DB'
+	docker compose exec postgres bash -c 'psql -U $$POSTGRES_USER -d $$POSTGRES_DB'
 
 
 # ############################################################################ #
