@@ -39,7 +39,8 @@ py:
 	docker compose exec gunicorn shell.sh
 
 psql:
-	docker compose exec postgres bash -c 'psql -U $$POSTGRES_USER -d $$POSTGRES_DB'
+	docker compose exec postgres bash -c 'psql -U $$POSTGRES_USER -d $$POSTGRES_DB_NAME'
+
 
 
 # ############################################################################ #
