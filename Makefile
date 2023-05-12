@@ -12,15 +12,16 @@ export TINY_HTTPS_PORT=443
 build:
 	docker compose build
 
-start:
+up:
 	docker compose up -d
 
-dev: start 
+down:
+	docker compose stop
 
 prod:
 	CMD=run.sh $(MAKE) start
 
-restart: stop start
+restart: down up
 
 restart-nginx:
 	docker compose stop nginx
