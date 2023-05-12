@@ -2,9 +2,10 @@
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 @import url("//fonts.googleapis.com/css?family=Merriweather:300,400,600");
 @import url("//fonts.googleapis.com/css?family=Open+Sans:300,400,600");
+
 body {
 	font-family: 'Open Sans',
-	sans-serif;
+		sans-serif;
 }
 
 h1,
@@ -16,7 +17,7 @@ h6,
 form#search input[name="q"],
 form#search input[name="q"]::placeholder {
 	font-family: 'Merriweather',
-	serif;
+		serif;
 }
 
 /* Colors
@@ -85,12 +86,13 @@ form .buttons-container {
 	margin-top: 3rem;
 }
 
-.button, button, 
-input[type="submit"], 
-input[type="reset"], 
+.button,
+button,
+input[type="submit"],
+input[type="reset"],
 input[type="button"] {
 	font-size: 1.2rem;
-    height: 3rem;
+	height: 3rem;
 	line-height: 3rem;
 }
 
@@ -241,10 +243,14 @@ body.delete .list li {
 	min-height: 8em;
 }
 
-
 @media (max-width: 1000px) {
 	html {
-		font-size: .8em;
+		font-size: 150%;
+	}
+
+	.six.columns {
+		width: 100%;
+		margin-left: 0;
 	}
 
 	form#search input[name="q"] {
@@ -252,7 +258,7 @@ body.delete .list li {
 	}
 
 	textarea,
-	input[type="text"] { 
+	input[type="text"] {
 		font-size: 2rem;
 		line-height: 3rem;
 		height: 4rem;
@@ -260,6 +266,10 @@ body.delete .list li {
 
 	#add textarea,
 	#edit textarea {
+		min-height: 6em;
+	}
+
+	#edit textarea[name="title"] {
 		min-height: 4em;
 	}
 
@@ -286,7 +296,7 @@ body.delete .list li {
 		display: none;
 	}
 
-	.item .edit { 
+	.item .edit {
 		padding-right: 1em;
 	}
 }
