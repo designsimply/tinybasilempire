@@ -35,6 +35,9 @@ services:
       - ${BASIL_HTTPS_PORT:-443}:443
     depends_on:
       - gunicorn
+    env_file:
+      - .secrets-example
+      - .secrets
     volumes:
       - ./services/nginx/conf.d:/etc/nginx/conf.d
       # - ./services/letsencrypt:/etc/letsencrypt
