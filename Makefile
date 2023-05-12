@@ -23,12 +23,8 @@ prod:
 
 restart: down up
 
-restart-nginx:
-	docker compose stop nginx
-	$(MAKE) start
-
-stop:
-	docker compose stop
+reload_nginx:
+	docker compose exec nginx sh -c 'nginx -s reload'
 
 logs:
 	docker compose logs
