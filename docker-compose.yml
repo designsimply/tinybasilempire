@@ -37,32 +37,38 @@ services:
       - gunicorn
     volumes:
       - ./services/nginx/conf.d:/etc/nginx/conf.d
-      - ./services/nginx/certs/dhparam:/etc/ssl/certs
-      - web-root:/var/www/html
+      # - ./services/letsencrypt:/etc/letsencrypt
       # - ./services/nginx/certs:/var/certs
-      - ./services/letsencrypt:/etc/letsencrypt
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
+      # - certbot-etc:/etc/letsencrypt
     networks:
       - reverse-proxy-network
 
-  certbot:
-    image: certbot/certbot
-    volumes:
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
-      - web-root:/var/www/html
-    depends_on:
-      - nginx
-  # command: certonly --webroot --webroot-path=/var/www/html --email sheri@designsimply.com --agree-tos --no-eff-email --staging -d tinybasilempire.com -d www.tinybasilempire.com
-  # command: certonly --webroot --webroot-path=/var/www/html --email sheri@designsimply.com --agree-tos --no-eff-email --force-renewal -d tinybasilempire.com -d www.tinybasilempire.com
+  # certbot:
+  #   image: certbot/certbot
+  #   volumes:
+  #     - certbot-etc:/etc/letsencrypt
+  #     - web-root:/var/www/html
+  #   depends_on:
+  #     - nginx
+
+    # Use this if you want to force certbot to stay up.
+    # entrypoint: sh -c "while true; do echo 'sleep...' && sleep 10; done"
+    # Certificate creation with staging on:
+    # command: certonly --webroot --webroot-path=/var/www/html --email sheri@designsimply.com --agree-tos --no-eff-email --staging -d tinybasilempire.com -d www.tinybasilempire.com
+    # Certificate creation with force-renewal on:
+    # command: certonly --webroot --webroot-path=/var/www/html --email sheri@designsimply.com --agree-tos --no-eff-email --force-renewal -d tinybasilempire.com -d www.tinybasilempire.com
+    # Certificate renewal dry run:
+    # command: renew --dry-run -v
+    # Certificate renewal:
+    # command: renew
 
 volumes:
-  certbot-etc:
-  certbot-var:
+  # certbot-etc:
+  # letsencrypt:
+  #   external: true
+  #   name: letsencrypt_keys
   data-db:
   web-root:
-
 
 networks:
   reverse-proxy-network:
