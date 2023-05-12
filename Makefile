@@ -29,10 +29,10 @@ reload_nginx:
 logs:
 	docker compose logs
 
-bash:
+gunicorn_bash:
 	docker compose exec gunicorn bash
 
-sh:
+nginx_sh:
 	docker compose exec nginx sh
 
 py:
