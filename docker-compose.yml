@@ -39,7 +39,11 @@ services:
       - .secrets-example
       - .secrets
     volumes:
+      - web-root:/var/www/html
       - ./services/nginx/conf.d:/etc/nginx/conf.d
+      - ./services/zerossl:/etc/zerossl
+      - ./services/nginx/dhparam:/var/ssl/certs
+      - ./services/.acme.sh:/root/.acme.sh
       # - ./services/letsencrypt:/etc/letsencrypt
       # - ./services/nginx/certs:/var/certs
       # - certbot-etc:/etc/letsencrypt
