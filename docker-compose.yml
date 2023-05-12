@@ -14,7 +14,7 @@ services:
 
   gunicorn:
     build:
-      dockerfile: ./Dockerfile
+      dockerfile: ./services/gunicorn/Dockerfile
       context: .
     depends_on:
       - postgres
