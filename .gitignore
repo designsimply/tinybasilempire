@@ -5,9 +5,11 @@
 # certifiticates
 *.pem
 *.crt
+*.cer
 *.key
 certs
 letsencrypt
+.acme.sh
 
 # python
 .venv*
