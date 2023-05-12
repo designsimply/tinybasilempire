@@ -51,8 +51,8 @@ help:
 	@echo ""
 	@echo "Usage: make <target>"
 	@echo "Targets:"
-	@grep -E "^[a-z,A-Z,0-9,-]+:.*" Makefile | sort | cut -d : -f 1 | xargs printf ' %s'
+	@grep -E "^[a-z,A-Z,0-9,-,_]+:.*" Makefile | sort | cut -d : -f 1 | xargs printf ' %s'
 	@echo ""
 
 .DEFAULT_GOAL=help
-.PHONY:   bash build dev help logs prod psql py restart-nginx restart sh start stop
+.PHONY: build down gunicorn_bash help install_acme_cert install_acme_cron install_acme_script issue_acme_cert logs nginx_sh prod psql py reload_nginx renew_acme_cert restart up
