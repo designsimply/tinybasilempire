@@ -41,7 +41,23 @@ py:
 psql:
 	docker compose exec postgres bash -c 'psql -U $$POSTGRES_USER -d $$POSTGRES_DB_NAME'
 
+install_acme_script:
+	docker compose exec nginx sh -c 'cd ~/ ; curl https://get.acme.sh | sh -s email=$$DEV_EMAIL'
 
+issue_acme_cert:
+	docker compose exec nginx sh -c '/root/.acme.sh/acme.sh --issue -d $$DOMAIN -w /var/www/html'
+
+install_acme_cert:
+	/root/.acme.sh/acme.sh --install-cert -d $$DOMAIN \
+	--fullchain-file /etc/zerossl/fullchain.cer \
+	--key-file /etc/zerossl/tinybasilempire.com.key \
+	--reloadcmd "nginx -s reload"'
+
+install_acme_cron:
+	docker compose exec nginx sh -c '/root/.acme.sh/acme.sh --install-cronjob'
+
+renew_acme_cert:
+	docker compose exec nginx sh -c '/root/.acme.sh/acme.sh --renew -d $$DOMAIN --force --ecc'
 
 # ############################################################################ #
 # Help
