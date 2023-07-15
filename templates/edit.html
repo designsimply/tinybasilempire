@@ -9,9 +9,11 @@
         <textarea class="u-full-width" name="title" tabindex="5" required>{{ link.title }}</textarea>
         <label for="url" class="placeholder ">Link <a href="{{ link.url }}">🔗</a>
             <a
-                onclick="javascript:document.forms.edit.url.value = document.forms.edit.url.value.split('?')[0];">🙅‍♀️</a>
+                onclick="javascript:document.forms.edit.url.select();document.forms.edit.url.setSelectionRange(0, 99999);navigator.clipboard.writeText(document.forms.edit.url.value);">💁‍♀️</a>
             <a
-                onclick="javascript:document.forms.edit.url.select();document.forms.edit.url.setSelectionRange(0, 99999);navigator.clipboard.writeText(document.forms.edit.title.value + ' - ' + document.forms.edit.url.value);">🙆‍♀️</a>
+                onclick="javascript:document.forms.edit.url.value = document.forms.edit.url.value.split('?')[0];javascript:document.forms.edit.url.select();document.forms.edit.url.setSelectionRange(0, 99999);navigator.clipboard.writeText(document.forms.edit.url.value);">🙅‍♀️</a>
+            <a
+                onclick="javascript:document.forms.edit.url.select();document.forms.edit.url.setSelectionRange(0, 99999);navigator.clipboard.writeText(document.forms.edit.title.value.trim() + ' ' + document.forms.edit.url.value);">🙆‍♀️</a>
         </label>
         <textarea class="u-full-width" name="url" id="url" tabindex="6">{{ link.url }}</textarea>
         <div class="row">
