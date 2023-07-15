@@ -7,18 +7,20 @@
     <fieldset>
         <label for="title" class="placeholder active">Title</label>
         <textarea class="u-full-width" name="title" tabindex="5" required>{{ link.title }}</textarea>
-        <label for="url" class="placeholder ">Link</label>
-        <input class="u-full-width" type="text" name="url" id="url" tabindex="6" class="av-password"
-            value="{{ link.url }}">
+        <label for="url" class="placeholder ">Link <a href="{{ link.url }}">🔗</a>
+            <a
+                onclick="javascript:document.forms.add.url.value = document.forms.edit.url.value.split('?')[0];">🙅‍♀️</a>
+            <a
+                onclick="javascript:document.forms.edit.url.select();navigator.clipboard.writeText(document.forms.edit.title.value + ' - ' + document.forms.add.url.value);">🙆‍♀️</a>
+        </label>
+        <textarea class="u-full-width" name="url" id="url" tabindex="6">{{ link.url }}</textarea>
         <div class="row">
             <div class="six columns">
-
                 <label for="description" class="placeholder">Description</label>
                 <textarea class="u-full-width" name="description" id="description"
                     tabindex="7">{{ link.description }}</textarea>
             </div>
             <div class="six columns">
-
                 <label for="tags" class="placeholder ">Tags</label>
                 <input class="u-full-width" type="text" name="tags" id="tags" tabindex="8" class="av-password"
                     value="{{ tags }}">
