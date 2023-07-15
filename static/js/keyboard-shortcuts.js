@@ -6,7 +6,8 @@ function search() {
 
 // single keys
 Mousetrap.bind('/', function () { document.getElementById("q").focus(); document.getElementById("q").select(); return false; });
-Mousetrap.bind("?", function () { alert(`TODO: fancier Keyboard Shortcuts Overlay.
+Mousetrap.bind("?", function () {
+  alert(`TODO: fancier Keyboard Shortcuts Overlay.
   h - Home
   l - Latest
   t - Tags
@@ -21,7 +22,9 @@ Mousetrap.bind("?", function () { alert(`TODO: fancier Keyboard Shortcuts Overla
   k - Previous item
   command+shift+o - Open All
   command+shift+e - Edit All
-  `); });
+  command+enter - Submit
+  `);
+});
 Mousetrap.bind("h", function () { document.getElementById('home').click(); });
 Mousetrap.bind("l", function () { document.getElementById('latest').click(); });
 Mousetrap.bind("t", function () { document.getElementById('tags').click(); });
@@ -67,6 +70,7 @@ Mousetrap.bind("k", function () {
 // key combinations
 Mousetrap.bind('command+shift+o', function () { links = document.getElementsByClassName('link'); if (typeof links !== 'undefined') { for (i = 0; i < links.length; i++) { window.open(links[i].href); } } });
 Mousetrap.bind('command+shift+e', function () { links = document.getElementsByClassName('edit'); if (typeof links !== 'undefined') { for (i = 0; i < links.length; i++) { window.open(links[i].href); } } });
+Mousetrap.bindGlobal('command+enter', function () { document.activeElement.closest('form').submit(); });
 
 // map multiple combinations to the same callback
 // return false to prevent default browser behavior and stop event bubbling
