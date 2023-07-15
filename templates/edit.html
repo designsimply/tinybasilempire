@@ -6,7 +6,7 @@
 <form id="edit" action="" method="post">
     <fieldset>
         <label for="title" class="placeholder active">Title</label>
-        <input class="u-full-width" type="text" name="title" tabindex="5" value="{{ link.title }}" required>
+        <textarea class="u-full-width" name="title" tabindex="5" required>{{ link.title }}</textarea>
         <label for="url" class="placeholder ">Link</label>
         <input class="u-full-width" type="text" name="url" id="url" tabindex="6" class="av-password"
             value="{{ link.url }}">
