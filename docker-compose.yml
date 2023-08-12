@@ -6,6 +6,7 @@ services:
     volumes:
       - data-db:/var/lib/postgresql/data # See "Where to Store Data" in https://hub.docker.com/_/postgres
       - ./db:/docker-entrypoint-initdb.d # automatically runs schema.sql 🎉
+      - ./db/backups:/backups
     env_file:
       - .secrets-example
       - .secrets
@@ -18,7 +19,7 @@ services:
       context: .
     depends_on:
       - postgres
-    command: ${CMD:-dev.sh}
+    command: ${CMD:-run.sh}
     volumes:
       - ./:/app/src
     env_file:

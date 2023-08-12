@@ -18,9 +18,6 @@ up:
 down:
 	docker compose stop
 
-prod:
-	CMD=run.sh $(MAKE) start
-
 restart: down up
 
 reload_nginx:
@@ -39,7 +36,15 @@ py:
 	docker compose exec gunicorn shell.sh
 
 psql:
-	docker compose exec postgres bash -c 'psql -U $$POSTGRES_USER -d $$POSTGRES_DB_NAME'
+	docker compose exec postgres bash -c 'PGPASSWORD=$$POSTGRES_PASSWORD psql -U $$POSTGRES_USER -h $$POSTGRES_HOST -d $$POSTGRES_DB_NAME'
+
+db_backup:
+	source .secrets \
+	&& docker \
+		run \
+		--volume ./db/backups:/backups \
+		postgres \
+		bash -c "PGPASSWORD=$$POSTGRES_PASSWORD pg_dump -U $$POSTGRES_USER -h $$POSTGRES_HOST -d $$POSTGRES_DB_NAME --verbose --file=/backups/$(shell date -u +'%Y-%m-%dT%H:%M:%S%z').backup"
 
 install_acme_script:
 	docker compose exec nginx sh -c 'cd ~/ ; curl https://get.acme.sh | sh -s email=$$DEV_EMAIL'
@@ -48,7 +53,7 @@ issue_acme_cert:
 	docker compose exec nginx sh -c '/root/.acme.sh/acme.sh --issue -d $$DOMAIN -w /var/www/html'
 
 install_acme_cert:
-	/root/.acme.sh/acme.sh --install-cert -d $$DOMAIN \
+	docker compose exec nginx sh -c '/root/.acme.sh/acme.sh --install-cert -d $$DOMAIN \
 	--fullchain-file /etc/zerossl/fullchain.cer \
 	--key-file /etc/zerossl/tinybasilempire.com.key \
 	--reloadcmd "nginx -s reload"'
@@ -72,4 +77,4 @@ help:
 	@echo ""
 
 .DEFAULT_GOAL=help
-.PHONY: build down gunicorn_bash help install_acme_cert install_acme_cron install_acme_script issue_acme_cert logs nginx_sh prod psql py reload_nginx renew_acme_cert restart up
+.PHONY:  build db_backup down gunicorn_bash help install_acme_cert install_acme_cron install_acme_script issue_acme_cert logs nginx_sh psql py reload_nginx renew_acme_cert restart up

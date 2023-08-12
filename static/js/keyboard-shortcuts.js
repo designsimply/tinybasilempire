@@ -6,7 +6,8 @@ function search() {
 
 // single keys
 Mousetrap.bind('/', function () { document.getElementById("q").focus(); document.getElementById("q").select(); return false; });
-Mousetrap.bind("?", function () { alert(`TODO: fancier Keyboard Shortcuts Overlay.
+Mousetrap.bind("?", function () {
+  alert(`TODO: fancier Keyboard Shortcuts Overlay.
   h - Home
   l - Latest
   t - Tags
@@ -19,9 +20,12 @@ Mousetrap.bind("?", function () { alert(`TODO: fancier Keyboard Shortcuts Overla
   p - Previous page
   j - Next item
   k - Previous item
+  + - Increase limit by 20
   command+shift+o - Open All
   command+shift+e - Edit All
-  `); });
+  command+enter - Submit
+  `);
+});
 Mousetrap.bind("h", function () { document.getElementById('home').click(); });
 Mousetrap.bind("l", function () { document.getElementById('latest').click(); });
 Mousetrap.bind("t", function () { document.getElementById('tags').click(); });
@@ -29,6 +33,15 @@ Mousetrap.bind("a", function () { document.getElementById('add').click(); });
 Mousetrap.bind("o", function () { document.getElementsByClassName('current')[0].getElementsByClassName('link')[0].click(); });
 Mousetrap.bind("e", function () { document.getElementsByClassName('current')[0].getElementsByClassName('edit')[0].click(); });
 Mousetrap.bind("i", function () { document.getElementsByClassName('current')[0].getElementsByClassName('date')[0].getElementsByTagName('a')[0].click(); });
+Mousetrap.bind("+", function () {
+  const params = new URLSearchParams(window.location.search);
+  const limit = params.get('limit');
+  if (limit) {
+    document.location = window.location.href.replace(limit, Number(limit) + 20);
+  } else {
+    document.location = window.location.href + '?limit=10'
+  }
+});
 Mousetrap.bind("#", function () {
   if (typeof document.getElementsByClassName('current')[0] !== 'undefined') {
     document.getElementsByClassName('current')[0].getElementsByClassName('delete')[0].click();
@@ -67,6 +80,7 @@ Mousetrap.bind("k", function () {
 // key combinations
 Mousetrap.bind('command+shift+o', function () { links = document.getElementsByClassName('link'); if (typeof links !== 'undefined') { for (i = 0; i < links.length; i++) { window.open(links[i].href); } } });
 Mousetrap.bind('command+shift+e', function () { links = document.getElementsByClassName('edit'); if (typeof links !== 'undefined') { for (i = 0; i < links.length; i++) { window.open(links[i].href); } } });
+Mousetrap.bindGlobal('command+enter', function () { document.activeElement.closest('form').submit(); });
 
 // map multiple combinations to the same callback
 // return false to prevent default browser behavior and stop event bubbling
