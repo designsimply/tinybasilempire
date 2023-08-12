@@ -1,5 +1,6 @@
 # general untracked
 untracked_*
+db/backups
 
 # ignore secrets keep secrets example
 .secrets*
