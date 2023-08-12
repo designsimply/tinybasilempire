@@ -1,3 +1,6 @@
+# general untracked
+untracked_*
+
 # ignore secrets keep secrets example
 .secrets*
 !.secrets-example
