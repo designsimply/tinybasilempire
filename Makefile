@@ -18,7 +18,7 @@ up:
 down:
 	docker compose stop
 
-restart: down up
+restart: down up ps
 
 reload_nginx:
 	docker compose exec nginx sh -c 'nginx -s reload'
@@ -34,6 +34,9 @@ nginx_sh:
 
 py:
 	docker compose exec gunicorn shell.sh
+
+ps:
+	docker compose ps
 
 psql:
 	docker compose exec postgres bash -c 'PGPASSWORD=$$POSTGRES_PASSWORD psql -U $$POSTGRES_USER -h $$POSTGRES_HOST -d $$POSTGRES_DB_NAME'
