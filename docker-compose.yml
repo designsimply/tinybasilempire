@@ -50,14 +50,13 @@ services:
       # - certbot-etc:/etc/letsencrypt
     networks:
       - reverse-proxy-network
-
-  # certbot:
-  #   image: certbot/certbot
-  #   volumes:
-  #     - certbot-etc:/etc/letsencrypt
-  #     - web-root:/var/www/html
-  #   depends_on:
-  #     - nginx
+    # certbot:
+    #   image: certbot/certbot
+    #   volumes:
+    #     - certbot-etc:/etc/letsencrypt
+    #     - web-root:/var/www/html
+    #   depends_on:
+    #     - nginx
 
     # Use this if you want to force certbot to stay up.
     # entrypoint: sh -c "while true; do echo 'sleep...' && sleep 10; done"
@@ -77,6 +76,7 @@ volumes:
   #   name: letsencrypt_keys
   data-db:
   web-root:
+
 
 networks:
   reverse-proxy-network:
