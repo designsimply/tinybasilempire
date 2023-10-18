@@ -33,6 +33,8 @@ Mousetrap.bind("a", function () { document.getElementById('add').click(); });
 Mousetrap.bind("o", function () { document.getElementsByClassName('current')[0].getElementsByClassName('link')[0].click(); });
 Mousetrap.bind("e", function () { document.getElementsByClassName('current')[0].getElementsByClassName('edit')[0].click(); });
 Mousetrap.bind("i", function () { document.getElementsByClassName('current')[0].getElementsByClassName('date')[0].getElementsByTagName('a')[0].click(); });
+Mousetrap.bind("c l", function () { navigator.clipboard.writeText(document.getElementsByClassName('current')[0].getElementsByClassName('link')[0].href); });
+Mousetrap.bind("c c", function () { navigator.clipboard.writeText(document.getElementsByClassName('current')[0].getElementsByClassName('link')[0].innerText + " " + document.getElementsByClassName('current')[0].getElementsByClassName('link')[0].href); });
 Mousetrap.bind("+", function () {
   const params = new URLSearchParams(window.location.search);
   const limit = params.get('limit');
@@ -89,6 +91,8 @@ Mousetrap.bind(['p', '['], function () { document.getElementById('previous').cli
 
 // gmail style sequences
 Mousetrap.bind('g i', function () { document.getElementById('home').click(); });
+Mousetrap.bindGlobal('command+k command+l', function () { document.forms.edit.url.select();document.forms.edit.url.setSelectionRange(0, 99999);navigator.clipboard.writeText(document.forms.edit.url.value); });
+Mousetrap.bindGlobal('command+k command+c', function () { document.forms.edit.url.select();document.forms.edit.url.setSelectionRange(0, 99999);navigator.clipboard.writeText(document.forms.edit.title.value.trim() + ' ' + document.forms.edit.url.value); });
 Mousetrap.bind('* a', function () { console.log('select all'); });
 
 // konami code!
