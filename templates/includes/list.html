@@ -2,8 +2,7 @@
 <nav class="list">
     <p>
         {% if page > 1 %}
-        <a id="previous"
-            href="{{ request.path }}?limit={{ limit }}&page={{ page-1 }}{{request_params}}">
+        <a id="previous" href="{{ request.path }}?limit={{ limit }}&page={{ page-1 }}{{request_params}}">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
@@ -12,8 +11,7 @@
         {% if total > page * limit %}
         <br>{{ prev_args }}
         <br>{{ next_args }}
-        <a id="next"            
-            href="{{ request.path }}?limit={{ limit }}&page={{ page+1 }}{{request_params}}">
+        <a id="next" href="{{ request.path }}?limit={{ limit }}&page={{ page+1 }}{{request_params}}">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -29,7 +27,8 @@
         {% if strfdelta and link.timesince %}
         <abbr class="date" title="{{ link.datecreated }}">
             <a href="{{ url_for('link', link_id=link.id) }}">
-                {{ strfdelta(link.timesince, "{days}d{hours}h ago") }}</a>
+                {{ link.timesince_created }}
+            </a>
         </abbr>
         {% endif %}
         {% if current_user.is_authenticated %}

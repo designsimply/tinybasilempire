@@ -1,5 +1,7 @@
 import json
 import urllib3
+from dataclasses import dataclass
+import datetime as dt
 
 # third-party libraries
 from flask import Flask, render_template, redirect, request, url_for, jsonify
@@ -10,6 +12,8 @@ from flask_login import (
     login_user,
     logout_user,
 )
+import humanize
+from datetime import timezone
 from oauthlib.oauth2 import WebApplicationClient
 from dataclasses import dataclass
 import urllib
@@ -80,8 +84,24 @@ app.jinja_env.globals["list"] = list
 app.jinja_env.globals["len"] = len
 
 
+def convert_to_links(results):
+    links = []
+    for result in results:
+        link = Link(
+            id=result.id,
+            url=result.url,
+            title=result.title,
+            description=result.description,
+            datecreated=result.datecreated,
+            timesince=result.timesince,
+        )
+        links.append(link)
+    return links
+
+
 def db_links_select(limit=5, offset=0):
-    return query_db(QUERY_ALL_LINKS, params=(limit, offset))
+    results = query_db(QUERY_ALL_LINKS, params=(limit, offset))
+    return convert_to_links(results)
 
 
 def db_links_count():
@@ -105,7 +125,9 @@ def db_tag_links_count(tag_name="%%"):
 
 
 def db_links_search(title="%%", description="%%", limit=5, offset=0):
-    return query_db(QUERY_SEARCH_LINKS, params=(title, description, limit, offset))
+    # return query_db(QUERY_SEARCH_LINKS, params=(title, description, limit, offset))
+    results = query_db(QUERY_SEARCH_LINKS, params=(title, description, limit, offset))
+    return convert_to_links(results)
 
 
 def db_links_search_count(title="%%", description="%%"):
@@ -136,6 +158,27 @@ def index():
     )
 
 
+@dataclass
+class Link:
+    id: str
+    url: str
+    title: str
+    description: str
+    datecreated: str
+    timesince: int
+
+    @property
+    def timesince_created(self):
+        return humanize.naturaltime(self.timesince)
+        return humanize.naturaltime(dt.datetime.now() - dt.timedelta(self.datecreated))
+        return humanize.naturalday(dt.datetime.now() - self.timesince)
+        return humanize.naturaltime(dt.datetime.now() - dt.timedelta(self.timesince))
+        return self.timesince
+        return humanize.naturaltime(
+            dt.datetime.now(timezone.utc)
+        )        
+
+
 @app.route("/latest")
 def latest():
     limit = request.args.get("limit", 10, type=int)
@@ -147,7 +190,7 @@ def latest():
         limit=limit,
         offset=offset,
     )
-
+    
     return render_template(
         "latest.html",
         links=links,

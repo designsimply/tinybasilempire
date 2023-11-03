@@ -7,4 +7,4 @@ source ${ENVDIR}/bin/activate
 
 # run your application with uvicorn
 cd ${SOURCEDIR} && \
-    gunicorn --reload --bind 0.0.0.0:8000 --workers 4 app:app
+    gunicorn --reload --bind 0.0.0.0:8000 --workers 6 app:app
