@@ -1,6 +1,6 @@
 # 🌱 tinybasilempire 🌱
 
-For collecting links and small notes—a tiny empire of basil, if you will.
+Tiny Basil Empire is a small platform you can use for collecting links and small notes. It was built uising python flask, postgres, gunicorn, nginx, Google OAuth, and ZeroSSL.  It has a growing list of keyboard shortcuts and is secured with Google Authentication.
 
 # Running
 
