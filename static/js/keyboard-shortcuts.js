@@ -25,10 +25,10 @@ Mousetrap.bind("?", function () {
   j - Next item
   k - Previous item
   + - Increase limit by 20
+  o o - Open All
+  e e - Edit All
   command+k command+l | cl - copy link
   command+k command+c | cc - copy title & link
-  command+shift+o - Open All
-  command+shift+e - Edit All
   command+enter - Submit
   `);
 });
@@ -161,7 +161,7 @@ Mousetrap.bind("k", function () {
 //Mousetrap.bind('esc', function () { console.log('escape'); }, 'keyup');
 
 // key combinations
-Mousetrap.bind("command+shift+o", function () {
+Mousetrap.bind("o o", function () {
   links = document.getElementsByClassName("link");
   if (typeof links !== "undefined") {
     for (i = 0; i < links.length; i++) {
@@ -169,7 +169,7 @@ Mousetrap.bind("command+shift+o", function () {
     }
   }
 });
-Mousetrap.bind("command+shift+e", function () {
+Mousetrap.bind("e e", function () {
   links = document.getElementsByClassName("edit");
   if (typeof links !== "undefined") {
     for (i = 0; i < links.length; i++) {
