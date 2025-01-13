@@ -3,6 +3,70 @@ function search() {
   search.val("");
   search.focus();
 }
+// Keyboard shortcut help overlay
+document.addEventListener('DOMContentLoaded', () => {
+  // Create the overlay container
+  const overlay = document.createElement('div');
+  overlay.id = 'overlay';
+  document.body.appendChild(overlay);
+
+  // Create the text element
+  const overlayText = document.createElement('div');
+  overlayText.id = 'overlay-text';
+  overlayText.textContent = `  
+    h - Home
+    l - Latest
+    t - Tags
+    a - Add
+    o - Open
+    e - Edit
+    i - Item
+    # - Delete
+    n - Next page
+    p - Previous page
+    j - Next item
+    k - Previous item
+    + - Increase limit by 20
+    o o - Open All
+    e e - Edit All
+    command+k command+l | cl - copy link
+    command+k command+c | cc - copy title & link
+    command+enter - Submit
+  `;
+  overlay.appendChild(overlayText);
+
+  // Add CSS styles for the overlay and text
+  const style = document.createElement('style');
+  style.textContent = `
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999; /* Ensure it's on top */
+    }
+    #overlay-text {
+      color: white;
+      font-size: 1.5rem;
+      text-align: center;
+      white-space: pre; /* Preserve line breaks and spaces */
+    }
+  `;
+  document.head.appendChild(style);
+  document.getElementById("overlay").style.display = "none";
+});
+Mousetrap.bind("?", function () {
+  if (document.getElementById("overlay").style.display === "block") {
+    document.getElementById("overlay").style.display = "none";
+  } else {
+    document.getElementById("overlay").style.display = "block";
+  }
+});
 
 // single keys
 Mousetrap.bind("/", function () {
@@ -10,35 +74,29 @@ Mousetrap.bind("/", function () {
   document.getElementById("q").select();
   return false;
 });
-function on() {
-  document.getElementById("overlay").style.display = "block";
-}
-function off() {
-  document.getElementById("overlay").style.display = "none";
-}
-Mousetrap.bind("?", function () {
-  on();
-  alert(`TODO: fancier Keyboard Shortcuts Overlay.
-  h - Home
-  l - Latest
-  t - Tags
-  a - Add
-  o - Open
-  e - Edit
-  i - Item
-  # - Delete
-  n - Next page
-  p - Previous page
-  j - Next item
-  k - Previous item
-  + - Increase limit by 20
-  o o - Open All
-  e e - Edit All
-  command+k command+l | cl - copy link
-  command+k command+c | cc - copy title & link
-  command+enter - Submit
-  `);
-});
+// Mousetrap.bind("?", function () {
+//   //createOverlay();
+//   // alert(`TODO: fancier Keyboard Shortcuts Overlay.
+//   // h - Home
+//   // l - Latest
+//   // t - Tags
+//   // a - Add
+//   // o - Open
+//   // e - Edit
+//   // i - Item
+//   // # - Delete
+//   // n - Next page
+//   // p - Previous page
+//   // j - Next item
+//   // k - Previous item
+//   // + - Increase limit by 20
+//   // o o - Open All
+//   // e e - Edit All
+//   // command+k command+l | cl - copy link
+//   // command+k command+c | cc - copy title & link
+//   // command+enter - Submit
+//   // `);
+// });
 Mousetrap.bind("h", function () {
   document.getElementById("home").click();
 });
