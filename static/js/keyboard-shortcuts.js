@@ -10,7 +10,14 @@ Mousetrap.bind("/", function () {
   document.getElementById("q").select();
   return false;
 });
+function on() {
+  document.getElementById("overlay").style.display = "block";
+}
+function off() {
+  document.getElementById("overlay").style.display = "none";
+}
 Mousetrap.bind("?", function () {
+  on();
   alert(`TODO: fancier Keyboard Shortcuts Overlay.
   h - Home
   l - Latest
