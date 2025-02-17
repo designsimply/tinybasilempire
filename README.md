@@ -2,9 +2,19 @@
 
 Tiny Basil Empire is a small platform you can use for collecting links and small notes. It was built uising python flask, postgres, gunicorn, nginx, Google OAuth, and ZeroSSL.  It has a growing list of keyboard shortcuts and is secured with Google Authentication.
 
-# Running
+# Setup
 
 `make build` create the container
+Update DNS to point domain to your server IP address.
+Create or transfer certificates to services/zerossl and services/dhparam.
+Create database using schema.sql
+
+# Certificates
+
+`make install_acme_script` install acme.sh
+
+# Running
+
 `make run` run the container with the gunicorn server
 `make shell` access bash shell
 `make py` access python flask shell
