@@ -14,6 +14,7 @@ db/backups
 certs
 letsencrypt
 .acme.sh
+services/acme.sh/
 
 # python
 .venv*

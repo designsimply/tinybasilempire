@@ -42,21 +42,47 @@ psql:
 	docker compose exec postgres bash -c 'PGPASSWORD=$$POSTGRES_PASSWORD psql -U $$POSTGRES_USER -h $$POSTGRES_HOST -d $$POSTGRES_DB_NAME'
 
 db_backup:
-	source .secrets \
-	&& docker \
+	. ./.secrets \
+	&& docker compose \
 		run \
 		--volume ./db/backups:/backups \
 		postgres \
-		bash -c "PGPASSWORD=$$POSTGRES_PASSWORD pg_dump -U $$POSTGRES_USER -h $$POSTGRES_HOST -d $$POSTGRES_DB_NAME --verbose --file=/backups/$(shell date -u +'%Y-%m-%dT%H:%M:%S%z').backup"
+		bash -c "PGPASSWORD=$$POSTGRES_PASSWORD pg_dump -U $$POSTGRES_USER -h $$POSTGRES_HOST -d $$POSTGRES_DB_NAME --verbose --file=/backups/pg_digitalocean_$(shell date -u +'%y%m%d_%H%M%S').backup"
+
+db_restore:
+	. ./.secrets \
+	&& docker compose exec postgres bash -c \
+	"PGPASSWORD=$$POSTGRES_PASSWORD psql -U $$POSTGRES_USER -h $$POSTGRES_HOST -d $$POSTGRES_DB_NAME -f /backups/240109_201409.backup"
+
+# from cheat sheet https://github.com/ChristianLempa/cheat-sheets/blob/main/docker/docker.md
+db_fs_backup:
+	. ./.secrets \
+	&& docker run --rm --volumes-from tinybasilempire-postgres-1 -e POSTGRES_PASSWORD=$$POSTGRES_PASSWORD -v $(shell pwd):/backup busybox tar cvf /backup/backup.tar /var/lib/postgresql/data
+
+# from cheat sheet https://github.com/ChristianLempa/cheat-sheets/blob/main/docker/docker.md
+db_fs_restore:
+	. ./.secrets \
+	&& docker run --rm --volumes-from tinybasilempire-postgres-1 -e POSTGRES_PASSWORD=$$POSTGRES_PASSWORD -v $(shell pwd):/backup busybox sh -c "cd /var/lib/postgresql/data && tar xvf /backup/backup-from-webserver.tar --strip 1"
 
 install_acme_script:
+	. ./.secrets && \
 	docker compose exec nginx sh -c 'cd ~/ ; curl https://get.acme.sh | sh -s email=$$DEV_EMAIL'
 
 issue_acme_cert:
-	docker compose exec nginx sh -c '/root/.acme.sh/acme.sh --issue -d $$DOMAIN -w /var/www/html'
+	. ./.secrets && \
+	docker compose exec nginx sh -c '/root/.acme.sh/acme.sh --issue -d $$DOMAIN  -w /var/www/html'
+
+test:
+	. ./.secrets && \
+	echo $$DOMAIN
 
 install_acme_cert:
-	docker compose exec nginx sh -c '/root/.acme.sh/acme.sh --install-cert -d $$DOMAIN \
+	. ./.secrets \
+	&& echo $$DOMAIN \
+	&& docker compose exec nginx sh -c "/root/.acme.sh/acme.sh --install-cert -d $$DOMAIN --fullchain-file /etc/zerossl/fullchain.cer --key-file /etc/zerossl/tinybasilempire.com.key --reloadcmd 'nginx -s reload'"
+
+blah:
+	echo docker compose exec nginx sh -c '/root/.acme.sh/acme.sh --install-cert -d $$DOMAIN \
 	--fullchain-file /etc/zerossl/fullchain.cer \
 	--key-file /etc/zerossl/tinybasilempire.com.key \
 	--reloadcmd "nginx -s reload"'
@@ -65,6 +91,7 @@ install_acme_cron:
 	docker compose exec nginx sh -c '/root/.acme.sh/acme.sh --install-cronjob'
 
 renew_acme_cert:
+	. ./.secrets && \
 	docker compose exec nginx sh -c '/root/.acme.sh/acme.sh --renew -d $$DOMAIN --force --ecc'
 
 # ############################################################################ #
