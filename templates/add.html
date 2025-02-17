@@ -18,6 +18,8 @@
                 onclick="javascript:document.forms.add.url.value = document.forms.add.url.value.split('?')[0];javascript:document.forms.add.url.select();document.forms.add.url.setSelectionRange(0, 99999);navigator.clipboard.writeText(document.forms.add.url.value);">🙅‍♀️</a>
             <a
                 onclick="javascript:document.forms.add.url.select();document.forms.add.url.setSelectionRange(0, 99999);navigator.clipboard.writeText(document.forms.add.title.value.trim() + ' ' + document.forms.add.url.value);">🙆‍♀️</a>
+            <a
+                onclick="javascript:document.forms.add.url.select();document.forms.add.url.setSelectionRange(0, 99999);navigator.clipboard.writeText(document.forms.add.title.value.trim() + ' ' + document.forms.add.url.value + ' ' + document.forms.add.description.value);">🧐</a>
         </label>
         <textarea class="u-full-width" name="url" id="url" tabindex="6">{{ request.args.get('url', '') }}</textarea>
 
