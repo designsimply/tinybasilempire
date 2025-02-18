@@ -1,4 +1,3 @@
 FROM nginx
 
-RUN apk update \
-    && apk add openssl
+RUN apt update && apt install -y openssl
