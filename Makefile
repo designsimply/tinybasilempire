@@ -39,16 +39,23 @@ py:
 ps:
 	docker compose ps
 
-psql:
-	docker compose exec postgres bash -c 'PGPASSWORD=$$POSTGRES_PASSWORD psql -U $$POSTGRES_USER -h $$POSTGRES_HOST -d $$POSTGRES_DB_NAME'
+db_psql:
+	source .secrets \
+	&& docker compose exec postgres bash -c \
+	'PGPASSWORD=$$POSTGRES_PASSWORD psql -U $$POSTGRES_USER -h $$POSTGRES_HOST -d $$POSTGRES_DB_NAME'
+
+db_restore:
+	source .secrets \
+	&& docker compose exec postgres bash -c \
+	"PGPASSWORD=$$POSTGRES_PASSWORD psql -U $$POSTGRES_USER -h $$POSTGRES_HOST -d $$POSTGRES_DB_NAME -f /backups/pg_ocean_240109_202119.backup"
 
 db_backup:
-	source .secrets \
+	. .secretds \
 	&& docker \
 		run \
 		--volume ./db/backups:/backups \
 		postgres \
-		bash -c "PGPASSWORD=$$POSTGRES_PASSWORD pg_dump -U $$POSTGRES_USER -h $$POSTGRES_HOST -d $$POSTGRES_DB_NAME --verbose --file=/backups/$(shell date -u +'%Y-%m-%dT%H:%M:%S%z').backup"
+		bash -c "PGPASSWORD=$$POSTGRES_PASSWORD pg_dump -U $$POSTGRES_USER -h $$POSTGRES_HOST -d $$POSTGRES_DB_NAME --verbose --file=/backups/pg_stardust_$(shell date -u +'%y%m%d_%H%M').backup"
 
 install_acme_script:
 	docker compose exec nginx sh -c 'cd ~/ ; curl https://get.acme.sh | sh -s email=$$DEV_EMAIL'
