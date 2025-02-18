@@ -5,6 +5,9 @@ urllib3
 # python microframework
 Flask
 
+# Use in dev for live changes.
+watchfiles
+
 # WSGI HTTP Server for UNIX.
 gunicorn
 

@@ -13,7 +13,8 @@ build:
 	docker compose build
 
 up:
-	docker compose up -d
+	# Use CMD=run.sh for prod. See ./bin
+	CMD=dev.sh docker compose up -d
 
 down:
 	docker compose stop

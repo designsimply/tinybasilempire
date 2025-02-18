@@ -7,4 +7,4 @@ source ${ENVDIR}/bin/activate
 
 # Run with flask in a single process which is easier to debug.
 cd ${SOURCEDIR} && \
-    flask run --reload --host 0.0.0.0 --port 8000
+    flask --app app.py --debug run --host 0.0.0.0 --port 8000
