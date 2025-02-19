@@ -110,11 +110,11 @@ Mousetrap.bind("i", function () {
 const url = window.location.href;
 if (url.includes("/edit") || url.includes("/add")) {
   Mousetrap.bindGlobal("c r", function () {
-    preventDefault(); // Prevents the second letter from being typed
+    event.preventDefault(); // Prevents the second letter from being typed
     document.getElementById("remove-querystring").click();
   });
   Mousetrap.bindGlobal("c l", function () {
-    preventDefault(); // Prevents the second letter from being typed
+    event.preventDefault(); // Prevents the second letter from being typed
     document.getElementById("copy-link").click();
   });
   Mousetrap.bindGlobal("c c", function (event) {
@@ -122,7 +122,7 @@ if (url.includes("/edit") || url.includes("/add")) {
     document.getElementById("copy-title-and-link").click();
   });
   Mousetrap.bindGlobal("c d", function () {
-    preventDefault(); // Prevents the second letter from being typed
+    event.preventDefault(); // Prevents the second letter from being typed
     document.getElementById("copy-all").click();
   });  
 } else {
