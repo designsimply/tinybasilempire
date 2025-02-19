@@ -29,8 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
     + - Increase limit by 20
     o o - Open All
     e e - Edit All
-    command+k command+l | cl - copy link
-    command+k command+c | cc - copy title & link
+    cr - remove querystring
+    cl - copy link
+    cc - copy title & link
+    cd - copy title, link, & description
     command+enter - Submit
   `;
   overlay.appendChild(overlayText);
@@ -74,29 +76,6 @@ Mousetrap.bind("/", function () {
   document.getElementById("q").select();
   return false;
 });
-// Mousetrap.bind("?", function () {
-//   //createOverlay();
-//   // alert(`TODO: fancier Keyboard Shortcuts Overlay.
-//   // h - Home
-//   // l - Latest
-//   // t - Tags
-//   // a - Add
-//   // o - Open
-//   // e - Edit
-//   // i - Item
-//   // # - Delete
-//   // n - Next page
-//   // p - Previous page
-//   // j - Next item
-//   // k - Previous item
-//   // + - Increase limit by 20
-//   // o o - Open All
-//   // e e - Edit All
-//   // command+k command+l | cl - copy link
-//   // command+k command+c | cc - copy title & link
-//   // command+enter - Submit
-//   // `);
-// });
 Mousetrap.bind("h", function () {
   document.getElementById("home").click();
 });
@@ -128,24 +107,59 @@ Mousetrap.bind("i", function () {
     .getElementsByTagName("a")[0]
     .click();
 });
-Mousetrap.bind("c l", function () {
-  navigator.clipboard.writeText(
-    document
-      .getElementsByClassName("current")[0]
-      .getElementsByClassName("link")[0].href
-  );
-});
-Mousetrap.bind("c c", function () {
-  navigator.clipboard.writeText(
-    document
-      .getElementsByClassName("current")[0]
-      .getElementsByClassName("link")[0].innerText +
-      " " +
+const url = window.location.href;
+if (url.includes("/edit") || url.includes("/add")) {
+  Mousetrap.bindGlobal("c r", function () {
+    preventDefault(); // Prevents the second letter from being typed
+    document.getElementById("remove-querystring").click();
+  });
+  Mousetrap.bindGlobal("c l", function () {
+    preventDefault(); // Prevents the second letter from being typed
+    document.getElementById("copy-link").click();
+  });
+  Mousetrap.bindGlobal("c c", function (event) {
+    event.preventDefault(); // Prevents the second letter from being typed
+    document.getElementById("copy-title-and-link").click();
+  });
+  Mousetrap.bindGlobal("c d", function () {
+    preventDefault(); // Prevents the second letter from being typed
+    document.getElementById("copy-all").click();
+  });  
+} else {
+  Mousetrap.bind("c l", function () {
+    navigator.clipboard.writeText(
       document
         .getElementsByClassName("current")[0]
         .getElementsByClassName("link")[0].href
-  );
-});
+    );
+  });  
+  Mousetrap.bind("c c", function () {
+    navigator.clipboard.writeText(
+      document
+        .getElementsByClassName("current")[0]
+        .getElementsByClassName("link")[0].innerText +
+        " " +
+        document
+          .getElementsByClassName("current")[0]
+          .getElementsByClassName("link")[0].href
+    );
+  });
+  Mousetrap.bind("c d", function () {
+    navigator.clipboard.writeText(
+      document
+        .getElementsByClassName("current")[0]
+        .getElementsByClassName("link")[0].innerText +
+        " " +
+        document
+          .getElementsByClassName("current")[0]
+          .getElementsByClassName("link")[0].href +
+          " " +
+        document
+        .getElementsByClassName("current")[0]
+        .getElementsByClassName("description")[0].innerText
+    );
+  });
+}
 Mousetrap.bind("+", function () {
   const params = new URLSearchParams(window.location.search);
   const limit = params.get("limit");
@@ -260,18 +274,6 @@ Mousetrap.bind(["p", "["], function () {
 // gmail style sequences
 Mousetrap.bind("g i", function () {
   document.getElementById("home").click();
-});
-Mousetrap.bindGlobal("command+k command+l", function () {
-  document.forms[1].url.select();
-  document.forms[1].url.setSelectionRange(0, 99999);
-  navigator.clipboard.writeText(document.forms[1].url.value);
-});
-Mousetrap.bindGlobal("command+k command+c", function () {
-  document.forms[1].url.select();
-  document.forms[1].url.setSelectionRange(0, 99999);
-  navigator.clipboard.writeText(
-    document.forms[1].title.value.trim() + " " + document.forms[1].url.value
-  );
 });
 Mousetrap.bind("* a", function () {
   console.log("select all");
