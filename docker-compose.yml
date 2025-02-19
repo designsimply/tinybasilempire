@@ -41,8 +41,6 @@ services:
       - ./services/.acme.sh:/root/.acme.sh
       - ./services/zerossl:/etc/zerossl
       - ./services/nginx/dhparam:/var/ssl/certs
-    networks:
-      - reverse-proxy-network
 
 volumes:
   data-db:
