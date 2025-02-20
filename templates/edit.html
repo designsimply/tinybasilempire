@@ -7,33 +7,34 @@
     <fieldset>
         <label for="title" class="placeholder active">Title</label>
         <textarea class="u-full-width" name="title" tabindex="5" required>{{ link.title }}</textarea>
-        <label for="url" class="placeholder ">Link <a href="{{ link.url }}">🔗</a>
-            <a id="remove-querystring" onclick="
+        <label for="url" class="placeholder ">Link 
+            <a href="{{ link.url }}">🔗</a>
+            <a id="remove-querystring" title="keyboard shortcut c r" onclick="
                 javascript:document.forms.edit.url.select();
                 document.forms.edit.url.setSelectionRange(0, 99999);
                 document.forms.edit.url.value = document.forms.edit.url.value.split('?')[0];
                 navigator.clipboard.writeText(document.forms.edit.url.value);
                 ">🙅‍♀️</a>
-            <a id="copy-link" onclick="
+            <a id="copy-link" title="keyboard shortcut c l" onclick="
                 javascript:document.forms.edit.url.select();
                 document.forms.edit.url.setSelectionRange(0, 99999);
                 navigator.clipboard.writeText(document.forms.edit.url.value);
                 ">💁‍♀️</a>
-            <a id="copy-title-and-link" alt="keyboard shortcut c c" onclick="
+            <a id="copy-title-and-link" title="keyboard shortcut c c" onclick="
             (function() {
                 let title = document.forms.edit.title.value.trim();
                 let url = document.forms.edit.url.value;
                 navigator.clipboard.writeText(title + ' ' + url);
             })();
             ">🙆‍♀️</a>
-            <a id="copy-all" alt="keyboard shortcut c d" onclick="
+            <a id="copy-all" title="keyboard shortcut c d" onclick="
             (function() {
                 let title = document.forms.edit.title.value.trim();
                 let url = document.forms.edit.url.value;
                 let description = document.forms.edit.description.value;
                 navigator.clipboard.writeText(title + ' ' + url + ' ' + description);
             })();
-            ">🤷‍♀️</a>
+            ">🤨</a>
         </label>
         <textarea class="u-full-width" name="url" id="url" tabindex="6">{{ link.url }}</textarea>
         <div class="row">
