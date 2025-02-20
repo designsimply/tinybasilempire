@@ -48,7 +48,9 @@
         {% endif %}
         <a class="link" href="{{ link.url }}">{{ link.title }}</a>
         {% if link.description %}
-        〰️ {{ link.description }}
+        <span class="description">{{ link.description }}</span>
+        {% else %}
+        <span class="description"></span>
         {% endif %}
         {% if tags %}
         ({% for tag in tags %}<a href="/tag/{{tag}}">{{tag}}</a>{% endfor %})
