@@ -13,16 +13,24 @@ build:
 	docker compose build
 
 up:
-	# Use CMD=run.sh for prod. See ./bin
-	CMD=dev.sh docker compose up -d
+	CMD=run.sh docker compose up -d
 
 down:
 	docker compose stop
+
+ps:
+	docker compose ps
 
 restart: down up ps
 
 reload_nginx:
 	docker compose exec nginx sh -c 'nginx -s reload'
+
+dev:
+	# Use CMD=run.sh for prod. See ./bin
+	CMD=dev.sh docker compose up -d
+
+restart_dev: down dev ps
 
 logs:
 	docker compose logs
@@ -35,9 +43,6 @@ nginx_sh:
 
 py:
 	docker compose exec gunicorn shell.sh
-
-ps:
-	docker compose ps
 
 db_psql:
 	source .secrets \
