@@ -17,4 +17,5 @@ DB_PASS = os.environ.get("POSTGRES_PASSWORD")
 
 AUTOLOGIN = as_bool(os.environ["AUTOLOGIN"])
 DEV_EMAIL = os.environ["DEV_EMAIL"]
+NGINX_SERVER_NAME = os.environ.get("NGINX_SERVER_NAME")
 SEARCHFORM_PLACEHOLDER = os.environ["SEARCHFORM_PLACEHOLDER"]
