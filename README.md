@@ -8,6 +8,7 @@ Tiny Basil Empire is a small platform you can use for collecting links and small
 Update DNS to point domain to your server IP address.
 Create or transfer certificates to services/zerossl and services/dhparam.
 Create database using schema.sql
+Copy nginx.conf.template to nginx.conf and replace 'localhost' with your domain name.
 
 # Certificates
 

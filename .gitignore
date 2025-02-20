@@ -23,4 +23,4 @@ __pycache__
 # local env
 .DS_Store
 .ackrc
-zappa*
+nginx.conf
