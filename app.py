@@ -4,7 +4,7 @@ from dataclasses import dataclass
 import datetime as dt
 
 # third-party libraries
-from flask import Flask, render_template, redirect, request, url_for, jsonify
+from flask import Flask, render_template, redirect, request, url_for, jsonify, session
 from flask_login import (
     LoginManager,
     current_user,
@@ -17,7 +17,6 @@ from datetime import timezone
 from oauthlib.oauth2 import WebApplicationClient
 from dataclasses import dataclass
 import urllib
-from flask import session
 
 
 # internal imports
@@ -205,12 +204,6 @@ def latest():
     )
 
 
-@app.route("/submit-form", methods=["POST"])
-def submit_form():
-    session["form_data"] = request.form.to_dict()
-    return redirect(url_for("login"))
-
-
 @app.route("/login")
 def login():
     if config.AUTOLOGIN:
@@ -218,7 +211,9 @@ def login():
         if user is None:
             user = User.create(name="dev", email=config.DEV_EMAIL, profile_pic=None)
         login_user(user)
-        return redirect(url_for("latest"))
+
+        # redirect to stored `referrer` if available, otherwise default to latest
+        return redirect(session.pop("referrer", url_for("latest")))
 
     # get a login url for google
     google_provider_cfg = get_google_provider_cfg()
@@ -295,13 +290,12 @@ def callback():
             #     id_=unique_id, name=users_name, email=users_email, profile_pic=picture
             # )
             login_user(user)
-        # # Send user back to latest endpoint
-        # return redirect(url_for("latest"))
-            
-        # Retrieve stored form data
-        form_data = session.pop("form_data", None)
-        if form_data:
-            return redirect(url_for("form_submission_page", **form_data))
+
+            # retrieve and pop referrer from session
+            referrer = session.pop("referrer", url_for("latest"))
+
+            # ensure query parameters are preserved
+            return redirect(referrer)            
     else:
         return "User email not available or not verified by Google.", 400
 
@@ -310,7 +304,12 @@ def callback():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for("latest"))
+
+    # retrieve and pop referrer from session
+    referrer = session.pop("referrer", url_for("latest"))
+
+    # ensure query parameters are preserved
+    return redirect(referrer)            
 
 
 @app.route("/profile")
@@ -384,8 +383,11 @@ def add():
             link, tag_list = add_new_link(title, url, description, tag_list)
             return redirect("/link/" + str(link.id))
         else:
-            return redirect("/login")
+            # store the full current URL in the session before redirecting to login
+            session["referrer"] = request.url
+            return redirect(url_for("login"))
     else:
+        # handle GET requests normally
         return render_template(
             "add.html",
             searchform_placeholder=config.SEARCHFORM_PLACEHOLDER,
