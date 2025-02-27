@@ -4,7 +4,7 @@ from dataclasses import dataclass
 import datetime as dt
 
 # third-party libraries
-from flask import Flask, render_template, redirect, request, url_for, jsonify, session
+from flask import Flask, render_template, redirect, request, url_for, jsonify
 from flask_login import (
     LoginManager,
     current_user,
@@ -144,6 +144,12 @@ def search_links_by_defragged_url_count(fuzzy, defragged):
     return query_db(SEARCH_FOR_POTENTIAL_DUPES_COUNT, params=[fuzzy, defragged])
 
 
+def redirect_url(default='index'):
+    return request.args.get('state') or \
+           request.referrer or \
+           url_for(default)
+
+
 # def pagination_params():
 # todo move limit, page, offset into a function
 
@@ -211,9 +217,7 @@ def login():
         if user is None:
             user = User.create(name="dev", email=config.DEV_EMAIL, profile_pic=None)
         login_user(user)
-
-        # redirect to stored `referrer` if available, otherwise default to latest
-        return redirect(session.pop("referrer", url_for("latest")))
+        return redirect(url_for("latest"))
 
     # get a login url for google
     google_provider_cfg = get_google_provider_cfg()
@@ -224,12 +228,15 @@ def login():
         authorization_endpoint,
         redirect_uri=(request.base_url + "/callback").replace("http://", "https://"),
         scope=["openid", "email", "profile"],
+        state=request.referrer,
     )
     return redirect(request_uri)
 
 
 @app.route("/login/callback")
 def callback():
+    state = request.args.get('state', '')
+
     # get auth code back from google
     code = request.args.get("code")
 
@@ -290,12 +297,9 @@ def callback():
             #     id_=unique_id, name=users_name, email=users_email, profile_pic=picture
             # )
             login_user(user)
+        # Send user back to latest endpoint
 
-            # retrieve and pop referrer from session
-            referrer = session.pop("referrer", url_for("latest"))
-
-            # ensure query parameters are preserved
-            return redirect(referrer)            
+        return redirect(redirect_url())
     else:
         return "User email not available or not verified by Google.", 400
 
@@ -304,12 +308,7 @@ def callback():
 @login_required
 def logout():
     logout_user()
-
-    # retrieve and pop referrer from session
-    referrer = session.pop("referrer", url_for("latest"))
-
-    # ensure query parameters are preserved
-    return redirect(referrer)            
+    return redirect(redirect_url())
 
 
 @app.route("/profile")
@@ -372,7 +371,6 @@ def add():
                 "add.html",
                 searchform_placeholder=config.SEARCHFORM_PLACEHOLDER,
             )
-
     elif request.method == "POST":
         if current_user.is_authenticated:
             title = request.form.get("title")
@@ -383,11 +381,8 @@ def add():
             link, tag_list = add_new_link(title, url, description, tag_list)
             return redirect("/link/" + str(link.id))
         else:
-            # store the full current URL in the session before redirecting to login
-            session["referrer"] = request.url
-            return redirect(url_for("login"))
+            return redirect("/login")
     else:
-        # handle GET requests normally
         return render_template(
             "add.html",
             searchform_placeholder=config.SEARCHFORM_PLACEHOLDER,
