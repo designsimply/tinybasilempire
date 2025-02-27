@@ -212,7 +212,7 @@ def latest():
 
 @app.route("/login")
 def login():
-    if config.AUTOLOGIN:
+    if config.AUTOLOGIN == "true":
         user = User.get_from_email(config.DEV_EMAIL)
         if user is None:
             user = User.create(name="dev", email=config.DEV_EMAIL, profile_pic=None)
@@ -297,7 +297,6 @@ def callback():
             #     id_=unique_id, name=users_name, email=users_email, profile_pic=picture
             # )
             login_user(user)
-        # Send user back to latest endpoint
 
         return redirect(redirect_url())
     else:
