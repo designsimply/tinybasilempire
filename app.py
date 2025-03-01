@@ -125,7 +125,6 @@ def db_tag_links_count(tag_name="%%"):
 
 
 def db_links_search(title="%%", description="%%", limit=5, offset=0):
-    # return query_db(QUERY_SEARCH_LINKS, params=(title, description, limit, offset))
     results = query_db(QUERY_SEARCH_LINKS, params=(title, description, limit, offset))
     return convert_to_links(results)
 
