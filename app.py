@@ -149,6 +149,16 @@ def redirect_url(default='index'):
            url_for(default)
 
 
+def convert_form_data_for_new_entry():
+    title = request.form.get("title")
+    url = request.form.get("url")
+    description = request.form.get("description", "")
+    tags = request.form.get("tags", "")
+    tag_list = tag_string_to_list(tags)
+    return title, url, description, tags, tag_list
+
+
+
 # def pagination_params():
 # todo move limit, page, offset into a function
 
