@@ -352,33 +352,46 @@ def profile():
 @app.route("/add", methods=["GET", "POST"])
 # @login_required
 def add():
-    if request.method == "GET":
-        limit = request.args.get("limit", 5, type=int)
-        page = request.args.get("page", 1, type=int)
-        offset = (page - 1) * limit  # page=2, limit=10, offset = 10
-        url = request.args.get("url", "", type=str)
-        title = request.args.get("title", "", type=str)
-        # TODO: move to function
-        req_args = []
-        for k, v in request.args.items():
-            if k != 'page' and k != 'limit':
-                req_args.append(k + '=' + v)
-        request_params = '&' + '&'.join(req_args)
+    if request.method == "POST":
+        if current_user.is_authenticated:
+            # If the form is submitted with the button (POST), add the info to the database
+            title, url, description, _, tag_list = convert_form_data_for_new_entry()
+            link, _ = add_new_link(title, url, description, tag_list)
+            return redirect("/link/" + str(link.id))
+        else:
+            # TODO Save form data in session and use that to update the db after login
+            return redirect("/login")
+    elif request.method == "GET":
+        if current_user.is_authenticated \
+            and request.referrer is not None \
+            and "accounts.google.com" in request.referrer \
+            and request.args.get("title") \
+            and request.args.get("url"):
+            # If the referrer is Google and the user is authenticated, add the info to the database
+            _, _, _, title, url, desc, tag_list, _ = convert_query_string_for_new_entry(request.args)
+            link, _ = add_new_link(title, url, desc, tag_list)
+            return redirect("/link/" + str(link.id))
+        else:
+            # If the page is loaded with a query string but without authentication, use those values to populate the form
+            limit, page, offset, title, url, desc, tag_list, request_params = convert_query_string_for_new_entry(request.args)
 
-        if len(url) > 0:
-            defragged = urllib.parse.urldefrag(url).url
-            links = search_links_by_defragged_url(
-                fuzzy=defragged + "%",
-                defragged=defragged,
-                limit=limit,
-                offset=offset,
-            )
-
-            count = search_links_by_defragged_url_count(
-                fuzzy=defragged + "%", defragged=defragged
-            )
-            total = count[0].count
-
+            # Check to see if the url is already in the database so a warning can be displayed
+            links = []
+            defragged = ''
+            total = 0
+            if len(url) > 0:
+                defragged = urllib.parse.urldefrag(url).url
+                links = search_links_by_defragged_url(
+                    fuzzy=defragged + "%",
+                    defragged=defragged,
+                    limit=limit,
+                    offset=offset,
+                )
+                count = search_links_by_defragged_url_count(
+                    fuzzy=defragged + "%", defragged=defragged
+                )
+                total = count[0].count
+            
             return render_template(
                 "add.html",
                 links=links,
@@ -390,22 +403,6 @@ def add():
                 request_params=request_params,
                 searchform_placeholder=config.SEARCHFORM_PLACEHOLDER,
             )
-        else:
-            return render_template(
-                "add.html",
-                searchform_placeholder=config.SEARCHFORM_PLACEHOLDER,
-            )
-    elif request.method == "POST":
-        if current_user.is_authenticated:
-            title = request.form.get("title")
-            url = request.form.get("url")
-            description = request.form.get("description")
-            tags = request.form.get("tags", "")
-            tag_list = tag_string_to_list(tags)
-            link, tag_list = add_new_link(title, url, description, tag_list)
-            return redirect("/link/" + str(link.id))
-        else:
-            return redirect("/login")
     else:
         return render_template(
             "add.html",
