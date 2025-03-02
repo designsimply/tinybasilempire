@@ -158,6 +158,22 @@ def convert_form_data_for_new_entry():
     return title, url, description, tags, tag_list
 
 
+def convert_query_string_for_new_entry(request_args):
+    limit = request_args.get("limit", 5, type=int)
+    page = request_args.get("page", 1, type=int)
+    offset = (page - 1) * limit  # page=2, limit=10, offset = 10
+    title = request_args.get("title", "", type=str)
+    url = request_args.get("url", "", type=str)
+    desc = request_args.get("desc", "")
+    tags = request_args.get("tags", "")
+    tag_list = tag_string_to_list(tags)
+    req_args = []
+    for k, v in request_args.items():
+        if k != 'page' and k != 'limit':
+            req_args.append(k + '=' + v)
+    request_params = '&' + '&'.join(req_args)
+    return limit, page, offset, title, url, desc, tag_list, request_params
+
 
 # def pagination_params():
 # todo move limit, page, offset into a function
