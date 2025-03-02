@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     k - Previous item
     + - Increase limit by 20
     o o - Open All
-    e e - Edit All
+    cmd+e - Edit All
     cr - remove querystring
     cl - copy link
     cc - copy title & link
@@ -248,7 +248,7 @@ Mousetrap.bind("o o", function () {
     }
   }
 });
-Mousetrap.bind("e e", function () {
+Mousetrap.bind("command+e", function () {
   links = document.getElementsByClassName("edit");
   if (typeof links !== "undefined") {
     for (i = 0; i < links.length; i++) {
