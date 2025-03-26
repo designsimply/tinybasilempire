@@ -251,7 +251,7 @@ Mousetrap.bind("shift+o", function () {
 Mousetrap.bind("shift+e", function () {
   links = document.getElementsByClassName("edit");
   if (typeof links !== "undefined") {
-    for (i = 0; i < links.length; i++) {
+    for (let i = 0; i < links.length; i++) {
       setTimeout(() => {
         window.open(links[i].href);
       }, 500 * i);
