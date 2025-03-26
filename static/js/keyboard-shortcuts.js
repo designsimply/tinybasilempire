@@ -153,6 +153,17 @@ if (url.includes("/edit") || url.includes("/add")) {
     navigator.clipboard.writeText(
       document
         .getElementsByClassName("current")[0]
+        .getElementsByClassName("description")[0].innerText +
+        " " +
+        document
+          .getElementsByClassName("current")[0]
+          .getElementsByClassName("link")[0].href
+    );
+  });
+  Mousetrap.bind("c y", function () {
+    navigator.clipboard.writeText(
+      document
+        .getElementsByClassName("current")[0]
         .getElementsByClassName("link")[0].innerText +
         " " +
         document
