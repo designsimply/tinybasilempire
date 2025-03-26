@@ -244,7 +244,7 @@ Mousetrap.bind("shift+o", function () {
   links = document.getElementsByClassName("link");
   if (typeof links !== "undefined") {
     for (i = 0; i < links.length; i++) {
-      window.open(links[i].href);
+      window.open(links[i].href, '_w' + i);
     }
   }
 });
@@ -252,7 +252,9 @@ Mousetrap.bind("shift+e", function () {
   links = document.getElementsByClassName("edit");
   if (typeof links !== "undefined") {
     for (i = 0; i < links.length; i++) {
-      window.open(links[i].href);
+      setTimeout(() => {
+        window.open(links[i].href);
+      }, 500 * i);
     }
   }
 });
