@@ -30,9 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
     shift+o - Open All
     shift+e - Edit All
     cr - remove querystring
-    cl - copy link
+    cu - copy link
     cc - copy title & link
-    cd - copy title, link, & description
+    cd - copy description & link
+    cy - copy title, link, & description
     command+enter - Submit
   `;
   overlay.appendChild(overlayText);
@@ -121,7 +122,11 @@ if (url.includes("/edit") || url.includes("/add")) {
     event.preventDefault(); // Prevents the second letter from being typed
     document.getElementById("copy-title-and-link").click();
   });
-  Mousetrap.bindGlobal("c d", function () {
+  Mousetrap.bindGlobal("c d", function (event) {
+    event.preventDefault(); // Prevents the second letter from being typed
+    document.getElementById("copy-description-and-link").click();
+  });
+  Mousetrap.bindGlobal("c y", function () {
     event.preventDefault(); // Prevents the second letter from being typed
     document.getElementById("copy-all").click();
   });  

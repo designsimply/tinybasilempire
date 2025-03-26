@@ -19,7 +19,7 @@
                 document.forms.add.url.value = document.forms.add.url.value.split('?')[0];
                 navigator.clipboard.writeText(document.forms.add.url.value);
                 ">🙅‍♀️</a>
-            <a id="copy-link" title="keyboard shortcut c l" onclick="
+            <a id="copy-link" title="keyboard shortcut c u" onclick="
                 javascript:document.forms.add.url.select();
                 document.forms.add.url.setSelectionRange(0, 99999);
                 navigator.clipboard.writeText(document.forms.add.url.value);
@@ -31,7 +31,15 @@
                 navigator.clipboard.writeText(title + ' ' + url);
             })();
             ">🙆‍♀️</a>
-            <a id="copy-all" title="keyboard shortcut c d" onclick="
+            <a id="copy-description-and-link" title="keyboard shortcut c d" onclick="
+            (function() {
+                let title = document.forms.add.title.value.trim();
+                let url = document.forms.add.url.value;
+                let description = document.forms.add.description.value.trim();
+                navigator.clipboard.writeText(description + ' ' + url);
+            })();
+            ">👩‍🦰</a>
+            <a id="copy-all" title="keyboard shortcut c y" onclick="
             (function() {
                 let title = document.forms.add.title.value.trim();
                 let url = document.forms.add.url.value;
