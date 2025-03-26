@@ -240,7 +240,7 @@ Mousetrap.bind("k", function () {
 //Mousetrap.bind('esc', function () { console.log('escape'); }, 'keyup');
 
 // key combinations
-Mousetrap.bind("shift+e", function () {
+Mousetrap.bind("shift+o", function () {
   links = document.getElementsByClassName("link");
   if (typeof links !== "undefined") {
     for (i = 0; i < links.length; i++) {
