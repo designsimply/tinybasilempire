@@ -27,8 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
     j - Next item
     k - Previous item
     + - Increase limit by 20
-    o o - Open All
-    cmd+e - Edit All
+    shift+o - Open All
+    shift+e - Edit All
     cr - remove querystring
     cl - copy link
     cc - copy title & link
@@ -240,7 +240,7 @@ Mousetrap.bind("k", function () {
 //Mousetrap.bind('esc', function () { console.log('escape'); }, 'keyup');
 
 // key combinations
-Mousetrap.bind("o o", function () {
+Mousetrap.bind("shift+e", function () {
   links = document.getElementsByClassName("link");
   if (typeof links !== "undefined") {
     for (i = 0; i < links.length; i++) {
@@ -248,7 +248,7 @@ Mousetrap.bind("o o", function () {
     }
   }
 });
-Mousetrap.bind("command+e", function () {
+Mousetrap.bind("shift+e", function () {
   links = document.getElementsByClassName("edit");
   if (typeof links !== "undefined") {
     for (i = 0; i < links.length; i++) {
