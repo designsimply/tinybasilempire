@@ -2,7 +2,7 @@
 
 {% block content %}
 {% include 'includes/list.html' %}
-<p><small>Showing {{limit}} of {{total}} result{% if total != 1 %}s{% endif %} for
+<p><small>Showing{% if limit < total %}{{limit}} of{% endif %} {{total}} result{% if total != 1 %}s{% endif %} for
         {% if tag_name %}tag:{{tag_name}}{% endif%}{{searchterm}}.</small>
 </p>
 {% endblock %}
