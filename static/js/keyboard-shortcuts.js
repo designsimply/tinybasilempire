@@ -293,6 +293,9 @@ Mousetrap.bind(["p", "["], function () {
 Mousetrap.bind("g i", function () {
   document.getElementById("home").click();
 });
+Mousetrap.bind("g a", function () {
+  document.getElementById("show-all").click();
+});
 Mousetrap.bind("* a", function () {
   console.log("select all");
 });
