@@ -78,8 +78,13 @@ install_acme_cron:
 	docker compose exec nginx sh -c "/root/.acme.sh/acme.sh --install-cronjob"
 
 renew_acme_cert:
-	source .secrets && \
-	docker compose exec nginx sh -c "/root/.acme.sh/acme.sh --renew -d $$DOMAIN --force --ecc"
+	. .secrets && \
+	docker compose exec nginx sh -c "\
+		/root/.acme.sh/acme.sh \
+		--renew \
+		-d $$DOMAIN \
+		--force \
+		--ecc"
 
 # ############################################################################ #
 # Help
