@@ -1,3 +1,6 @@
+
+SHELL=bash
+
 # ############################################################################ #
 # Variables
 # ############################################################################ #
@@ -78,7 +81,7 @@ install_acme_cron:
 	docker compose exec nginx sh -c "/root/.acme.sh/acme.sh --install-cronjob"
 
 renew_acme_cert:
-	. .secrets && \
+	source .secrets && \
 	docker compose exec nginx sh -c "\
 		/root/.acme.sh/acme.sh \
 		--renew \
