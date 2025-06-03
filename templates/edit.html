@@ -40,7 +40,9 @@
                         let title = document.forms.edit.title.value.trim();
                         let url = document.forms.edit.url.value;
                         let description = document.forms.edit.description.value;
-                        navigator.clipboard.writeText(title + ' \n' + url + ' \n\n' + description);
+                        let output = title + ' \n' + url;
+                        if (description !== '') { output += '\n\n' + description}
+                        navigator.clipboard.writeText(output);
                     })();
                     ">🙆🏼‍♀️</a>
             </label>

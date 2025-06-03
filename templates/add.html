@@ -44,7 +44,9 @@
                     let title = document.forms.add.title.value.trim();
                     let url = document.forms.add.url.value;
                     let description = document.forms.add.description.value;
-                    navigator.clipboard.writeText(title + ' \n' + url + ' \n\n' + description);
+                    let output = title + ' \n' + url;
+                    if (description !== '') { output += '\n\n' + description}
+                    navigator.clipboard.writeText(output);
                 })();
                 ">🙆🏼‍♀️</a>
             </label>
