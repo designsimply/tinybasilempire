@@ -29,11 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
     + - Increase limit by 20
     shift+o - Open All
     shift+e - Edit All
-    cr - remove querystring
+    cx - remove querystring
     cu - copy link
-    cc - copy title & link
+    cy - copy title & link
     cd - copy description & link
-    cy - copy title, link, & description
+    cc - copy title, link, & description
     command+enter - Submit
   `;
   overlay.appendChild(overlayText);
@@ -110,15 +110,15 @@ Mousetrap.bind("i", function () {
 });
 const url = window.location.href;
 if (url.includes("/edit") || url.includes("/add")) {
-  Mousetrap.bindGlobal("c r", function () {
-    event.preventDefault(); // Prevents the second letter from being typed
-    document.getElementById("remove-querystring").click();
-  });
-  Mousetrap.bindGlobal("c l", function () {
-    event.preventDefault(); // Prevents the second letter from being typed
-    document.getElementById("copy-link").click();
-  });
-  Mousetrap.bindGlobal("c c", function (event) {
+  // Mousetrap.bindGlobal("c r", function () {
+  //   event.preventDefault(); // Prevents the second letter from being typed
+  //   document.getElementById("remove-querystring").click();
+  // });
+  // Mousetrap.bindGlobal("c l", function () {
+  //   event.preventDefault(); // Prevents the second letter from being typed
+  //   document.getElementById("copy-link").click();
+  // });
+  Mousetrap.bindGlobal("c y", function (event) {
     event.preventDefault(); // Prevents the second letter from being typed
     document.getElementById("copy-title-and-link").click();
   });
@@ -126,54 +126,71 @@ if (url.includes("/edit") || url.includes("/add")) {
     event.preventDefault(); // Prevents the second letter from being typed
     document.getElementById("copy-description-and-link").click();
   });
-  Mousetrap.bindGlobal("c y", function () {
+  Mousetrap.bindGlobal("c c", function () {
     event.preventDefault(); // Prevents the second letter from being typed
     document.getElementById("copy-all").click();
   });  
 } else {
-  Mousetrap.bind("c l", function () {
+  Mousetrap.bind("c u", function () {
     navigator.clipboard.writeText(
       document
         .getElementsByClassName("current")[0]
         .getElementsByClassName("link")[0].href
     );
   });  
-  Mousetrap.bind("c c", function () {
-    navigator.clipboard.writeText(
-      document
+  Mousetrap.bind("c y", function () {
+    let outputElements = "";
+    let linkTextElement = document
         .getElementsByClassName("current")[0]
-        .getElementsByClassName("link")[0].innerText +
-        " " +
-        document
-          .getElementsByClassName("current")[0]
-          .getElementsByClassName("link")[0].href
-    );
+        .getElementsByClassName("link")[0].innerText.trim();
+    let linkElement = document
+        .getElementsByClassName("current")[0]
+        .getElementsByClassName("link")[0].href.trim();
+    if (linkTextElement !== "") {
+      outputElements += linkTextElement + " ";
+    }
+    if (linkElement !== "") {
+      outputElements += "\n" + linkElement + " ";
+    }
+    navigator.clipboard.writeText( outputElements );
   });
   Mousetrap.bind("c d", function () {
-    navigator.clipboard.writeText(
-      document
+    let outputElements = "";
+    let linkElement = document
         .getElementsByClassName("current")[0]
-        .getElementsByClassName("description")[0].innerText +
-        " " +
-        document
-          .getElementsByClassName("current")[0]
-          .getElementsByClassName("link")[0].href
-    );
+        .getElementsByClassName("link")[0].href.trim();
+    let descriptionElement = document
+        .getElementsByClassName("current")[0]
+        .getElementsByClassName("description")[0].innerText.trim();
+    if (descriptionElement !== "") {
+      outputElements += descriptionElement + " ";
+    }
+    if (linkElement !== "") {
+      outputElements += "\n" + linkElement + " ";
+    }
+    navigator.clipboard.writeText( outputElements );
   });
-  Mousetrap.bind("c y", function () {
-    navigator.clipboard.writeText(
-      document
+  Mousetrap.bind("c c", function () {
+    let outputElements = "";
+    let linkTextElement = document
         .getElementsByClassName("current")[0]
-        .getElementsByClassName("link")[0].innerText +
-        " " +
-        document
-          .getElementsByClassName("current")[0]
-          .getElementsByClassName("link")[0].href +
-          " " +
-        document
+        .getElementsByClassName("link")[0].innerText.trim();
+    let linkElement = document
         .getElementsByClassName("current")[0]
-        .getElementsByClassName("description")[0].innerText
-    );
+        .getElementsByClassName("link")[0].href.trim();
+    let descriptionElement = document
+        .getElementsByClassName("current")[0]
+        .getElementsByClassName("description")[0].innerText.trim();
+    if (linkTextElement !== "") {
+      outputElements += linkTextElement + " ";
+    }
+    if (linkElement !== "") {
+      outputElements += "\n" + linkElement + " ";
+    }
+    if (descriptionElement !== "") {
+      outputElements += "\n\n" + descriptionElement + " ";
+    }
+    navigator.clipboard.writeText( outputElements );
   });
 }
 Mousetrap.bind("+", function () {
