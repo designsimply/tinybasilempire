@@ -9,7 +9,7 @@
         <textarea class="u-full-width" name="title" tabindex="5" required>{{ link.title }}</textarea>
             <label for="url" class="placeholder ">Link 
                 <a href="{{ link.url }}">🔗</a>
-                <a id="remove-querystring" title="keyboard shortcut c r" onclick="
+                <a id="remove-querystring" title="keyboard shortcut c x" onclick="
                     javascript:document.forms.edit.url.select();
                     document.forms.edit.url.setSelectionRange(0, 99999);
                     document.forms.edit.url.value = document.forms.edit.url.value.split('?')[0];
@@ -20,7 +20,7 @@
                     document.forms.edit.url.setSelectionRange(0, 99999);
                     navigator.clipboard.writeText(document.forms.edit.url.value);
                     ">💇🏼‍♀️</a>
-                <a id="copy-title-and-link" title="keyboard shortcut c c" onclick="
+                <a id="copy-title-and-link" title="keyboard shortcut c y" onclick="
                     (function() {
                         let title = document.forms.edit.title.value.trim();
                         let url = document.forms.edit.url.value;
@@ -35,7 +35,7 @@
                         navigator.clipboard.writeText(description + ' \n' + url);
                     })();
                     ">🙋🏼‍♀️</a>
-                <a id="copy-all" title="keyboard shortcut c y" onclick="
+                <a id="copy-all" title="keyboard shortcut c c" onclick="
                     (function() {
                         let title = document.forms.edit.title.value.trim();
                         let url = document.forms.edit.url.value;
