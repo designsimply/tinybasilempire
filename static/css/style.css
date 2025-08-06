@@ -98,7 +98,7 @@ input[type="button"] {
 
 body.add label a,
 body.edit label a {
-    padding: 2%;
+    padding: 1%;
     margin: 1%;
     font-size: 2em;
 }
