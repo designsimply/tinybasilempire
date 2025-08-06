@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     cu - copy url
     cs - copy title and link
     cd - copy description and link
-    ci - copy title and description
+    cy - copy title and description
     cc - copy title, link, and description
     command+enter - Submit
   `;
@@ -131,7 +131,7 @@ if (url.includes("/edit") || url.includes("/add")) {
     event.preventDefault(); // Prevents the second letter from being typed
     document.getElementById("copy-description-and-link").click();
   });
-  Mousetrap.bindGlobal("c i", function (event) {
+  Mousetrap.bindGlobal("c Y", function (event) {
     event.preventDefault(); // Prevents the second letter from being typed
     document.getElementById("copy-title-and-description").click();
   });
