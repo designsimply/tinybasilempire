@@ -131,7 +131,7 @@ if (url.includes("/edit") || url.includes("/add")) {
     event.preventDefault(); // Prevents the second letter from being typed
     document.getElementById("copy-description-and-link").click();
   });
-  Mousetrap.bindGlobal("c Y", function (event) {
+  Mousetrap.bindGlobal("c y", function (event) {
     event.preventDefault(); // Prevents the second letter from being typed
     document.getElementById("copy-title-and-description").click();
   });
@@ -146,8 +146,8 @@ if (url.includes("/edit") || url.includes("/add")) {
         .getElementsByClassName("current")[0]
         .getElementsByClassName("link")[0].href
     );
-  });  
-  Mousetrap.bind("c y", function () {
+  });
+  Mousetrap.bind("c s", function () {
     let outputElements = "";
     let linkTextElement = document
         .getElementsByClassName("current")[0]
@@ -176,6 +176,22 @@ if (url.includes("/edit") || url.includes("/add")) {
     }
     if (linkElement !== "") {
       outputElements += "\n" + linkElement + " ";
+    }
+    navigator.clipboard.writeText( outputElements );
+  });
+  Mousetrap.bind("c y", function () {
+    let outputElements = "";
+    let linkTextElement = document
+        .getElementsByClassName("current")[0]
+        .getElementsByClassName("link")[0].innerText.trim();
+    let descriptionElement = document
+        .getElementsByClassName("current")[0]
+        .getElementsByClassName("description")[0].innerText.trim();
+    if (linkTextElement !== "") {
+      outputElements += linkTextElement + " ";
+    }
+    if (descriptionElement !== "") {
+      outputElements += "\n" + descriptionElement + " ";
     }
     navigator.clipboard.writeText( outputElements );
   });
