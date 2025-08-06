@@ -46,9 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
       position: fixed;
       top: 0;
       left: 0;
-      width: 400px;
-      height: 800px;
-      border-radius: 12px;
+      width: 100%;
+      height: 100%;
       background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
       display: flex;
       justify-content: center;
@@ -58,7 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
     #overlay-text {
       color: white;
       font-size: 1.5rem;
-      text-align: center;
+      text-align: left;
+      margin-left: 42%;
       white-space: pre; /* Preserve line breaks and spaces */
     }
   `;
