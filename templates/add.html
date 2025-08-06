@@ -43,7 +43,7 @@
                     (function() {
                         let title = document.forms.add.title.value.trim();
                         let description = document.forms.add.description.value;
-                        let output = title + ' \n' + url;
+                        let output = title;
                         if (description !== '') { output += '\n\n' + description}
                         navigator.clipboard.writeText(output);
                     })();
