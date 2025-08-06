@@ -30,10 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
     shift+o - Open All
     shift+e - Edit All
     cx - remove querystring
-    cu - copy link
-    cy - copy title & link
-    cd - copy description & link
-    cc - copy title, link, & description
+    cu - copy url
+    cs - copy title and link
+    cd - copy description and link
+    ci - copy title and description
+    cc - copy title, link, and description
     command+enter - Submit
   `;
   overlay.appendChild(overlayText);
@@ -45,8 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
+      width: 400px;
+      height: 800px;
+      border-radius: 12px;
       background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
       display: flex;
       justify-content: center;
@@ -69,6 +71,9 @@ Mousetrap.bind("?", function () {
   } else {
     document.getElementById("overlay").style.display = "block";
   }
+});
+Mousetrap.bind("esc", function () {
+    document.getElementById("overlay").style.display = "none";
 });
 
 // single keys
@@ -110,21 +115,25 @@ Mousetrap.bind("i", function () {
 });
 const url = window.location.href;
 if (url.includes("/edit") || url.includes("/add")) {
-  // Mousetrap.bindGlobal("c r", function () {
-  //   event.preventDefault(); // Prevents the second letter from being typed
-  //   document.getElementById("remove-querystring").click();
-  // });
-  // Mousetrap.bindGlobal("c l", function () {
-  //   event.preventDefault(); // Prevents the second letter from being typed
-  //   document.getElementById("copy-link").click();
-  // });
-  Mousetrap.bindGlobal("c y", function (event) {
+  Mousetrap.bindGlobal("c x", function () {
+    event.preventDefault(); // Prevents the second letter from being typed
+    document.getElementById("remove-querystring").click();
+  });
+  Mousetrap.bindGlobal("c u", function () {
+    event.preventDefault(); // Prevents the second letter from being typed
+    document.getElementById("copy-link").click();
+  });
+  Mousetrap.bindGlobal("c s", function (event) {
     event.preventDefault(); // Prevents the second letter from being typed
     document.getElementById("copy-title-and-link").click();
   });
   Mousetrap.bindGlobal("c d", function (event) {
     event.preventDefault(); // Prevents the second letter from being typed
     document.getElementById("copy-description-and-link").click();
+  });
+  Mousetrap.bindGlobal("c i", function (event) {
+    event.preventDefault(); // Prevents the second letter from being typed
+    document.getElementById("copy-title-and-description").click();
   });
   Mousetrap.bindGlobal("c c", function () {
     event.preventDefault(); // Prevents the second letter from being typed
