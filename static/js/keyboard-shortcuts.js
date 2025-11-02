@@ -175,7 +175,7 @@ if (url.includes("/edit") || url.includes("/add")) {
     }
     navigator.clipboard.writeText( outputElements );
   });
-  Mousetrap.bind("c c", function () {
+  Mousetrap.bind("c a", function () {
     let outputElements = "";
     let linkTextElement = document
         .getElementsByClassName("current")[0]
