@@ -9,25 +9,25 @@
         <textarea class="u-full-width" name="title" tabindex="5" required>{{ link.title }}</textarea>
             <label for="url" class="placeholder ">Link <br>
                 <a href="{{ link.url }}">🔗</a>
-                <a id="remove-querystring" title="keyboard shortcut c x" onclick="
+                <a id="remove-querystring" title="keyboard shortcut c x remove-querystring" onclick="
                     javascript:document.forms.edit.url.select();
                     document.forms.edit.url.setSelectionRange(0, 99999);
                     document.forms.edit.url.value = document.forms.edit.url.value.split('?')[0];
                     navigator.clipboard.writeText(document.forms.edit.url.value);
                     ">🙅‍♀️</a>
-                <a id="copy-link" title="keyboard shortcut c u" onclick="
+                <a id="copy-link" title="keyboard shortcut c u copy-link" onclick="
                     javascript:document.forms.edit.url.select();
                     document.forms.edit.url.setSelectionRange(0, 99999);
                     navigator.clipboard.writeText(document.forms.edit.url.value);
                     ">💇🏼‍♀️</a>
-                <a id="copy-title-and-link" title="keyboard shortcut c c" onclick="
+                <a id="copy-title-and-link" title="keyboard shortcut c c copy-title-and-link" onclick="
                     (function() {
                         let title = document.forms.edit.title.value.trim();
                         let url = document.forms.edit.url.value;
                         navigator.clipboard.writeText(title + ' \n' + url);
                     })();
                     ">💁‍♀️</a>
-                <a id="copy-description-and-link" title="keyboard shortcut c d" onclick="
+                <a id="copy-description-and-link" title="keyboard shortcut c d copy-description-and-link" onclick="
                     (function() {
                         let title = document.forms.edit.title.value.trim();
                         let url = document.forms.edit.url.value;
@@ -35,7 +35,7 @@
                         navigator.clipboard.writeText(description + ' \n' + url);
                     })();
                     ">🙋🏼‍♀️</a>
-                <a id="copy-all" title="keyboard shortcut c a" onclick="
+                <a id="copy-all" title="keyboard shortcut c v copy-all" onclick="
                     (function() {
                         let title = document.forms.edit.title.value.trim();
                         let url = document.forms.edit.url.value;

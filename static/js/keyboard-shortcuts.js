@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     h - Home
     l - Latest
     t - Tags
-    + - Add
+    a - Add
     o - Open
     e - Edit
     i - Item
@@ -31,10 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
     shift+e - Edit All
     cx - remove querystring
     cu - copy url
-    cs - copy title and link
+    cc - copy title and link
     cd - copy description and link
-    cy - copy title and description
-    cc - copy title, link, and description
+    cv - copy title, link, and description
     command+enter - Submit
   `;
   overlay.appendChild(overlayText);
@@ -91,7 +90,7 @@ Mousetrap.bind("l", function () {
 Mousetrap.bind("t", function () {
   document.getElementById("tags").click();
 });
-Mousetrap.bind("+", function () {
+Mousetrap.bind("a", function () {
   document.getElementById("add").click();
 });
 Mousetrap.bind("o", function () {
@@ -131,7 +130,7 @@ if (url.includes("/edit") || url.includes("/add")) {
     event.preventDefault(); // Prevents the second letter from being typed
     document.getElementById("copy-description-and-link").click();
   });
-  Mousetrap.bindGlobal("c a", function () {
+  Mousetrap.bindGlobal("c v", function () {
     event.preventDefault(); // Prevents the second letter from being typed
     document.getElementById("copy-all").click();
   });  
