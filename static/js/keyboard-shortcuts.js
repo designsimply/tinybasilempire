@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     cu - copy url
     cc - copy title and link
     cd - copy description and link
-    cv - copy title, link, and description
+    ck - copy title, link, and description
     command+enter - Submit
   `;
   overlay.appendChild(overlayText);
@@ -130,7 +130,7 @@ if (url.includes("/edit") || url.includes("/add")) {
     event.preventDefault(); // Prevents the second letter from being typed
     document.getElementById("copy-description-and-link").click();
   });
-  Mousetrap.bindGlobal("c v", function () {
+  Mousetrap.bindGlobal("c k", function () {
     event.preventDefault(); // Prevents the second letter from being typed
     document.getElementById("copy-all").click();
   });  
@@ -174,7 +174,7 @@ if (url.includes("/edit") || url.includes("/add")) {
     }
     navigator.clipboard.writeText( outputElements );
   });
-  Mousetrap.bind("c a", function () {
+  Mousetrap.bind("c k", function () {
     let outputElements = "";
     let linkTextElement = document
         .getElementsByClassName("current")[0]
