@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     h - Home
     l - Latest
     t - Tags
-    a - Add
+    + - Add
     o - Open
     e - Edit
     i - Item
@@ -91,7 +91,7 @@ Mousetrap.bind("l", function () {
 Mousetrap.bind("t", function () {
   document.getElementById("tags").click();
 });
-Mousetrap.bind("a", function () {
+Mousetrap.bind("+", function () {
   document.getElementById("add").click();
 });
 Mousetrap.bind("o", function () {
@@ -123,7 +123,7 @@ if (url.includes("/edit") || url.includes("/add")) {
     event.preventDefault(); // Prevents the second letter from being typed
     document.getElementById("copy-link").click();
   });
-  Mousetrap.bindGlobal("c s", function (event) {
+  Mousetrap.bindGlobal("c c", function (event) {
     event.preventDefault(); // Prevents the second letter from being typed
     document.getElementById("copy-title-and-link").click();
   });
@@ -131,11 +131,7 @@ if (url.includes("/edit") || url.includes("/add")) {
     event.preventDefault(); // Prevents the second letter from being typed
     document.getElementById("copy-description-and-link").click();
   });
-  Mousetrap.bindGlobal("c y", function (event) {
-    event.preventDefault(); // Prevents the second letter from being typed
-    document.getElementById("copy-title-and-description").click();
-  });
-  Mousetrap.bindGlobal("c c", function () {
+  Mousetrap.bindGlobal("c a", function () {
     event.preventDefault(); // Prevents the second letter from being typed
     document.getElementById("copy-all").click();
   });  
@@ -147,7 +143,7 @@ if (url.includes("/edit") || url.includes("/add")) {
         .getElementsByClassName("link")[0].href
     );
   });
-  Mousetrap.bind("c s", function () {
+  Mousetrap.bind("c c", function () {
     let outputElements = "";
     let linkTextElement = document
         .getElementsByClassName("current")[0]
@@ -179,22 +175,6 @@ if (url.includes("/edit") || url.includes("/add")) {
     }
     navigator.clipboard.writeText( outputElements );
   });
-  Mousetrap.bind("c y", function () {
-    let outputElements = "";
-    let linkTextElement = document
-        .getElementsByClassName("current")[0]
-        .getElementsByClassName("link")[0].innerText.trim();
-    let descriptionElement = document
-        .getElementsByClassName("current")[0]
-        .getElementsByClassName("description")[0].innerText.trim();
-    if (linkTextElement !== "") {
-      outputElements += linkTextElement + " ";
-    }
-    if (descriptionElement !== "") {
-      outputElements += "\n" + descriptionElement + " ";
-    }
-    navigator.clipboard.writeText( outputElements );
-  });
   Mousetrap.bind("c c", function () {
     let outputElements = "";
     let linkTextElement = document
@@ -206,14 +186,11 @@ if (url.includes("/edit") || url.includes("/add")) {
     let descriptionElement = document
         .getElementsByClassName("current")[0]
         .getElementsByClassName("description")[0].innerText.trim();
-    if (linkTextElement !== "") {
-      outputElements += linkTextElement + " ";
+    if (descriptionElement !== "") {
+      outputElements += descriptionElement + " \n\n";
     }
     if (linkElement !== "") {
-      outputElements += "\n" + linkElement + " ";
-    }
-    if (descriptionElement !== "") {
-      outputElements += "\n\n" + descriptionElement + " ";
+      outputElements += linkTextElement + " \n" + linkElement;
     }
     navigator.clipboard.writeText( outputElements );
   });
