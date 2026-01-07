@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     j - Next item
     k - Previous item
     + - Increase limit by 20
+    = - Show All
     shift+o - Open All
     shift+e - Edit All
     cx - remove querystring
@@ -111,6 +112,12 @@ Mousetrap.bind("i", function () {
     .getElementsByClassName("date")[0]
     .getElementsByTagName("a")[0]
     .click();
+});
+Mousetrap.bind("=", function () {
+  const showAllLink = document.getElementById("show-all");
+  if (showAllLink) {
+    showAllLink.click();
+  }
 });
 const url = window.location.href;
 if (url.includes("/edit") || url.includes("/add")) {
